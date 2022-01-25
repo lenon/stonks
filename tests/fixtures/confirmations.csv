@@ -1,0 +1,5 @@
+date,broker,sells,buys,clearing_fees,trading_fees,brokerage_fees,income_tax
+2022-01-01,Acme,0,1000,2.5,0.5,1,0.0
+2022-01-02,Acme,0,1100,3.0,0.6,1,0.0
+2022-01-03,Acme,500,750,5.0,1.0,1,0.5
+2022-01-04,Acme,0,500,0.5,0.5,1,0.0

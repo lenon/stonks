@@ -1,0 +1,6 @@
+date,broker,symbol,type,quantity,price,amount,costs,net_amount
+2022-01-01,Acme,ABC3,buy,100,10,1000,4.0,1004.0
+2022-01-02,Acme,DEF3,buy,100,11,1100,4.6,1104.6
+2022-01-03,Acme,ABC3,sell,100,5,500,2.8,497.2
+2022-01-03,Acme,DEF3,buy,125,6,750,4.2,754.2
+2022-01-04,Acme,DEF3,buy,100,5,500,2.0,502.0
