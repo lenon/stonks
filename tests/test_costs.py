@@ -1,29 +1,25 @@
 import pandas as pd
 from pytest import fixture
 from stonks.costs import (
-    sum_confirmation_volume_and_costs,
-    calc_trade_amount_and_costs,
-    calc_subscription_net_amount,
+    sum_confirmations_costs,
+    calc_trades_costs,
+    calc_subscriptions_net_amounts,
 )
 
 
-def test_sum_confirmation_volume_and_costs(
-    confirmations, confirmations_with_volume_and_costs
-):
-    results = sum_confirmation_volume_and_costs(confirmations)
+def test_sum_confirmations_costs(confirmations, confirmations_with_costs):
+    results = sum_confirmations_costs(confirmations)
 
-    pd.testing.assert_frame_equal(results, confirmations_with_volume_and_costs)
+    pd.testing.assert_frame_equal(results, confirmations_with_costs)
 
 
-def test_calc_trade_amount_and_costs(
-    confirmations_with_volume_and_costs, trades, trades_with_costs
-):
-    results = calc_trade_amount_and_costs(confirmations_with_volume_and_costs, trades)
+def test_calc_trades_costs(confirmations_with_costs, trades, trades_with_costs):
+    results = calc_trades_costs(confirmations_with_costs, trades)
 
     pd.testing.assert_frame_equal(results, trades_with_costs)
 
 
-def test_calc_subscription_net_amount(subscriptions, subscriptions_with_net_amount):
-    results = calc_subscription_net_amount(subscriptions)
+def test_calc_subscriptions_net_amounts(subscriptions, subscriptions_with_net_amount):
+    results = calc_subscriptions_net_amounts(subscriptions)
 
     pd.testing.assert_frame_equal(results, subscriptions_with_net_amount)

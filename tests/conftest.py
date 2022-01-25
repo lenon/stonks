@@ -17,7 +17,7 @@ def confirmations():
 
 
 @fixture
-def confirmations_with_volume_and_costs():
+def confirmations_with_costs():
     return pd.read_csv(
         fixture_path("confirmations-with-costs.csv"),
         parse_dates=["date"],
