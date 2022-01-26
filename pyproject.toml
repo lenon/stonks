@@ -23,3 +23,7 @@ profile = "black"
 multi_line_output = 3
 no_sections = true
 length_sort = true
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
