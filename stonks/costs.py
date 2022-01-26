@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 # Calculate volume, costs and net amount since these values are not included in
 # the confirmation (or "nota de corretagem").
 def sum_confirmations_costs(confirmations):

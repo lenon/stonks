@@ -1,5 +1,5 @@
-from pytest import fixture
 import pandas as pd
+from pytest import fixture
 from .helpers import fixture_path
 
 

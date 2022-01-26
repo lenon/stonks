@@ -1,11 +1,11 @@
 import pandas as pd
 from pytest import fixture
+from .helpers import fixture_path
 from stonks.costs import (
-    sum_confirmations_costs,
     calc_trades_costs,
+    sum_confirmations_costs,
     calc_subscriptions_net_amounts,
 )
-from .helpers import fixture_path
 
 
 @fixture
