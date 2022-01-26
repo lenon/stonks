@@ -12,7 +12,14 @@ openpyxl = "^3.0.9"
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
 black = "^21.12b0"
+isort = "^5.10.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+no_sections = true
+length_sort = true
