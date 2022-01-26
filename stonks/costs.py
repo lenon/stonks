@@ -28,9 +28,7 @@ def _calc_trade_net_amount(trades):
 def calc_trades_costs(confirmations, trades):
     conf_prefix = "c_"
 
-    drop_conf_prefix = lambda t: t.drop(
-        columns=t.columns[t.columns.str.startswith(conf_prefix)]
-    )
+    drop_conf_prefix = lambda t: t.drop(columns=t.columns[t.columns.str.startswith(conf_prefix)])
 
     return (
         trades.join(confirmations.add_prefix(conf_prefix), on=["date", "broker"])
@@ -46,6 +44,4 @@ def calc_trades_costs(confirmations, trades):
 # Subscriptions net amount is the cost per share x quantity of exercised shares.
 # Costs are already included in cost per share.
 def calc_subscriptions_net_amounts(subscriptions):
-    return subscriptions.assign(
-        net_amount=subscriptions.exercised * subscriptions.price
-    )
+    return subscriptions.assign(net_amount=subscriptions.exercised * subscriptions.price)
