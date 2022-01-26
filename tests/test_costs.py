@@ -9,44 +9,44 @@ from .helpers import fixture_path
 
 
 @fixture
-def confirmations():
+def confirmations_pre_calc():
     return pd.read_csv(
-        fixture_path("confirmations.csv"),
+        fixture_path("confirmations-pre-calc.csv"),
         parse_dates=["date"],
         index_col=["date", "broker"],
     )
 
 
 @fixture
-def trades():
+def trades_pre_calc():
     return pd.read_csv(
-        fixture_path("trades.csv"),
+        fixture_path("trades-pre-calc.csv"),
         parse_dates=["date"],
         index_col=["date", "broker"],
     )
 
 
 @fixture
-def subscriptions():
+def subscriptions_pre_calc():
     return pd.read_csv(
-        fixture_path("subscriptions.csv"),
+        fixture_path("subscriptions-pre-calc.csv"),
         parse_dates=["date", "start", "end", "settlement", "issue_date"],
     )
 
 
-def test_sum_confirmations_costs(confirmations, confirmations_with_costs):
-    results = sum_confirmations_costs(confirmations)
+def test_sum_confirmations_costs(confirmations_pre_calc, confirmations):
+    results = sum_confirmations_costs(confirmations_pre_calc)
 
-    pd.testing.assert_frame_equal(results, confirmations_with_costs)
-
-
-def test_calc_trades_costs(confirmations_with_costs, trades, trades_with_costs):
-    results = calc_trades_costs(confirmations_with_costs, trades)
-
-    pd.testing.assert_frame_equal(results, trades_with_costs)
+    pd.testing.assert_frame_equal(results, confirmations)
 
 
-def test_calc_subscriptions_net_amounts(subscriptions, subscriptions_with_net_amount):
-    results = calc_subscriptions_net_amounts(subscriptions)
+def test_calc_trades_costs(confirmations, trades_pre_calc, trades):
+    results = calc_trades_costs(confirmations, trades_pre_calc)
 
-    pd.testing.assert_frame_equal(results, subscriptions_with_net_amount)
+    pd.testing.assert_frame_equal(results, trades)
+
+
+def test_calc_subscriptions_net_amounts(subscriptions_pre_calc, subscriptions):
+    results = calc_subscriptions_net_amounts(subscriptions_pre_calc)
+
+    pd.testing.assert_frame_equal(results, subscriptions)
