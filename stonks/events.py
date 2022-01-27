@@ -26,3 +26,23 @@ def buy(positions, event):
         "cost": new_cost,
         "cost_per_share": new_cost_per_share,
     }
+
+
+def sell(positions, event):
+    if event.symbol not in positions.index:
+        raise ValueError(f"can't sell position {event.symbol} as it is not open")
+
+    prev = positions.loc[event.symbol]
+    new_quantity = prev.quantity - event.quantity
+    new_cost = new_quantity * prev.cost_per_share
+
+    if new_quantity == 0:
+        # closing position if there's nothing left in stock
+        positions.drop(labels=event.symbol, inplace=True)
+    else:
+        positions.loc[event.symbol] = {
+            "quantity": new_quantity,
+            "cost": new_cost,
+            # cost per share stay the same
+            "cost_per_share": prev.cost_per_share,
+        }
