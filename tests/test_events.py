@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 from pandas import to_datetime as dt
 from datetime import datetime, timedelta
-from stonks.events import buy, sell, concat_dfs, subscription, merger
+from stonks.events import buy, sell, concat_dfs, subscription, merger, split
 from pandas.testing import assert_frame_equal
 
 
@@ -140,7 +140,7 @@ def test_sell_closing_position():
     assert_frame_equal(positions, expected)
 
 
-def test_sell_without_an_opened_position():
+def test_sell_without_an_open_position():
     positions = make_positions(
         [{"symbol": "AAA", "quantity": 8.0, "cost": 80.0, "cost_per_share": 10.0}]
     )
@@ -303,7 +303,7 @@ def test_merger():
     assert_frame_equal(positions, expected)
 
 
-def test_merger_without_opened_position():
+def test_merger_without_open_position():
     positions = make_positions([])
     event = make_event(
         {
@@ -317,3 +317,29 @@ def test_merger_without_opened_position():
 
     with pytest.raises(ValueError, match="can't merge ABC into NEWCO as ABC position is not open"):
         merger(positions, event)
+
+
+def test_split():
+    positions = make_positions(
+        [{"symbol": "ABC", "quantity": 10.0, "cost": 109.0, "cost_per_share": 10.9}]
+    )
+    expected = make_positions(
+        [{"symbol": "ABC", "quantity": 100.0, "cost": 109.0, "cost_per_share": 1.09}]
+    )
+    event = make_event(
+        {"date": dt("2022-01-05"), "symbol": "ABC", "event": "split", "ratio": "10:1"}
+    )
+
+    split(positions, event)
+
+    assert_frame_equal(positions, expected)
+
+
+def test_split_without_open_position():
+    positions = make_positions([])
+    event = make_event(
+        {"date": dt("2022-01-05"), "symbol": "ABC", "event": "split", "ratio": "10:1"}
+    )
+
+    with pytest.raises(ValueError, match="can't split position ABC as it is not open"):
+        split(positions, event)
