@@ -95,3 +95,20 @@ def merger(positions, event):
         "cost": position_to_merge.cost,
         "cost_per_share": cost_per_share,
     }
+
+
+def split(positions, event):
+    if event.symbol not in positions.index:
+        raise ValueError(f"can't split position {event.symbol} as it is not open")
+
+    position_to_split = positions.loc[event.symbol]
+    ratio = ratio_to_float(event.ratio)
+
+    new_quantity = position_to_split.quantity * ratio
+    new_cost_per_share = position_to_split.cost / new_quantity
+
+    positions.loc[event.symbol] = {
+        "quantity": new_quantity,
+        "cost": position_to_split.cost,
+        "cost_per_share": new_cost_per_share,
+    }
