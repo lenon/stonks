@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 from pandas import to_datetime as dt
 from datetime import datetime, timedelta
-from stonks.events import buy, sell, concat_dfs, subscription
+from stonks.events import buy, sell, concat_dfs, subscription, merger
 from pandas.testing import assert_frame_equal
 
 
@@ -279,3 +279,41 @@ def test_subscription_with_future_issue_date():
     subscription(positions, event)
 
     assert_frame_equal(positions, expected)
+
+
+def test_merger():
+    positions = make_positions(
+        [{"symbol": "ABC", "quantity": 10.0, "cost": 109.0, "cost_per_share": 10.9}]
+    )
+    expected = make_positions(
+        [{"symbol": "NEWCO", "quantity": 5, "cost": 109.0, "cost_per_share": 21.8}]
+    )
+    event = make_event(
+        {
+            "date": dt("2022-01-10"),
+            "symbol": "ABC",
+            "event": "merger",
+            "ratio": "2:1",
+            "acquirer": "NEWCO",
+        }
+    )
+
+    merger(positions, event)
+
+    assert_frame_equal(positions, expected)
+
+
+def test_merger_without_opened_position():
+    positions = make_positions([])
+    event = make_event(
+        {
+            "date": dt("2022-01-10"),
+            "symbol": "ABC",
+            "event": "merger",
+            "ratio": "2:1",
+            "acquirer": "NEWCO",
+        }
+    )
+
+    with pytest.raises(ValueError, match="can't merge ABC into NEWCO as ABC position is not open"):
+        merger(positions, event)

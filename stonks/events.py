@@ -1,4 +1,6 @@
+import math
 import pandas as pd
+from .utils import ratio_to_float
 from datetime import date
 
 
@@ -71,4 +73,25 @@ def subscription(positions, event):
         "quantity": new_quantity,
         "cost": new_cost,
         "cost_per_share": new_cost_per_share,
+    }
+
+
+def merger(positions, event):
+    if event.symbol not in positions.index:
+        raise ValueError(
+            f"can't merge {event.symbol} into {event.acquirer} as {event.symbol} position is not open"
+        )
+
+    position_to_merge = positions.loc[event.symbol]
+    ratio = ratio_to_float(event.ratio)
+
+    # quantity should be truncated because fractional shares are not allowed on B3
+    quantity = math.trunc(position_to_merge.quantity / ratio)
+    cost_per_share = position_to_merge.cost / quantity
+
+    positions.drop(labels=event.symbol, inplace=True)
+    positions.loc[event.acquirer] = {
+        "quantity": quantity,
+        "cost": position_to_merge.cost,
+        "cost_per_share": cost_per_share,
     }
