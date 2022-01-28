@@ -112,3 +112,30 @@ def split(positions, event):
         "cost": position_to_split.cost,
         "cost_per_share": new_cost_per_share,
     }
+
+
+def spinoff(positions, event):
+    if event.symbol not in positions.index:
+        raise ValueError(f"can't spinoff position {event.symbol} as it is not open")
+
+    position_to_spinoff = positions.loc[event.symbol]
+    ratio = ratio_to_float(event.ratio)
+
+    newco_quantity = math.trunc(position_to_spinoff.quantity / ratio)
+    newco_cost = position_to_spinoff.cost * event.cost_basis
+    newco_cost_per_share = newco_cost / newco_quantity
+
+    new_quantity = position_to_spinoff.quantity
+    new_cost = position_to_spinoff.cost - newco_cost
+    new_cost_per_share = new_cost / position_to_spinoff.quantity
+
+    positions.loc[event.new_company] = {
+        "quantity": newco_quantity,
+        "cost": newco_cost,
+        "cost_per_share": newco_cost_per_share,
+    }
+    positions.loc[event.symbol] = {
+        "quantity": new_quantity,
+        "cost": new_cost,
+        "cost_per_share": new_cost_per_share,
+    }

@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 from pandas import to_datetime as dt
 from datetime import datetime, timedelta
-from stonks.events import buy, sell, concat_dfs, subscription, merger, split
+from stonks.events import buy, sell, concat_dfs, subscription, merger, split, spinoff
 from pandas.testing import assert_frame_equal
 
 
@@ -343,3 +343,46 @@ def test_split_without_open_position():
 
     with pytest.raises(ValueError, match="can't split position ABC as it is not open"):
         split(positions, event)
+
+
+def test_spinoff():
+    positions = make_positions(
+        [{"symbol": "ABC", "quantity": 100.0, "cost": 1090.0, "cost_per_share": 10.9}]
+    )
+    expected = make_positions(
+        [
+            {"symbol": "ABC", "quantity": 100.0, "cost": 654.0, "cost_per_share": 6.54},
+            {"symbol": "NEWCO", "quantity": 50.0, "cost": 436.0, "cost_per_share": 8.72},
+        ]
+    )
+    event = make_event(
+        {
+            "date": dt("2022-03-01"),
+            "symbol": "ABC",
+            "event": "spinoff",
+            "ratio": "2:1",
+            "new_company": "NEWCO",
+            "cost_basis": 0.4,
+        }
+    )
+
+    spinoff(positions, event)
+
+    assert_frame_equal(positions, expected)
+
+
+def test_spinoff_without_open_position():
+    positions = make_positions([])
+    event = make_event(
+        {
+            "date": dt("2022-03-01"),
+            "symbol": "ABC",
+            "event": "spinoff",
+            "ratio": "2:1",
+            "new_company": "NEWCO",
+            "cost_basis": 0.4,
+        }
+    )
+
+    with pytest.raises(ValueError, match="can't spinoff position ABC as it is not open"):
+        spinoff(positions, event)
