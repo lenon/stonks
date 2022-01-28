@@ -1,7 +1,8 @@
 import pandas as pd
 import pytest
 from pandas import to_datetime as dt
-from stonks.events import buy, sell, concat_dfs
+from datetime import datetime, timedelta
+from stonks.events import buy, sell, concat_dfs, subscription
 from pandas.testing import assert_frame_equal
 
 
@@ -160,3 +161,121 @@ def test_sell_without_an_opened_position():
 
     with pytest.raises(ValueError, match="can't sell position BBB as it is not open"):
         sell(positions, event)
+
+
+def test_subscription_with_new_position():
+    positions = make_positions([])
+    expected = make_positions(
+        [{"symbol": "ABC", "quantity": 90.0, "cost": 4509.0, "cost_per_share": 50.1}]
+    )
+    event = make_event(
+        {
+            "date": dt("2022-01-01"),
+            "broker": "Acme",
+            "symbol": "ABC",
+            "price": 50.1,
+            "net_amount": 4509.0,
+            "event": "subscription",
+            "description": "4th subs",
+            "start": dt("2022-01-01"),
+            "end": dt("2022-01-02"),
+            "settlement": dt("2022-01-03"),
+            "shares": 100.0,
+            "exercised": 90.0,
+            "issue_date": dt("2022-01-10"),
+        }
+    )
+
+    subscription(positions, event)
+
+    assert_frame_equal(positions, expected)
+
+
+def test_subscription_for_existing_position():
+    positions = make_positions(
+        [{"symbol": "ABC", "quantity": 90.0, "cost": 4509.0, "cost_per_share": 50.1}]
+    )
+    expected = make_positions(
+        [{"symbol": "ABC", "quantity": 140.0, "cost": 5034.0, "cost_per_share": 35.957143}]
+    )
+    event = make_event(
+        {
+            "date": dt("2022-01-10"),
+            "broker": "Acme",
+            "symbol": "ABC",
+            "price": 10.5,
+            "net_amount": 525.0,
+            "event": "subscription",
+            "description": "5th subs",
+            "start": dt("2022-01-10"),
+            "end": dt("2022-01-11"),
+            "settlement": dt("2022-01-12"),
+            "shares": 50.0,
+            "exercised": 50.0,
+            "issue_date": dt("2022-01-13"),
+        }
+    )
+
+    subscription(positions, event)
+
+    assert_frame_equal(positions, expected)
+
+
+def test_subscription_without_issue_date():
+    positions = make_positions(
+        [{"symbol": "ABC", "quantity": 90.0, "cost": 4509.0, "cost_per_share": 50.1}]
+    )
+    expected = make_positions(
+        [{"symbol": "ABC", "quantity": 90.0, "cost": 4509.0, "cost_per_share": 50.1}]
+    )
+    event = make_event(
+        {
+            "date": dt("2022-01-10"),
+            "broker": "Acme",
+            "symbol": "ABC",
+            "price": 10.5,
+            "net_amount": 525.0,
+            "event": "subscription",
+            "description": "5th subs",
+            "start": dt("2022-01-10"),
+            "end": dt("2022-01-11"),
+            "settlement": dt("2022-01-12"),
+            "shares": 50.0,
+            "exercised": 50.0,
+            "issue_date": None,
+        }
+    )
+
+    subscription(positions, event)
+
+    assert_frame_equal(positions, expected)
+
+
+def test_subscription_with_future_issue_date():
+    positions = make_positions(
+        [{"symbol": "ABC", "quantity": 90.0, "cost": 4509.0, "cost_per_share": 50.1}]
+    )
+    expected = make_positions(
+        [{"symbol": "ABC", "quantity": 90.0, "cost": 4509.0, "cost_per_share": 50.1}]
+    )
+    event = make_event(
+        {
+            "date": dt("2022-01-10"),
+            "broker": "Acme",
+            "symbol": "ABC",
+            "price": 10.5,
+            "net_amount": 525.0,
+            "event": "subscription",
+            "description": "5th subs",
+            "start": dt("2022-01-10"),
+            "end": dt("2022-01-11"),
+            "settlement": dt("2022-01-12"),
+            "shares": 50.0,
+            "exercised": 50.0,
+            "issue_date": datetime.now() + timedelta(days=10),
+        }
+    )
+
+    subscription(positions, event)
+
+    assert_frame_equal(positions, expected)
