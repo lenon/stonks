@@ -1,4 +1,5 @@
 import pandas as pd
+from datetime import date
 
 
 def concat_dfs(*dfs):
@@ -46,3 +47,28 @@ def sell(positions, event):
             # cost per share stay the same
             "cost_per_share": prev.cost_per_share,
         }
+
+
+def subscription(positions, event):
+    # subscriptions not yet issued must not change current positions
+    if pd.isnull(event.issue_date) or event.issue_date.date() > date.today():
+        return
+
+    if event.symbol not in positions.index:
+        # first subscription, not yet in positions dataframe
+        new_quantity = event.exercised
+        new_cost = event.net_amount
+        new_cost_per_share = event.net_amount / event.exercised
+    else:
+        # subscription for a position that is already open
+        prev = positions.loc[event.symbol]
+
+        new_cost = prev.cost + event.net_amount
+        new_cost_per_share = new_cost / (prev.quantity + event.exercised)
+        new_quantity = prev.quantity + event.exercised
+
+    positions.loc[event.symbol] = {
+        "quantity": new_quantity,
+        "cost": new_cost,
+        "cost_per_share": new_cost_per_share,
+    }
