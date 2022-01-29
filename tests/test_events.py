@@ -2,7 +2,8 @@ import pandas as pd
 import pytest
 from pandas import to_datetime as dt
 from datetime import datetime, timedelta
-from stonks.events import buy, sell, concat_dfs, subscription, merger, split, spinoff
+from .helpers import make_event, make_positions
+from stonks.events import buy, sell, split, merger, spinoff, concat_dfs, subscription
 from pandas.testing import assert_frame_equal
 
 
@@ -16,18 +17,6 @@ def test_concat_dfs(trades, subscriptions, splits, mergers, spinoffs, events):
     )
 
     pd.testing.assert_frame_equal(result, events)
-
-
-def make_positions(data):
-    df = pd.DataFrame.from_records(
-        data, index="symbol", columns=["symbol", "quantity", "cost", "cost_per_share"]
-    )
-    df.index.name = None  # reset index name otherwise df comparison fails
-    return df
-
-
-def make_event(data):
-    return pd.Series(data)
 
 
 def test_buy_new_position():
