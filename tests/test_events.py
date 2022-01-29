@@ -3,12 +3,12 @@ import pytest
 from pandas import to_datetime as dt
 from datetime import datetime, timedelta
 from .helpers import make_event, make_position, make_positions
-from stonks.events import buy, sell, split, merger, spinoff, concat_dfs, subscription
+from stonks.events import buy, sell, split, merger, spinoff, concat_events, subscription
 from pandas.testing import assert_frame_equal
 
 
-def test_concat_dfs(trades, subscriptions, splits, mergers, spinoffs, events):
-    result = concat_dfs(
+def test_concat_events(trades, subscriptions, splits, mergers, spinoffs, events):
+    result = concat_events(
         ["trade", trades.reset_index()],
         ["subscription", subscriptions],
         ["split", splits],

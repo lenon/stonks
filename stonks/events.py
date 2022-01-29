@@ -4,7 +4,7 @@ from .utils import ratio_to_float
 from datetime import date
 
 
-def concat_dfs(*dfs):
+def concat_events(*dfs):
     events = [df.assign(event=event) for event, df in dfs]
 
     return pd.concat(events).sort_values(by="date", ignore_index=True)
