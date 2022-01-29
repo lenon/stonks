@@ -3,7 +3,16 @@ import pytest
 from pandas import to_datetime as dt
 from datetime import datetime, timedelta
 from .helpers import make_event, make_position, make_positions
-from stonks.events import buy, sell, split, merger, spinoff, concat_events, subscription
+from stonks.events import (
+    buy,
+    sell,
+    split,
+    merger,
+    spinoff,
+    event_fn,
+    subscription,
+    concat_events,
+)
 from pandas.testing import assert_frame_equal
 
 
@@ -341,3 +350,23 @@ def test_spinoff_without_open_position():
 
     with pytest.raises(ValueError, match="can't spinoff position ABC as it is not open"):
         spinoff(positions, event)
+
+
+def test_event_fn():
+    event_trade_buy = pd.Series({"event": "trade", "type": "buy"})
+    event_trade_sell = pd.Series({"event": "trade", "type": "sell"})
+    event_subscription = pd.Series({"event": "subscription"})
+    event_merger = pd.Series({"event": "merger"})
+    event_split = pd.Series({"event": "split"})
+    event_spinoff = pd.Series({"event": "spinoff"})
+    event_unknown = pd.Series({"event": "foo"})
+
+    assert event_fn(event_trade_buy) == buy
+    assert event_fn(event_trade_sell) == sell
+    assert event_fn(event_subscription) == subscription
+    assert event_fn(event_merger) == merger
+    assert event_fn(event_split) == split
+    assert event_fn(event_spinoff) == spinoff
+
+    with pytest.raises(ValueError, match="unknown event type foo"):
+        event_fn(event_unknown)

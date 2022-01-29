@@ -139,3 +139,21 @@ def spinoff(positions, event):
         "cost": new_cost,
         "cost_per_share": new_cost_per_share,
     }
+
+
+def event_fn(e):
+    match e:
+        case pd.Series(event="trade", type="buy"):
+            return buy
+        case pd.Series(event="trade", type="sell"):
+            return sell
+        case pd.Series(event="subscription"):
+            return subscription
+        case pd.Series(event="merger"):
+            return merger
+        case pd.Series(event="split"):
+            return split
+        case pd.Series(event="spinoff"):
+            return spinoff
+        case _:
+            raise ValueError(f"unknown event type {e.event}")
