@@ -31,3 +31,6 @@ target-version = ["py310"]
 
 [tool.pytest.ini_options]
 addopts = "--capture=tee-sys --no-header --quiet --tb=short"
+
+[tool.coverage.run]
+branch = true
