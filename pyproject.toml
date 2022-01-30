@@ -34,3 +34,8 @@ addopts = "--capture=tee-sys --no-header --quiet --tb=short"
 
 [tool.coverage.run]
 branch = true
+omit = ["tests/*"]
+dynamic_context = "test_function"
+
+[tool.coverage.html]
+show_contexts = true
