@@ -25,7 +25,7 @@ def _calc_trade_net_amount(trades):
 # Calculate amount, costs and net amount for each trade. A single trade has a
 # relationship with only one confirmation entry, but a confirmation could have
 # one or more trades.
-def calc_trades_costs(confirmations, trades):
+def calc_trades_costs(trades, confirmations):
     conf_prefix = "c_"
 
     drop_conf_prefix = lambda t: t.drop(columns=t.columns[t.columns.str.startswith(conf_prefix)])
