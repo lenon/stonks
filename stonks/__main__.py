@@ -1,4 +1,4 @@
-from stonks.positions import calc_positions
+from .positions import calc_positions
 import argparse
 
 parser = argparse.ArgumentParser(description="Calculate current stocks portfolio")
