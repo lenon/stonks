@@ -41,7 +41,7 @@ def test_sum_confirmations_costs(confirmations_pre_calc, confirmations):
 
 
 def test_calc_trades_costs(confirmations, trades_pre_calc, trades):
-    results = calc_trades_costs(confirmations, trades_pre_calc)
+    results = calc_trades_costs(trades_pre_calc, confirmations)
 
     pd.testing.assert_frame_equal(results, trades)
 
