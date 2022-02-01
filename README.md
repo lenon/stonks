@@ -46,8 +46,10 @@ After filling in all information, you can calculate your current portfolio with
 the following command:
 
 ```
-poetry run python -m stonks
+poetry run python -m stonks data/br.xlsx
 ```
+
+The result will be saved in a new file named `data/br-positions.xlsx`.
 
 [pyenv-instructions]: https://github.com/pyenv/pyenv#installation
 [poetry-instructions]: https://python-poetry.org/docs/#installation
