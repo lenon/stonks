@@ -1,0 +1,36 @@
+name: CI
+on:
+  - push
+env:
+  PYTHON_VERSION: 3.10.2
+  POETRY_VERSION: 1.1.12
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Cache Poetry
+        id: cache-poetry
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.local/share/pypoetry
+            ~/.local/bin/poetry
+          key: poetry-${{ env.POETRY_VERSION }}-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}
+      - name: Install Poetry
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
+        run: scripts/install-poetry.sh
+      - name: Add Poetry to path
+        if: steps.cache-poetry.outputs.cache-hit == 'true'
+        run: echo "~/.local/bin" >> $GITHUB_PATH
+      - run: poetry --version
+      - name: Cache virtual envs
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: venvs-${{ env.POETRY_VERSION }}-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-${{ hashFiles('poetry.lock') }}
+      - run: poetry install
+      - run: poetry run pytest
