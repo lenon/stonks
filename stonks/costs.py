@@ -1,8 +1,8 @@
 import pandas as pd
 
-
-# Calculate volume, costs and net amount since these values are not included in
-# the confirmation (or "nota de corretagem").
+# Calculate volume (sells + buys), costs (sum of all fees) and net amount (sells
+# - buys - costs). These columns are not included in trade confirmations ("nota
+# de corretagem" in Portuguese) and are required for other calculations.
 def sum_confirmations_costs(confirmations):
     return confirmations.assign(
         volume=lambda c: c.sells + c.buys,
@@ -11,10 +11,8 @@ def sum_confirmations_costs(confirmations):
     )
 
 
-# The net amount is also not included in the confirmation document, so here we
-# calculate it for each trade. The "amount" value here is the principal amount,
-# which is price x quantity. For buys it's principal amount + costs, for sells
-# it's principal amount - costs.
+# Calculate net amount for each trade, which is principal amount + costs for
+# buys and principal amount - costs for sells.
 def _calc_trade_net_amount(trades):
     return trades.apply(
         lambda t: t.amount + t.costs if t.type == "buy" else t.amount - t.costs,
@@ -22,9 +20,9 @@ def _calc_trade_net_amount(trades):
     )
 
 
-# Calculate amount, costs and net amount for each trade. A single trade has a
-# relationship with only one confirmation entry, but a confirmation could have
-# one or more trades.
+# Calculate amount (quantity x price), pro rata costs (amount / volume * total
+# costs) and net amount for each trade. A trade confirmation has a one-to-many
+# association with a trade, identified by date and broker name.
 def calc_trades_costs(trades, confirmations):
     conf_prefix = "c_"
 
