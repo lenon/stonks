@@ -3,6 +3,7 @@ import pytest
 from pandas import to_datetime as dt
 from datetime import datetime, timedelta
 from .helpers import make_event, make_position, make_positions
+from stonks.errors import UnknownEventError, PositionNotOpenError
 from stonks.events import (
     buy,
     sell,
@@ -145,7 +146,7 @@ def test_sell_without_an_open_position():
         event="trade",
     )
 
-    with pytest.raises(ValueError, match="can't sell position BBB as it is not open"):
+    with pytest.raises(PositionNotOpenError, match="position not open: BBB"):
         sell(positions, event)
 
 
@@ -287,7 +288,7 @@ def test_merger_without_open_position():
         acquirer="NEWCO",
     )
 
-    with pytest.raises(ValueError, match="can't merge ABC into NEWCO as ABC position is not open"):
+    with pytest.raises(PositionNotOpenError, match="position not open: ABC"):
         merger(positions, event)
 
 
@@ -309,7 +310,7 @@ def test_split_without_open_position():
     positions = make_positions([])
     event = make_event(date=dt("2022-01-05"), symbol="ABC", event="split", ratio="10:1")
 
-    with pytest.raises(ValueError, match="can't split position ABC as it is not open"):
+    with pytest.raises(PositionNotOpenError, match="position not open: ABC"):
         split(positions, event)
 
 
@@ -348,7 +349,7 @@ def test_spinoff_without_open_position():
         cost_basis=0.4,
     )
 
-    with pytest.raises(ValueError, match="can't spinoff position ABC as it is not open"):
+    with pytest.raises(PositionNotOpenError, match="position not open: ABC"):
         spinoff(positions, event)
 
 
@@ -368,5 +369,5 @@ def test_event_fn():
     assert event_fn(event_split) == split
     assert event_fn(event_spinoff) == spinoff
 
-    with pytest.raises(ValueError, match="unknown event type foo"):
+    with pytest.raises(UnknownEventError, match="unknown event type: foo"):
         event_fn(event_unknown)

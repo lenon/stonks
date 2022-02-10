@@ -1,6 +1,7 @@
 import math
 import pandas as pd
 from .utils import ratio_to_float
+from .errors import UnknownEventError, PositionNotOpenError
 from datetime import date
 
 
@@ -34,7 +35,7 @@ def buy(positions, event):
 def sell(positions, event):
     if event.symbol not in positions.index:
         # safeguard against incorrect data
-        raise ValueError(f"can't sell position {event.symbol} as it is not open")
+        raise PositionNotOpenError(event.symbol)
 
     prev = positions.loc[event.symbol]
     # sells affect quantity and total costs
@@ -81,9 +82,7 @@ def subscription(positions, event):
 def merger(positions, event):
     if event.symbol not in positions.index:
         # safeguard against incorrect data
-        raise ValueError(
-            f"can't merge {event.symbol} into {event.acquirer} as {event.symbol} position is not open"
-        )
+        raise PositionNotOpenError(event.symbol)
 
     position_to_merge = positions.loc[event.symbol]
     ratio = ratio_to_float(event.ratio)
@@ -106,7 +105,7 @@ def merger(positions, event):
 def split(positions, event):
     if event.symbol not in positions.index:
         # safeguard against incorrect data
-        raise ValueError(f"can't split position {event.symbol} as it is not open")
+        raise PositionNotOpenError(event.symbol)
 
     position_to_split = positions.loc[event.symbol]
     ratio = ratio_to_float(event.ratio)
@@ -126,7 +125,7 @@ def split(positions, event):
 def spinoff(positions, event):
     if event.symbol not in positions.index:
         # safeguard against incorrect data
-        raise ValueError(f"can't spinoff position {event.symbol} as it is not open")
+        raise PositionNotOpenError(event.symbol)
 
     position_to_spinoff = positions.loc[event.symbol]
     ratio = ratio_to_float(event.ratio)
@@ -166,4 +165,4 @@ def event_fn(e):
         case pd.Series(event="spinoff"):
             return spinoff
         case _:
-            raise ValueError(f"unknown event type {e.event}")
+            raise UnknownEventError(e.event)
