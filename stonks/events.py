@@ -17,7 +17,7 @@ def buy(positions, event):
         new_cost = event.net_amount
         new_cost_per_share = event.net_amount / event.quantity
     else:
-        # bought it before, let's update cost per share
+        # bought it before, let's sum quantity and update cost per share
         prev = positions.loc[event.symbol]
 
         new_quantity = prev.quantity + event.quantity
@@ -33,20 +33,22 @@ def buy(positions, event):
 
 def sell(positions, event):
     if event.symbol not in positions.index:
+        # safeguard against incorrect data
         raise ValueError(f"can't sell position {event.symbol} as it is not open")
 
     prev = positions.loc[event.symbol]
+    # sells affect quantity and total costs
     new_quantity = prev.quantity - event.quantity
     new_cost = new_quantity * prev.cost_per_share
 
     if new_quantity == 0:
-        # closing position if there's nothing left in stock
+        # sold all stocks, closing position
         positions.drop(labels=event.symbol, inplace=True)
     else:
         positions.loc[event.symbol] = {
             "quantity": new_quantity,
             "cost": new_cost,
-            # cost per share stay the same
+            # sells do not affect cost per share
             "cost_per_share": prev.cost_per_share,
         }
 
@@ -78,6 +80,7 @@ def subscription(positions, event):
 
 def merger(positions, event):
     if event.symbol not in positions.index:
+        # safeguard against incorrect data
         raise ValueError(
             f"can't merge {event.symbol} into {event.acquirer} as {event.symbol} position is not open"
         )
@@ -87,23 +90,29 @@ def merger(positions, event):
 
     # quantity should be truncated because fractional shares are not allowed on B3
     quantity = math.trunc(position_to_merge.quantity / ratio)
+    # cost basis is not affected by the merger event
+    cost = position_to_merge.cost
     cost_per_share = position_to_merge.cost / quantity
 
+    # drop the old position and replace by acquirer company symbol
     positions.drop(labels=event.symbol, inplace=True)
     positions.loc[event.acquirer] = {
         "quantity": quantity,
-        "cost": position_to_merge.cost,
+        "cost": cost,
         "cost_per_share": cost_per_share,
     }
 
 
 def split(positions, event):
     if event.symbol not in positions.index:
+        # safeguard against incorrect data
         raise ValueError(f"can't split position {event.symbol} as it is not open")
 
     position_to_split = positions.loc[event.symbol]
     ratio = ratio_to_float(event.ratio)
 
+    # splits only affect quantity and cost per share
+    # total cost does not change
     new_quantity = position_to_split.quantity * ratio
     new_cost_per_share = position_to_split.cost / new_quantity
 
@@ -116,6 +125,7 @@ def split(positions, event):
 
 def spinoff(positions, event):
     if event.symbol not in positions.index:
+        # safeguard against incorrect data
         raise ValueError(f"can't spinoff position {event.symbol} as it is not open")
 
     position_to_spinoff = positions.loc[event.symbol]
