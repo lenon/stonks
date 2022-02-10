@@ -1,5 +1,5 @@
-from .positions import calc_positions
 import argparse
+from .positions import calc_positions
 
 parser = argparse.ArgumentParser(description="Calculate current stocks portfolio")
 
