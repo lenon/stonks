@@ -1,4 +1,3 @@
-import pandas as pd
 from .utils import columns_to_title_case, positions_output_path
 from openpyxl import Workbook as Wb
 from openpyxl.utils.dataframe import dataframe_to_rows
