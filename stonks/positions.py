@@ -4,16 +4,11 @@ from .costs import (
     sum_confirmations_costs,
     calc_subscriptions_net_amounts,
 )
-from .excel import read_sheet, save_as_excel
-from .utils import positions_output_path
+from .excel import read_sheet
 from .events import event_fn, concat_events
-from stonks.excel import save_as_excel
 
 
-def calc_positions(input_path):
-    output_path = positions_output_path(input_path)
-    xlsx = pd.ExcelFile(input_path)
-
+def calc_positions(xlsx):
     # confirmations (or "notas de corretagem") include a summary of all trades made in a single day
     # they are needed to calculate the cost basis for each position
     confirmations = (
@@ -48,4 +43,8 @@ def calc_positions(input_path):
         fn = event_fn(event)
         fn(positions, event)
 
-    save_as_excel(positions, output_path)
+    sorted_positions = (
+        positions.sort_index().round(2).reset_index().rename(columns={"index": "symbol"})
+    )
+
+    return sorted_positions
