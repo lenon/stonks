@@ -51,4 +51,13 @@ def calc_positions(xlsx):
         positions.sort_index().round(2).reset_index().rename(columns={"index": "symbol"})
     )
 
-    return sorted_positions
+    return [
+        sorted_positions,
+        confirmations,
+        trades,
+        subscriptions,
+        splits,
+        mergers,
+        spinoffs,
+        events,
+    ]
