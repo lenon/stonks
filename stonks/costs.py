@@ -1,6 +1,3 @@
-import pandas as pd
-
-
 # Calculate volume (sells + buys), costs (sum of all fees) and net amount (sells
 # - buys - costs). These columns are not included in trade confirmations ("nota
 # de corretagem" in Portuguese) and are required for other calculations.
