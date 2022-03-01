@@ -1,3 +1,3 @@
 date,broker,symbol,description,start,end,settlement,shares,exercised,price,issue_date
 2022-01-01,Acme,ABC3,4th subs,2022-01-01,2022-01-02,2022-01-03,100,90,50.1,2022-01-10
-2022-02-01,Acme,ABC3,5th subs,2022-02-01,2022-02-02,2022-02-03,50,50,10.5,2022-02-10
+2022-02-01,Acme,ABC3,5th subs,2022-02-01,2022-02-02,2022-02-03,50,50,10.5,

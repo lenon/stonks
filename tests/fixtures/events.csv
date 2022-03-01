@@ -16,5 +16,5 @@ date,broker,symbol,type,quantity,price,amount,costs,net_amount,event,description
 2022-01-08,Acme,FFF,buy,16.0,6.25,100.0,1.4,101.4,trade,,,,,,,,,,,
 2022-01-10,,CCC,,,,,,,merger,,,,,,,,2:1,NEWCO,,
 2022-01-10,,EEE,,,,,,,split,,,,,,,,5:1,,,
-2022-02-01,Acme,ABC3,,,10.5,,,525.0,subscription,5th subs,2022-02-01,2022-02-02,2022-02-03,50.0,50.0,2022-02-10,,,,
+2022-02-01,Acme,ABC3,,,10.5,,,525.0,subscription,5th subs,2022-02-01,2022-02-02,2022-02-03,50.0,50.0,,,,,
 2022-03-01,,AAA,,,,,,,spinoff,,,,,,,,2:1,,CORP,0.05
