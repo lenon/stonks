@@ -1,38 +1,45 @@
 import pandas as pd
-from .utils import columns_to_snake_case, columns_to_title_case
-from openpyxl import Workbook
+from .utils import columns_to_title_case, positions_output_path
+from openpyxl import Workbook as Wb
 from openpyxl.utils.dataframe import dataframe_to_rows
 
-_BRL_FORMAT = '_(R$* #,##0.00_);_(R$* (#,##0.00);_(R$* "-"??_);_(@_)'
+
+class Sheet:
+    _BRL_FORMAT = '_(R$* #,##0.00_);_(R$* (#,##0.00);_(R$* "-"??_);_(@_)'
+
+    def __init__(self, ws):
+        self._ws = ws
+
+    def _find_column_by_name(self, name):
+        header = next(self._ws.rows)
+        cell = next(cell for cell in header if cell.value == name)
+
+        return cell.column_letter
+
+    def format_as_brl(self, column_name):
+        column_letter = self._find_column_by_name(column_name)
+
+        for cell in self._ws[column_letter]:
+            cell.number_format = self._BRL_FORMAT
+
+    def set_column_width(self, column_name, width):
+        column_letter = self._find_column_by_name(column_name)
+        self._ws.column_dimensions[column_letter].width = width
 
 
-def read_sheet(xlsx, sheet_name):
-    return pd.read_excel(xlsx, sheet_name=sheet_name).rename(columns=columns_to_snake_case)
+class Workbook:
+    def __init__(self, input_path):
+        self._output_path = positions_output_path(input_path)
+        self._wb = Wb()
 
+    def add_sheet(self, name, df):
+        ws = self._wb.create_sheet(name)
+        df = df.rename(columns=columns_to_title_case)
 
-def save_as_excel(positions, output_path):
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "positions"
+        for r in dataframe_to_rows(df, index=False):
+            ws.append(r)
 
-    df = (
-        positions.rename(columns=columns_to_title_case)
-        .sort_index()
-        .round(2)
-        .reset_index()
-        .rename(columns={"index": "Symbol"})
-    )
+        return Sheet(ws)
 
-    for r in dataframe_to_rows(df, index=False):
-        ws.append(r)
-
-    for cell in ws["C"]:
-        cell.number_format = _BRL_FORMAT
-
-    for cell in ws["D"]:
-        cell.number_format = _BRL_FORMAT
-
-    ws.column_dimensions["C"].width = 15
-    ws.column_dimensions["D"].width = 15
-
-    wb.save(output_path)
+    def save(self):
+        self._wb.save(self._output_path)
