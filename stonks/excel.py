@@ -4,7 +4,8 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 
 
 class Sheet:
-    _BRL_FORMAT = '_(R$* #,##0.00_);_(R$* (#,##0.00);_(R$* "-"??_);_(@_)'
+    _BRL_FORMAT = '_-"R$"\ * #,##0.00_-;\-"R$"\ * #,##0.00_-;_-"R$"\ * "-"??_-;_-@_-'
+    _DATE_FORMAT = "dd/mm/yy"
 
     def __init__(self, ws):
         self._ws = ws
@@ -20,6 +21,12 @@ class Sheet:
 
         for cell in self._ws[column_letter]:
             cell.number_format = self._BRL_FORMAT
+
+    def format_as_date(self, column_name):
+        column_letter = self._find_column_by_name(column_name)
+
+        for cell in self._ws[column_letter]:
+            cell.number_format = self._DATE_FORMAT
 
     def set_column_width(self, column_name, width):
         column_letter = self._find_column_by_name(column_name)
