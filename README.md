@@ -5,8 +5,8 @@ portfolio in the Brazilian stock market. I wrote it in Python 3 using Pandas for
 data analysis. The goal was to replace a complicated Excel spreadsheet I was
 using.
 
-Feel free to use the code as you like, but please keep in mind that there is no
-guarantee that it is 100% correct or will work for all cases.
+Feel free to use the code as you like, but please keep in mind that nothing here
+is guaranteed to be correct.
 
 ## Requirements
 
