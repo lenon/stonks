@@ -12,7 +12,7 @@ def make_position(symbol, /, quantity, cost, cost_per_share):
     )
 
 
-def make_positions(data):
+def make_positions_df(data):
     df = pd.DataFrame(data, columns=["symbol", "quantity", "cost", "cost_per_share"]).set_index(
         "symbol"
     )
