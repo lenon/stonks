@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 from pandas import to_datetime as dt
 from datetime import datetime, timedelta
-from .helpers import make_event, make_position, make_positions
+from .helpers import make_event, make_position, make_positions_df
 from stonks.errors import UnknownEventError, PositionNotOpenError
 from stonks.events import (
     buy,
@@ -30,8 +30,8 @@ def test_concat_events(trades, subscriptions, splits, mergers, spinoffs, events)
 
 
 def test_buy_new_position():
-    positions = make_positions([])
-    expected = make_positions(
+    positions = make_positions_df([])
+    expected = make_positions_df(
         [make_position("AAA", quantity=8.0, cost=101.4, cost_per_share=12.675)]
     )
     event = make_event(
@@ -53,10 +53,10 @@ def test_buy_new_position():
 
 
 def test_buy_second_time():
-    positions = make_positions(
+    positions = make_positions_df(
         [make_position("AAA", quantity=8.0, cost=101.4, cost_per_share=12.675)]
     )
-    expected = make_positions(
+    expected = make_positions_df(
         [make_position("AAA", quantity=16.0, cost=198.26, cost_per_share=12.39125)]
     )
     event = make_event(
@@ -78,10 +78,10 @@ def test_buy_second_time():
 
 
 def test_sell_position():
-    positions = make_positions(
+    positions = make_positions_df(
         [make_position("AAA", quantity=16.0, cost=198.26, cost_per_share=12.39125)]
     )
-    expected = make_positions(
+    expected = make_positions_df(
         # cost per share shouldn't change
         [make_position("AAA", quantity=11.0, cost=136.30375, cost_per_share=12.39125)]
     )
@@ -104,13 +104,13 @@ def test_sell_position():
 
 
 def test_sell_closing_position():
-    positions = make_positions(
+    positions = make_positions_df(
         [
             make_position("AAA", quantity=8.0, cost=80.0, cost_per_share=10.0),
             make_position("BBB", quantity=10.0, cost=200.0, cost_per_share=20.0),
         ]
     )
-    expected = make_positions(
+    expected = make_positions_df(
         [make_position("BBB", quantity=10.0, cost=200.0, cost_per_share=20.0)]
     )
     event = make_event(
@@ -132,7 +132,9 @@ def test_sell_closing_position():
 
 
 def test_sell_without_an_open_position():
-    positions = make_positions([make_position("AAA", quantity=8.0, cost=80.0, cost_per_share=10.0)])
+    positions = make_positions_df(
+        [make_position("AAA", quantity=8.0, cost=80.0, cost_per_share=10.0)]
+    )
     event = make_event(
         date=dt("2022-01-03"),
         broker="Acme",
@@ -151,8 +153,8 @@ def test_sell_without_an_open_position():
 
 
 def test_subscription_with_new_position():
-    positions = make_positions([])
-    expected = make_positions(
+    positions = make_positions_df([])
+    expected = make_positions_df(
         [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
     )
     event = make_event(
@@ -177,10 +179,10 @@ def test_subscription_with_new_position():
 
 
 def test_subscription_for_existing_position():
-    positions = make_positions(
+    positions = make_positions_df(
         [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
     )
-    expected = make_positions(
+    expected = make_positions_df(
         [make_position("ABC", quantity=140.0, cost=5034.0, cost_per_share=35.957143)]
     )
     event = make_event(
@@ -205,10 +207,10 @@ def test_subscription_for_existing_position():
 
 
 def test_subscription_without_issue_date():
-    positions = make_positions(
+    positions = make_positions_df(
         [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
     )
-    expected = make_positions(
+    expected = make_positions_df(
         [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
     )
     event = make_event(
@@ -233,10 +235,10 @@ def test_subscription_without_issue_date():
 
 
 def test_subscription_with_future_issue_date():
-    positions = make_positions(
+    positions = make_positions_df(
         [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
     )
-    expected = make_positions(
+    expected = make_positions_df(
         [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
     )
     event = make_event(
@@ -261,10 +263,12 @@ def test_subscription_with_future_issue_date():
 
 
 def test_merger():
-    positions = make_positions(
+    positions = make_positions_df(
         [make_position("ABC", quantity=10.0, cost=109.0, cost_per_share=10.9)]
     )
-    expected = make_positions([make_position("NEWCO", quantity=5, cost=109.0, cost_per_share=21.8)])
+    expected = make_positions_df(
+        [make_position("NEWCO", quantity=5, cost=109.0, cost_per_share=21.8)]
+    )
     event = make_event(
         date=dt("2022-01-10"),
         symbol="ABC",
@@ -279,7 +283,7 @@ def test_merger():
 
 
 def test_merger_without_open_position():
-    positions = make_positions([])
+    positions = make_positions_df([])
     event = make_event(
         date=dt("2022-01-10"),
         symbol="ABC",
@@ -293,10 +297,10 @@ def test_merger_without_open_position():
 
 
 def test_split():
-    positions = make_positions(
+    positions = make_positions_df(
         [make_position("ABC", quantity=10.0, cost=109.0, cost_per_share=10.9)]
     )
-    expected = make_positions(
+    expected = make_positions_df(
         [make_position("ABC", quantity=100.0, cost=109.0, cost_per_share=1.09)]
     )
     event = make_event(date=dt("2022-01-05"), symbol="ABC", event="split", ratio="10:1")
@@ -307,7 +311,7 @@ def test_split():
 
 
 def test_split_without_open_position():
-    positions = make_positions([])
+    positions = make_positions_df([])
     event = make_event(date=dt("2022-01-05"), symbol="ABC", event="split", ratio="10:1")
 
     with pytest.raises(PositionNotOpenError, match="position not open: ABC"):
@@ -315,10 +319,10 @@ def test_split_without_open_position():
 
 
 def test_spinoff():
-    positions = make_positions(
+    positions = make_positions_df(
         [make_position("ABC", quantity=100.0, cost=1090.0, cost_per_share=10.9)]
     )
-    expected = make_positions(
+    expected = make_positions_df(
         [
             make_position("ABC", quantity=100.0, cost=654.0, cost_per_share=6.54),
             make_position("NEWCO", quantity=50.0, cost=436.0, cost_per_share=8.72),
@@ -339,7 +343,7 @@ def test_spinoff():
 
 
 def test_spinoff_without_open_position():
-    positions = make_positions([])
+    positions = make_positions_df([])
     event = make_event(
         date=dt("2022-03-01"),
         symbol="ABC",
