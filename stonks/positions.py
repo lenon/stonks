@@ -1,7 +1,7 @@
 import pandas as pd
 from .costs import (
     calc_trades_costs,
-    sum_confirmations_costs,
+    calc_confirmations_costs,
     calc_subscriptions_net_amounts,
 )
 from .utils import columns_to_snake_case
@@ -18,7 +18,7 @@ def calc_positions(xlsx):
     confirmations = (
         _read_sheet(xlsx, "confirmations")
         .set_index(["date", "broker"])
-        .pipe(sum_confirmations_costs)
+        .pipe(calc_confirmations_costs)
     )
     # trades contain all buys and sells of stocks
     trades = (
