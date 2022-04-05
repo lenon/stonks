@@ -4,7 +4,7 @@ from .helpers import fixture_path
 
 
 @fixture
-def confirmations():
+def confirmations_df():
     return pd.read_csv(
         fixture_path("confirmations.csv"),
         parse_dates=["date"],
@@ -13,7 +13,21 @@ def confirmations():
 
 
 @fixture
-def trades():
+def confirmations_costs_df():
+    return pd.read_csv(
+        fixture_path("confirmations-costs.csv"),
+        parse_dates=["date"],
+        index_col=["date", "broker"],
+    )
+
+
+@fixture
+def confirmations_with_costs_df(confirmations_df, confirmations_costs_df):
+    return confirmations_df.combine_first(confirmations_costs_df)
+
+
+@fixture
+def trades_df():
     return pd.read_csv(
         fixture_path("trades.csv"),
         parse_dates=["date"],
@@ -22,11 +36,24 @@ def trades():
 
 
 @fixture
-def subscriptions():
+def trades_costs_df():
+    return pd.read_csv(
+        fixture_path("trades-costs.csv"),
+        parse_dates=["date"],
+        index_col=["date", "broker"],
+    )
+
+
+@fixture
+def subscriptions_df():
     return pd.read_csv(
         fixture_path("subscriptions.csv"),
-        parse_dates=["date", "start", "end", "settlement", "issue_date"],
     )
+
+
+@fixture
+def subscriptions_amounts_df():
+    return pd.read_csv(fixture_path("subscriptions-amounts.csv"))
 
 
 @fixture

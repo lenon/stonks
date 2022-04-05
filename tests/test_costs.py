@@ -1,6 +1,4 @@
 import pandas as pd
-from pytest import fixture
-from .helpers import fixture_path
 from stonks.costs import (
     calc_trades_costs,
     sum_confirmations_costs,
@@ -8,45 +6,19 @@ from stonks.costs import (
 )
 
 
-@fixture
-def confirmations_pre_calc():
-    return pd.read_csv(
-        fixture_path("confirmations-pre-calc.csv"),
-        parse_dates=["date"],
-        index_col=["date", "broker"],
-    )
+def test_sum_confirmations_costs(confirmations_df, confirmations_costs_df):
+    results = sum_confirmations_costs(confirmations_df)
+
+    pd.testing.assert_frame_equal(results, confirmations_costs_df)
 
 
-@fixture
-def trades_pre_calc():
-    return pd.read_csv(
-        fixture_path("trades-pre-calc.csv"),
-        parse_dates=["date"],
-        index_col=["date", "broker"],
-    )
+def test_calc_trades_costs(confirmations_with_costs_df, trades_df, trades_costs_df):
+    results = calc_trades_costs(trades_df, confirmations_with_costs_df)
+
+    pd.testing.assert_frame_equal(results, trades_costs_df)
 
 
-@fixture
-def subscriptions_pre_calc():
-    return pd.read_csv(
-        fixture_path("subscriptions-pre-calc.csv"),
-        parse_dates=["date", "start", "end", "settlement", "issue_date"],
-    )
+def test_calc_subscriptions_net_amounts(subscriptions_df, subscriptions_amounts_df):
+    results = calc_subscriptions_net_amounts(subscriptions_df)
 
-
-def test_sum_confirmations_costs(confirmations_pre_calc, confirmations):
-    results = sum_confirmations_costs(confirmations_pre_calc)
-
-    pd.testing.assert_frame_equal(results, confirmations)
-
-
-def test_calc_trades_costs(confirmations, trades_pre_calc, trades):
-    results = calc_trades_costs(trades_pre_calc, confirmations)
-
-    pd.testing.assert_frame_equal(results, trades)
-
-
-def test_calc_subscriptions_net_amounts(subscriptions_pre_calc, subscriptions):
-    results = calc_subscriptions_net_amounts(subscriptions_pre_calc)
-
-    pd.testing.assert_frame_equal(results, subscriptions)
+    pd.testing.assert_frame_equal(results, subscriptions_amounts_df)
