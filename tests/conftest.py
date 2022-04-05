@@ -97,3 +97,8 @@ def events_df():
         fixture_path("events.csv"),
         parse_dates=["date", "start", "end", "settlement", "issue_date"],
     )
+
+
+@fixture
+def positions_df():
+    return pd.read_csv(fixture_path("positions.csv"))
