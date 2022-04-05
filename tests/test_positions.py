@@ -1,13 +1,5 @@
-import pandas as pd
-from pytest import fixture
-from .helpers import fixture_path
 from pandas.testing import assert_frame_equal
 from stonks.positions import calc_positions
-
-
-@fixture
-def positions_df():
-    return pd.read_csv(fixture_path("positions.csv"))
 
 
 def test_calc_positions(
