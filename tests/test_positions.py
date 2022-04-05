@@ -6,31 +6,24 @@ from stonks.positions import calc_positions
 
 
 @fixture
-def positions():
+def positions_df():
     return pd.read_csv(fixture_path("positions.csv"))
 
 
 def test_calc_positions(
-    positions, confirmations, trades, subscriptions, splits, mergers, spinoffs, events
+    positions_df,
+    trades_with_costs_df,
+    subscriptions_with_amounts_df,
+    splits_df,
+    mergers_df,
+    spinoffs_df,
 ):
-    xlsx = pd.ExcelFile(fixture_path("br-sample.xlsx"))
+    actual_positions = calc_positions(
+        trades=trades_with_costs_df,
+        subscriptions=subscriptions_with_amounts_df,
+        splits=splits_df,
+        mergers=mergers_df,
+        spinoffs=spinoffs_df,
+    )
 
-    (
-        actual_positions,
-        actual_confirmations,
-        actual_trades,
-        actual_subscriptions,
-        actual_splits,
-        actual_mergers,
-        actual_spinoffs,
-        actual_events,
-    ) = calc_positions(xlsx)
-
-    assert_frame_equal(actual_positions, positions)
-    assert_frame_equal(actual_confirmations, confirmations)
-    assert_frame_equal(actual_trades, trades)
-    assert_frame_equal(actual_subscriptions, subscriptions)
-    assert_frame_equal(actual_splits, splits)
-    assert_frame_equal(actual_mergers, mergers)
-    assert_frame_equal(actual_spinoffs, spinoffs)
-    assert_frame_equal(actual_events, events)
+    assert_frame_equal(actual_positions, positions_df)

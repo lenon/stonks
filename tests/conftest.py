@@ -45,9 +45,15 @@ def trades_costs_df():
 
 
 @fixture
+def trades_with_costs_df(trades_df, trades_costs_df):
+    return trades_df.combine_first(trades_costs_df)
+
+
+@fixture
 def subscriptions_df():
     return pd.read_csv(
         fixture_path("subscriptions.csv"),
+        parse_dates=["date", "start", "end", "settlement", "issue_date"],
     )
 
 
@@ -57,7 +63,12 @@ def subscriptions_amounts_df():
 
 
 @fixture
-def splits():
+def subscriptions_with_amounts_df(subscriptions_df, subscriptions_amounts_df):
+    return subscriptions_df.combine_first(subscriptions_amounts_df)
+
+
+@fixture
+def splits_df():
     return pd.read_csv(
         fixture_path("splits.csv"),
         parse_dates=["date"],
@@ -65,7 +76,7 @@ def splits():
 
 
 @fixture
-def mergers():
+def mergers_df():
     return pd.read_csv(
         fixture_path("mergers.csv"),
         parse_dates=["date"],
@@ -73,7 +84,7 @@ def mergers():
 
 
 @fixture
-def spinoffs():
+def spinoffs_df():
     return pd.read_csv(
         fixture_path("spinoffs.csv"),
         parse_dates=["date"],
@@ -81,7 +92,7 @@ def spinoffs():
 
 
 @fixture
-def events():
+def events_df():
     return pd.read_csv(
         fixture_path("events.csv"),
         parse_dates=["date", "start", "end", "settlement", "issue_date"],
