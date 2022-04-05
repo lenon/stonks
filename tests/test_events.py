@@ -17,16 +17,23 @@ from stonks.events import (
 from pandas.testing import assert_frame_equal
 
 
-def test_concat_events(trades, subscriptions, splits, mergers, spinoffs, events):
+def test_concat_events(
+    trades_with_costs_df,
+    subscriptions_with_amounts_df,
+    splits_df,
+    mergers_df,
+    spinoffs_df,
+    events_df,
+):
     result = concat_events(
-        ["trade", trades.reset_index()],
-        ["subscription", subscriptions],
-        ["split", splits],
-        ["merger", mergers],
-        ["spinoff", spinoffs],
+        ["trade", trades_with_costs_df.reset_index()],
+        ["subscription", subscriptions_with_amounts_df],
+        ["split", splits_df],
+        ["merger", mergers_df],
+        ["spinoff", spinoffs_df],
     )
 
-    pd.testing.assert_frame_equal(result, events)
+    assert_frame_equal(result, events_df)
 
 
 def test_buy_new_position():
