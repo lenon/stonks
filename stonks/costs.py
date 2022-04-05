@@ -4,7 +4,7 @@ import pandas as pd
 
 # Calculate some columns that are not included in trade confirmations ("nota de
 # corretagem" in Portuguese) and are required for other calculations.
-def sum_confirmations_costs(confirmations):
+def calc_confirmations_costs(confirmations):
     volume = confirmations.sells + confirmations.buys
     costs = confirmations.clearing_fees + confirmations.trading_fees + confirmations.brokerage_fees
     net_amount = confirmations.sells - confirmations.buys - costs

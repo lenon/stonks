@@ -1,13 +1,13 @@
 import pandas as pd
 from stonks.costs import (
     calc_trades_costs,
-    sum_confirmations_costs,
+    calc_confirmations_costs,
     calc_subscriptions_net_amounts,
 )
 
 
-def test_sum_confirmations_costs(confirmations_df, confirmations_costs_df):
-    results = sum_confirmations_costs(confirmations_df)
+def test_calc_confirmations_costs(confirmations_df, confirmations_costs_df):
+    results = calc_confirmations_costs(confirmations_df)
 
     pd.testing.assert_frame_equal(results, confirmations_costs_df)
 
