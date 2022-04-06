@@ -11,6 +11,12 @@ def concat_events(*dfs):
     return pd.concat(events).sort_values(by="date", ignore_index=True)
 
 
+def filter_by_date(events, date):
+    return events.query(
+        "(event == 'subscription' and issue_date <= @date) or (event != 'subscription' and date <= @date)"
+    )
+
+
 def buy(positions, event):
     if event.symbol not in positions.index:
         # first buy, not yet in positions dataframe

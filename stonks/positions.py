@@ -1,5 +1,5 @@
 import pandas as pd
-from .events import event_fn, concat_events
+from .events import event_fn, concat_events, filter_by_date
 from .schemas import (
     SplitSchema,
     TradeSchema,
@@ -9,7 +9,7 @@ from .schemas import (
 )
 
 
-def calc_positions(trades, subscriptions, splits, mergers, spinoffs):
+def calc_positions(date, trades, subscriptions, splits, mergers, spinoffs):
     trades_df = TradeSchema(trades)
     subscriptions_df = SubscriptionSchema(subscriptions)
     splits_df = SplitSchema(splits)
@@ -23,10 +23,10 @@ def calc_positions(trades, subscriptions, splits, mergers, spinoffs):
         ["merger", mergers_df],
         ["spinoff", spinoffs_df],
     )
-
+    filtered_events = filter_by_date(events=events, date=date)
     positions = pd.DataFrame(columns=["quantity", "cost", "cost_per_share"])
 
-    for _, event in events.iterrows():
+    for _, event in filtered_events.iterrows():
         fn = event_fn(event)
         fn(positions, event)
 
