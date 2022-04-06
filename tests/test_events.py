@@ -13,6 +13,7 @@ from stonks.events import (
     event_fn,
     subscription,
     concat_events,
+    filter_by_date,
 )
 from pandas.testing import assert_frame_equal
 
@@ -34,6 +35,12 @@ def test_concat_events(
     )
 
     assert_frame_equal(result, events_df)
+
+
+def test_filter_by_date(events_df, events_filtered_df):
+    result = filter_by_date(events=events_df, date="2022-02-15")
+
+    assert_frame_equal(result, events_filtered_df)
 
 
 def test_buy_new_position():

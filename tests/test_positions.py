@@ -1,3 +1,4 @@
+from datetime import date
 from pandas.testing import assert_frame_equal
 from stonks.positions import calc_positions
 
@@ -11,6 +12,7 @@ def test_calc_positions(
     spinoffs_df,
 ):
     actual_positions = calc_positions(
+        date=date.today(),
         trades=trades_with_costs_df,
         subscriptions=subscriptions_with_amounts_df,
         splits=splits_df,
