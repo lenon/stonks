@@ -1,5 +1,5 @@
 date,broker,symbol,type,quantity,price,amount,costs,net_amount
-2022-01-01,Acme,AAA,buy,8,12.5,,,
+2022-01-01,Acme,AAA,buy,8.0,12.5,,,
 2022-01-15,Acme,AAA,buy,8,12.0,,,
 2022-01-15,Acme,BBB,buy,10,10.4,,,
 2022-01-31,Acme,AAA,sell,5,20.0,,,
