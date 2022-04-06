@@ -9,23 +9,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: scripts/read-python-version.sh
-      - uses: actions/setup-python@v2
+      - name: Install Poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v3
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-      - name: Cache Poetry
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.local/share/pypoetry
-            ~/.local/bin/poetry
-          key: poetry-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}
-      - name: Install Poetry
-        run: scripts/install-poetry.sh
-      - name: Cache virtual envs
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pypoetry/virtualenvs
-          key: venvs-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-${{ hashFiles('poetry.lock') }}
+          cache: poetry
+      # workaround for this issue: https://github.com/actions/setup-python/issues/374#issuecomment-1088938718
+      - run: poetry env use ${{ env.PYTHON_VERSION }}
       - run: poetry install
       - run: poetry run coverage run -m pytest
       - run: poetry run coverage html
