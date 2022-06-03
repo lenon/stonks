@@ -182,7 +182,7 @@ test = ["hypothesis (>=5.5.3)", "pytest (>=6.0)", "pytest-xdist (>=1.31)"]
 
 [[package]]
 name = "pandera"
-version = "0.10.1"
+version = "0.11.0"
 description = "A light-weight and flexible data validation and testing tool for dataframes."
 category = "main"
 optional = false
@@ -198,7 +198,7 @@ typing-inspect = ">=0.6.0"
 wrapt = "*"
 
 [package.extras]
-all = ["hypothesis (>=5.41.1)", "dask", "pandas-stubs", "shapely", "pyyaml (>=5.1)", "geopandas", "ray (<=1.7.0)", "frictionless", "black", "fastapi", "scipy", "modin", "pyspark"]
+all = ["black", "dask", "geopandas", "shapely", "pyspark", "frictionless", "pyyaml (>=5.1)", "fastapi", "hypothesis (>=5.41.1)", "ray (<=1.7.0)", "modin", "scipy", "pandas-stubs"]
 dask = ["dask"]
 fastapi = ["fastapi"]
 geopandas = ["geopandas", "shapely"]
@@ -412,7 +412,7 @@ reports = ["cryptography", "jinja2", "pdfrw"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "c212c3203ee284ff6bfb6f30d3a39380c22d3d3fc45a98808a89de48d6249c2f"
+content-hash = "a2b8586778baad978865e294b7b4db96b3efc668fcbd5ecf15dad0121ccdf2ad"
 
 [metadata.files]
 appscript = [
@@ -641,8 +641,8 @@ pandas = [
     {file = "pandas-1.4.2.tar.gz", hash = "sha256:92bc1fc585f1463ca827b45535957815b7deb218c549b7c18402c322c7549a12"},
 ]
 pandera = [
-    {file = "pandera-0.10.1-py3-none-any.whl", hash = "sha256:8db295ff8562e1bdbdb38988c16f4cccc891c8b665bd50427c69fe5637e957fe"},
-    {file = "pandera-0.10.1.tar.gz", hash = "sha256:7f69676b67833b252e3799ea7f52993b08a668aeba4879892e0d729203435657"},
+    {file = "pandera-0.11.0-py3-none-any.whl", hash = "sha256:39c7acecbe9d89e47b948b27d37684e26d7a1fcb6bca94d856a0bb423b9fab65"},
+    {file = "pandera-0.11.0.tar.gz", hash = "sha256:ac49604d5f30554ea29913c8a52351bfffa7ba33eb1f68614d77d04e83684167"},
 ]
 pathspec = [
     {file = "pathspec-0.9.0-py2.py3-none-any.whl", hash = "sha256:7d15c4ddb0b5c802d161efc417ec1a2558ea2653c2e8ad9c19098201dc1c993a"},
