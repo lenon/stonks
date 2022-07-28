@@ -393,7 +393,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 
 [[package]]
 name = "xlwings"
-version = "0.27.10"
+version = "0.27.11"
 description = "Make Excel fly: Interact with Excel from Python and vice versa."
 category = "main"
 optional = false
@@ -412,7 +412,7 @@ reports = ["cryptography", "jinja2", "pdfrw"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "28b71943e43c90fac7a82751c97b6a3540c2937c7188812339ab3eaac6b13b51"
+content-hash = "217ff7132c316ba844ea6c7fb120ead7ecf015f355c49d79b6107351546b8263"
 
 [metadata.files]
 appscript = [
@@ -877,6 +877,6 @@ wrapt = [
     {file = "wrapt-1.14.0.tar.gz", hash = "sha256:8323a43bd9c91f62bb7d4be74cc9ff10090e7ef820e27bfe8815c57e68261311"},
 ]
 xlwings = [
-    {file = "xlwings-0.27.10-py3-none-any.whl", hash = "sha256:6ebdcb13a95c971eed31062f6765ea0a13c59f648b73f832641dff1309cd64de"},
-    {file = "xlwings-0.27.10.tar.gz", hash = "sha256:b4786b8551f4bf425120f548a8ede378e512f1c377572115360986db2131691d"},
+    {file = "xlwings-0.27.11-py3-none-any.whl", hash = "sha256:30a18ea0575af47b58529296adbe82609ec1cdce613f3df5c343b194d1632ad1"},
+    {file = "xlwings-0.27.11.tar.gz", hash = "sha256:8fa5525ccbd73db0fe5062c9a514ab1331e7e705db65e137be24a35f4dd5e7f8"},
 ]
