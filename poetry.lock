@@ -182,8 +182,8 @@ test = ["hypothesis (>=5.5.3)", "pytest (>=6.0)", "pytest-xdist (>=1.31)"]
 
 [[package]]
 name = "pandera"
-version = "0.11.0"
-description = "A light-weight and flexible data validation and testing tool for dataframes."
+version = "0.12.0"
+description = "A light-weight and flexible data validation and testing tool for statistical data objects."
 category = "main"
 optional = false
 python-versions = ">=3.8"
@@ -199,8 +199,8 @@ wrapt = "*"
 
 [package.extras]
 strategies = ["hypothesis (>=5.41.1)"]
-pyspark = ["pyspark"]
-mypy = ["pandas-stubs"]
+pyspark = ["pyspark (>=3.2.0)"]
+mypy = ["pandas-stubs (<=1.4.3.220807)"]
 modin-ray = ["ray (<=1.7.0)", "modin"]
 modin-dask = ["dask", "modin"]
 modin = ["dask", "ray (<=1.7.0)", "modin"]
@@ -209,7 +209,7 @@ hypotheses = ["scipy"]
 geopandas = ["shapely", "geopandas"]
 fastapi = ["fastapi"]
 dask = ["dask"]
-all = ["pandas-stubs", "scipy", "modin", "ray (<=1.7.0)", "hypothesis (>=5.41.1)", "fastapi", "pyyaml (>=5.1)", "frictionless", "pyspark", "shapely", "geopandas", "dask", "black"]
+all = ["pyyaml (>=5.1)", "geopandas", "shapely", "ray (<=1.7.0)", "pyspark (>=3.2.0)", "modin", "scipy", "hypothesis (>=5.41.1)", "fastapi", "pandas-stubs (<=1.4.3.220807)", "black", "dask", "frictionless"]
 
 [[package]]
 name = "pathspec"
@@ -412,7 +412,7 @@ reports = ["cryptography", "jinja2", "pdfrw"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "6517bb20f9206b65effca014b27648806474e1746ccd28f6018e86ed3ee0533e"
+content-hash = "b7f771825a07c3fae68095a6006c3d14bc2ccbaa701d62166fba963d812e3138"
 
 [metadata.files]
 appscript = [
@@ -650,8 +650,8 @@ pandas = [
     {file = "pandas-1.4.3.tar.gz", hash = "sha256:2ff7788468e75917574f080cd4681b27e1a7bf36461fe968b49a87b5a54d007c"},
 ]
 pandera = [
-    {file = "pandera-0.11.0-py3-none-any.whl", hash = "sha256:39c7acecbe9d89e47b948b27d37684e26d7a1fcb6bca94d856a0bb423b9fab65"},
-    {file = "pandera-0.11.0.tar.gz", hash = "sha256:ac49604d5f30554ea29913c8a52351bfffa7ba33eb1f68614d77d04e83684167"},
+    {file = "pandera-0.12.0-py3-none-any.whl", hash = "sha256:c47110979c0ddf15647563b2ffde0db3e728eb833e78e7801080004a08d78955"},
+    {file = "pandera-0.12.0.tar.gz", hash = "sha256:d3255e52b7bbe7a4ba0182b80725bdd71efe0658d06e3e5d1840047d79578535"},
 ]
 pathspec = [
     {file = "pathspec-0.9.0-py2.py3-none-any.whl", hash = "sha256:7d15c4ddb0b5c802d161efc417ec1a2558ea2653c2e8ad9c19098201dc1c993a"},
