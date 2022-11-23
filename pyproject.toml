@@ -6,7 +6,7 @@ authors = ["Lenon Marcel <lenon.marcel@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pandas = "^1.4.4"
+pandas = "^1.5.2"
 openpyxl = "^3.0.10"
 xlwings = "^0.27.14"
 pandera = "^0.12.0"
