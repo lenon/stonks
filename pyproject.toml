@@ -8,7 +8,7 @@ authors = ["Lenon Marcel <lenon.marcel@gmail.com>"]
 python = "^3.10"
 pandas = "^1.4.4"
 openpyxl = "^3.0.10"
-xlwings = "^0.27.14"
+xlwings = "^0.28.9"
 pandera = "^0.12.0"
 
 [tool.poetry.dev-dependencies]
