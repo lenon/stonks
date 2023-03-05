@@ -1,22 +1,17 @@
 name: CI
 on:
   - push
-env:
-  POETRY_VERSION: 1.1.13
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: scripts/read-python-version.sh
       - name: Install Poetry
         run: pipx install poetry
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
+          python-version-file: .python-version
           cache: poetry
-      # workaround for this issue: https://github.com/actions/setup-python/issues/374#issuecomment-1088938718
-      - run: poetry env use ${{ env.PYTHON_VERSION }}
       - run: poetry install
       - run: poetry run coverage run -m pytest
       - run: poetry run coverage html
