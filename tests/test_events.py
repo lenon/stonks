@@ -14,6 +14,7 @@ from stonks.events import (
     subscription,
     concat_events,
     filter_by_date,
+    stock_dividend,
 )
 from pandas.testing import assert_frame_equal
 
@@ -25,6 +26,7 @@ def test_concat_events(
     mergers_df,
     spinoffs_df,
     events_df,
+    stock_dividends_df,
 ):
     result = concat_events(
         ["trade", trades_with_costs_df.reset_index()],
@@ -32,6 +34,7 @@ def test_concat_events(
         ["split", splits_df],
         ["merger", mergers_df],
         ["spinoff", spinoffs_df],
+        ["stock_dividend", stock_dividends_df],
     )
 
     assert_frame_equal(result, events_df)
@@ -369,6 +372,28 @@ def test_spinoff_without_open_position():
 
     with pytest.raises(PositionNotOpenError, match="position not open: ABC"):
         spinoff(positions, event)
+
+
+def test_stock_dividend():
+    positions = make_positions_df(
+        [make_position("ABC", quantity=10.0, cost=109.0, cost_per_share=10.9)]
+    )
+    expected = make_positions_df(
+        [make_position("ABC", quantity=20.0, cost=109.0, cost_per_share=5.45)]
+    )
+    event = make_event(date=dt("2022-01-05"), symbol="ABC", event="stock_dividend", quantity=10)
+
+    stock_dividend(positions, event)
+
+    assert_frame_equal(positions, expected)
+
+
+def test_stock_dividend_without_open_position():
+    positions = make_positions_df([])
+    event = make_event(date=dt("2022-01-05"), symbol="ABC", event="stock_dividend", quantity=10)
+
+    with pytest.raises(PositionNotOpenError, match="position not open: ABC"):
+        stock_dividend(positions, event)
 
 
 def test_event_fn():

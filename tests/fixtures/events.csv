@@ -18,3 +18,4 @@ date,broker,amount,costs,net_amount,price,quantity,symbol,type,event,description
 2022-03-31,,,,,,,CCC,,merger,,,,,,,,2:1,NEWCO,,
 2022-04-01,Acme,,,525.0,10.5,,ABC3,,subscription,5th subs,2022-04-10,50.0,,2022-04-11,50.0,2022-04-01,,,,
 2022-04-01,,,,,,,AAA,,spinoff,,,,,,,,2:1,,CORP,0.05
+2022-04-02,,,,,,10.0,NEWCO,,stock_dividend,,,,,,,,,,,
