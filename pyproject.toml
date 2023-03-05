@@ -29,7 +29,7 @@ length_sort = true
 
 [tool.black]
 line-length = 100
-target-version = ["py310"]
+target-version = ["py311"]
 
 [tool.pytest.ini_options]
 addopts = "--capture=tee-sys --no-header --quiet --tb=short"
