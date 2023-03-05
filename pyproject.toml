@@ -5,7 +5,7 @@ description = ""
 authors = ["Lenon Marcel <lenon.marcel@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 pandas = "^1.5.3"
 openpyxl = "^3.0.10"
 xlwings = "^0.30.0"
