@@ -8,7 +8,13 @@ from datetime import date
 def concat_events(*dfs):
     events = [df.assign(event=event) for event, df in dfs]
 
-    return pd.concat(events).sort_values(by="date", ignore_index=True)
+    # `ignore_index` will create a new sequential index, which will work as ID for the `sort_values` below. For events
+    # with the same date, the ID will be used to differentiate between then and ensure the order of appearance is
+    # respected.
+    combined_dfs = pd.concat(events, ignore_index=True).rename_axis("id")
+    sorted_dfs = combined_dfs.sort_values(by=["date", "id"], ignore_index=True)
+
+    return sorted_dfs
 
 
 def filter_by_date(events, date):
