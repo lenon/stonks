@@ -1,6 +1,4 @@
-import pandas as pd
 from pandera import Check, Index, Column, Timestamp, MultiIndex, DataFrameSchema
-from stonks.events import spinoff
 
 ConfirmationSchema = DataFrameSchema(
     columns={
