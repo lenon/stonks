@@ -1,11 +1,11 @@
-import pandas as pd
+from pandas import read_csv
 from pytest import fixture
 from .helpers import fixture_path
 
 
 @fixture
 def confirmations_df():
-    return pd.read_csv(
+    return read_csv(
         fixture_path("confirmations.csv"),
         parse_dates=["date"],
         index_col=["date", "broker"],
@@ -14,7 +14,7 @@ def confirmations_df():
 
 @fixture
 def confirmations_costs_df():
-    return pd.read_csv(
+    return read_csv(
         fixture_path("confirmations-costs.csv"),
         parse_dates=["date"],
         index_col=["date", "broker"],
@@ -28,7 +28,7 @@ def confirmations_with_costs_df(confirmations_df, confirmations_costs_df):
 
 @fixture
 def trades_df():
-    return pd.read_csv(
+    return read_csv(
         fixture_path("trades.csv"),
         parse_dates=["date"],
         index_col=["date", "broker"],
@@ -37,7 +37,7 @@ def trades_df():
 
 @fixture
 def trades_costs_df():
-    return pd.read_csv(
+    return read_csv(
         fixture_path("trades-costs.csv"),
         parse_dates=["date"],
         index_col=["date", "broker"],
@@ -51,7 +51,7 @@ def trades_with_costs_df(trades_df, trades_costs_df):
 
 @fixture
 def subscriptions_df():
-    return pd.read_csv(
+    return read_csv(
         fixture_path("subscriptions.csv"),
         parse_dates=["date", "start", "end", "settlement", "issue_date"],
     )
@@ -59,7 +59,7 @@ def subscriptions_df():
 
 @fixture
 def subscriptions_amounts_df():
-    return pd.read_csv(fixture_path("subscriptions-amounts.csv"))
+    return read_csv(fixture_path("subscriptions-amounts.csv"))
 
 
 @fixture
@@ -69,7 +69,7 @@ def subscriptions_with_amounts_df(subscriptions_df, subscriptions_amounts_df):
 
 @fixture
 def splits_df():
-    return pd.read_csv(
+    return read_csv(
         fixture_path("splits.csv"),
         parse_dates=["date"],
     )
@@ -77,7 +77,7 @@ def splits_df():
 
 @fixture
 def mergers_df():
-    return pd.read_csv(
+    return read_csv(
         fixture_path("mergers.csv"),
         parse_dates=["date"],
     )
@@ -85,7 +85,7 @@ def mergers_df():
 
 @fixture
 def spinoffs_df():
-    return pd.read_csv(
+    return read_csv(
         fixture_path("spinoffs.csv"),
         parse_dates=["date"],
     )
@@ -93,7 +93,7 @@ def spinoffs_df():
 
 @fixture
 def events_df():
-    return pd.read_csv(
+    return read_csv(
         fixture_path("events.csv"),
         parse_dates=["date", "start", "end", "settlement", "issue_date"],
     )
@@ -101,7 +101,7 @@ def events_df():
 
 @fixture
 def events_filtered_df():
-    return pd.read_csv(
+    return read_csv(
         fixture_path("events-filtered.csv"),
         dtype={"acquirer": object, "new_company": object},
         parse_dates=["date", "start", "end", "settlement", "issue_date"],
@@ -110,4 +110,4 @@ def events_filtered_df():
 
 @fixture
 def positions_df():
-    return pd.read_csv(fixture_path("positions.csv"))
+    return read_csv(fixture_path("positions.csv"))
