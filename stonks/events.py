@@ -162,6 +162,25 @@ def spinoff(positions, event):
     }
 
 
+def stock_dividend(positions, event):
+    if event.symbol not in positions.index:
+        # safeguard against incorrect data
+        raise PositionNotOpenError(event.symbol)
+
+    position_to_inc = positions.loc[event.symbol]
+
+    # stock dividends only affect quantity and cost per share
+    # total cost does not change
+    new_quantity = position_to_inc.quantity + event.quantity
+    new_cost_per_share = position_to_inc.cost / new_quantity
+
+    positions.loc[event.symbol] = {
+        "quantity": new_quantity,
+        "cost": position_to_inc.cost,
+        "cost_per_share": new_cost_per_share,
+    }
+
+
 def event_fn(e):
     match e:
         case pd.Series(event="trade", type="buy"):
@@ -176,5 +195,7 @@ def event_fn(e):
             return split
         case pd.Series(event="spinoff"):
             return spinoff
+        case pd.Series(event="stock_dividend"):
+            return stock_dividend
         case _:
             raise UnknownEventError(e.event)

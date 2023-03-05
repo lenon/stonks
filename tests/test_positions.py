@@ -10,6 +10,7 @@ def test_calc_positions(
     splits_df,
     mergers_df,
     spinoffs_df,
+    stock_dividends_df,
 ):
     actual_positions = calc_positions(
         date=date.today(),
@@ -18,6 +19,7 @@ def test_calc_positions(
         splits=splits_df,
         mergers=mergers_df,
         spinoffs=spinoffs_df,
+        stock_dividends=stock_dividends_df,
     )
 
     assert_frame_equal(actual_positions, positions_df)

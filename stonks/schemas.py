@@ -77,3 +77,12 @@ SpinoffSchema = DataFrameSchema(
     },
     strict=True,
 )
+
+StockDividendSchema = DataFrameSchema(
+    columns={
+        "date": Column(Timestamp),
+        "symbol": Column(str),
+        "quantity": Column(float, Check.gt(0)),
+    },
+    strict=True,
+)

@@ -92,6 +92,14 @@ def spinoffs_df():
 
 
 @fixture
+def stock_dividends_df():
+    return read_csv(
+        fixture_path("stock-dividends.csv"),
+        parse_dates=["date"],
+    )
+
+
+@fixture
 def events_df():
     return read_csv(
         fixture_path("events.csv"),
