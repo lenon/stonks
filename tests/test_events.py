@@ -7,11 +7,11 @@ from stonks.errors import UnknownEventError, PositionNotOpenError
 from stonks.events import (
     buy,
     sell,
+    right,
     split,
     merger,
-    spinoff,
     event_fn,
-    subscription,
+    spin_off,
     concat_events,
     filter_by_date,
     stock_dividend,
@@ -21,19 +21,19 @@ from pandas.testing import assert_frame_equal
 
 def test_concat_events(
     trades_with_costs_df,
-    subscriptions_with_amounts_df,
+    rights_with_amounts_df,
     splits_df,
     mergers_df,
-    spinoffs_df,
+    spin_offs_df,
     events_df,
     stock_dividends_df,
 ):
     result = concat_events(
         ["trade", trades_with_costs_df.reset_index()],
-        ["subscription", subscriptions_with_amounts_df],
+        ["right", rights_with_amounts_df],
         ["split", splits_df],
         ["merger", mergers_df],
-        ["spinoff", spinoffs_df],
+        ["spin_off", spin_offs_df],
         ["stock_dividend", stock_dividends_df],
     )
 
@@ -169,7 +169,7 @@ def test_sell_without_an_open_position():
         sell(positions, event)
 
 
-def test_subscription_with_new_position():
+def test_right_with_new_position():
     positions = make_positions_df([])
     expected = make_positions_df(
         [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
@@ -180,7 +180,7 @@ def test_subscription_with_new_position():
         symbol="ABC",
         price=50.1,
         net_amount=4509.0,
-        event="subscription",
+        event="right",
         description="4th subs",
         start=dt("2022-01-01"),
         end=dt("2022-01-02"),
@@ -190,12 +190,12 @@ def test_subscription_with_new_position():
         issue_date=dt("2022-01-10"),
     )
 
-    subscription(positions, event)
+    right(positions, event)
 
     assert_frame_equal(positions, expected)
 
 
-def test_subscription_for_existing_position():
+def test_right_for_existing_position():
     positions = make_positions_df(
         [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
     )
@@ -208,7 +208,7 @@ def test_subscription_for_existing_position():
         symbol="ABC",
         price=10.5,
         net_amount=525.0,
-        event="subscription",
+        event="right",
         description="5th subs",
         start=dt("2022-01-10"),
         end=dt("2022-01-11"),
@@ -218,12 +218,12 @@ def test_subscription_for_existing_position():
         issue_date=dt("2022-01-13"),
     )
 
-    subscription(positions, event)
+    right(positions, event)
 
     assert_frame_equal(positions, expected)
 
 
-def test_subscription_without_issue_date():
+def test_right_without_issue_date():
     positions = make_positions_df(
         [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
     )
@@ -236,7 +236,7 @@ def test_subscription_without_issue_date():
         symbol="ABC",
         price=10.5,
         net_amount=525.0,
-        event="subscription",
+        event="right",
         description="5th subs",
         start=dt("2022-01-10"),
         end=dt("2022-01-11"),
@@ -246,12 +246,12 @@ def test_subscription_without_issue_date():
         issue_date=None,
     )
 
-    subscription(positions, event)
+    right(positions, event)
 
     assert_frame_equal(positions, expected)
 
 
-def test_subscription_with_future_issue_date():
+def test_right_with_future_issue_date():
     positions = make_positions_df(
         [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
     )
@@ -264,7 +264,7 @@ def test_subscription_with_future_issue_date():
         symbol="ABC",
         price=10.5,
         net_amount=525.0,
-        event="subscription",
+        event="right",
         description="5th subs",
         start=dt("2022-01-10"),
         end=dt("2022-01-11"),
@@ -274,7 +274,7 @@ def test_subscription_with_future_issue_date():
         issue_date=datetime.now() + timedelta(days=10),
     )
 
-    subscription(positions, event)
+    right(positions, event)
 
     assert_frame_equal(positions, expected)
 
@@ -335,7 +335,7 @@ def test_split_without_open_position():
         split(positions, event)
 
 
-def test_spinoff():
+def test_spin_off():
     positions = make_positions_df(
         [make_position("ABC", quantity=100.0, cost=1090.0, cost_per_share=10.9)]
     )
@@ -348,30 +348,30 @@ def test_spinoff():
     event = make_event(
         date=dt("2022-03-01"),
         symbol="ABC",
-        event="spinoff",
+        event="spin_off",
         ratio="2:1",
         new_company="NEWCO",
         cost_basis=0.4,
     )
 
-    spinoff(positions, event)
+    spin_off(positions, event)
 
     assert_frame_equal(positions, expected)
 
 
-def test_spinoff_without_open_position():
+def test_spin_off_without_open_position():
     positions = make_positions_df([])
     event = make_event(
         date=dt("2022-03-01"),
         symbol="ABC",
-        event="spinoff",
+        event="spin_off",
         ratio="2:1",
         new_company="NEWCO",
         cost_basis=0.4,
     )
 
     with pytest.raises(PositionNotOpenError, match="position not open: ABC"):
-        spinoff(positions, event)
+        spin_off(positions, event)
 
 
 def test_stock_dividend():
@@ -399,18 +399,18 @@ def test_stock_dividend_without_open_position():
 def test_event_fn():
     event_trade_buy = pd.Series({"event": "trade", "type": "buy"})
     event_trade_sell = pd.Series({"event": "trade", "type": "sell"})
-    event_subscription = pd.Series({"event": "subscription"})
+    event_right = pd.Series({"event": "right"})
     event_merger = pd.Series({"event": "merger"})
     event_split = pd.Series({"event": "split"})
-    event_spinoff = pd.Series({"event": "spinoff"})
+    event_spin_off = pd.Series({"event": "spin_off"})
     event_unknown = pd.Series({"event": "foo"})
 
     assert event_fn(event_trade_buy) == buy
     assert event_fn(event_trade_sell) == sell
-    assert event_fn(event_subscription) == subscription
+    assert event_fn(event_right) == right
     assert event_fn(event_merger) == merger
     assert event_fn(event_split) == split
-    assert event_fn(event_spinoff) == spinoff
+    assert event_fn(event_spin_off) == spin_off
 
     with pytest.raises(UnknownEventError, match="unknown event type: foo"):
         event_fn(event_unknown)

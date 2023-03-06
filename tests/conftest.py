@@ -4,26 +4,26 @@ from .helpers import fixture_path
 
 
 @fixture
-def confirmations_df():
+def trade_confirmations_df():
     return read_csv(
-        fixture_path("confirmations.csv"),
+        fixture_path("trade-confirmations.csv"),
         parse_dates=["date"],
         index_col=["date", "broker"],
     )
 
 
 @fixture
-def confirmations_costs_df():
+def trade_confirmations_costs_df():
     return read_csv(
-        fixture_path("confirmations-costs.csv"),
+        fixture_path("trade-confirmations-costs.csv"),
         parse_dates=["date"],
         index_col=["date", "broker"],
     )
 
 
 @fixture
-def confirmations_with_costs_df(confirmations_df, confirmations_costs_df):
-    return confirmations_df.combine_first(confirmations_costs_df)
+def trade_confirmations_with_costs_df(trade_confirmations_df, trade_confirmations_costs_df):
+    return trade_confirmations_df.combine_first(trade_confirmations_costs_df)
 
 
 @fixture
@@ -50,21 +50,21 @@ def trades_with_costs_df(trades_df, trades_costs_df):
 
 
 @fixture
-def subscriptions_df():
+def rights_df():
     return read_csv(
-        fixture_path("subscriptions.csv"),
+        fixture_path("rights.csv"),
         parse_dates=["date", "start", "end", "settlement", "issue_date"],
     )
 
 
 @fixture
-def subscriptions_amounts_df():
-    return read_csv(fixture_path("subscriptions-amounts.csv"))
+def rights_amounts_df():
+    return read_csv(fixture_path("rights-amounts.csv"))
 
 
 @fixture
-def subscriptions_with_amounts_df(subscriptions_df, subscriptions_amounts_df):
-    return subscriptions_df.combine_first(subscriptions_amounts_df)
+def rights_with_amounts_df(rights_df, rights_amounts_df):
+    return rights_df.combine_first(rights_amounts_df)
 
 
 @fixture
@@ -84,9 +84,9 @@ def mergers_df():
 
 
 @fixture
-def spinoffs_df():
+def spin_offs_df():
     return read_csv(
-        fixture_path("spinoffs.csv"),
+        fixture_path("spin-offs.csv"),
         parse_dates=["date"],
     )
 

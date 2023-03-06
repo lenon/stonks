@@ -19,7 +19,7 @@ def concat_events(*dfs):
 
 def filter_by_date(events, date):
     return events.query(
-        "(event == 'subscription' and issue_date <= @date) or (event != 'subscription' and date <= @date)"
+        "(event == 'right' and issue_date <= @date) or (event != 'right' and date <= @date)"
     )
 
 
@@ -66,18 +66,18 @@ def sell(positions, event):
         }
 
 
-def subscription(positions, event):
-    # subscriptions not yet issued must not change current positions
+def right(positions, event):
+    # rights not yet issued must not change current positions
     if pd.isnull(event.issue_date) or event.issue_date.date() > date.today():
         return
 
     if event.symbol not in positions.index:
-        # first subscription, not yet in positions dataframe
+        # first right, not yet in positions dataframe
         new_quantity = event.exercised
         new_cost = event.net_amount
         new_cost_per_share = event.net_amount / event.exercised
     else:
-        # subscription for a position that is already open
+        # right for a position that is already open
         prev = positions.loc[event.symbol]
 
         new_cost = prev.cost + event.net_amount
@@ -134,21 +134,21 @@ def split(positions, event):
     }
 
 
-def spinoff(positions, event):
+def spin_off(positions, event):
     if event.symbol not in positions.index:
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
 
-    position_to_spinoff = positions.loc[event.symbol]
+    position_to_spin_off = positions.loc[event.symbol]
     ratio = ratio_to_float(event.ratio)
 
-    newco_quantity = math.trunc(position_to_spinoff.quantity / ratio)
-    newco_cost = position_to_spinoff.cost * event.cost_basis
+    newco_quantity = math.trunc(position_to_spin_off.quantity / ratio)
+    newco_cost = position_to_spin_off.cost * event.cost_basis
     newco_cost_per_share = newco_cost / newco_quantity
 
-    new_quantity = position_to_spinoff.quantity
-    new_cost = position_to_spinoff.cost - newco_cost
-    new_cost_per_share = new_cost / position_to_spinoff.quantity
+    new_quantity = position_to_spin_off.quantity
+    new_cost = position_to_spin_off.cost - newco_cost
+    new_cost_per_share = new_cost / position_to_spin_off.quantity
 
     positions.loc[event.new_company] = {
         "quantity": newco_quantity,
@@ -187,14 +187,14 @@ def event_fn(e):
             return buy
         case pd.Series(event="trade", type="sell"):
             return sell
-        case pd.Series(event="subscription"):
-            return subscription
+        case pd.Series(event="right"):
+            return right
         case pd.Series(event="merger"):
             return merger
         case pd.Series(event="split"):
             return split
-        case pd.Series(event="spinoff"):
-            return spinoff
+        case pd.Series(event="spin_off"):
+            return spin_off
         case pd.Series(event="stock_dividend"):
             return stock_dividend
         case _:

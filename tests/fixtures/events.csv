@@ -1,6 +1,6 @@
 date,broker,amount,costs,net_amount,price,quantity,symbol,type,event,description,end,exercised,issue_date,settlement,shares,start,ratio,acquirer,new_company,cost_basis
 2022-01-01,Acme,100.0,1.4,101.4,12.5,8.0,AAA,buy,trade,,,,,,,,,,,
-2022-01-01,Acme,,,4509.0,50.1,,ABC3,,subscription,4th subs,2022-01-10,90.0,2022-01-15,2022-01-11,100.0,2022-01-01,,,,
+2022-01-01,Acme,,,4509.0,50.1,,ABC3,,right,4th subs,2022-01-10,90.0,2022-01-15,2022-01-11,100.0,2022-01-01,,,,
 2022-01-15,Acme,96.0,0.86,96.86,12.0,8.0,AAA,buy,trade,,,,,,,,,,,
 2022-01-15,Acme,104.0,0.94,104.94,10.4,10.0,BBB,buy,trade,,,,,,,,,,,
 2022-01-31,Acme,100.0,1.07,98.93,20.0,5.0,AAA,sell,trade,,,,,,,,,,,
@@ -16,6 +16,6 @@ date,broker,amount,costs,net_amount,price,quantity,symbol,type,event,description
 2022-03-15,Acme,100.0,1.4,101.4,6.25,16.0,FFF,buy,trade,,,,,,,,,,,
 2022-03-31,,,,,,,EEE,,split,,,,,,,,5:1,,,
 2022-03-31,,,,,,,CCC,,merger,,,,,,,,2:1,NEWCO,,
-2022-04-01,Acme,,,525.0,10.5,,ABC3,,subscription,5th subs,2022-04-10,50.0,,2022-04-11,50.0,2022-04-01,,,,
-2022-04-01,,,,,,,AAA,,spinoff,,,,,,,,2:1,,CORP,0.05
+2022-04-01,Acme,,,525.0,10.5,,ABC3,,right,5th subs,2022-04-10,50.0,,2022-04-11,50.0,2022-04-01,,,,
+2022-04-01,,,,,,,AAA,,spin_off,,,,,,,,2:1,,CORP,0.05
 2022-04-02,,,,,,10.0,NEWCO,,stock_dividend,,,,,,,,,,,
