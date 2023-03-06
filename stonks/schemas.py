@@ -1,6 +1,6 @@
 from pandera import Check, Index, Column, Timestamp, MultiIndex, DataFrameSchema
 
-ConfirmationSchema = DataFrameSchema(
+TradeConfirmations = DataFrameSchema(
     columns={
         "sells": Column(float, Check.ge(0)),
         "buys": Column(float, Check.ge(0)),
@@ -16,7 +16,7 @@ ConfirmationSchema = DataFrameSchema(
     strict=True,
 )
 
-TradeSchema = DataFrameSchema(
+Trades = DataFrameSchema(
     columns={
         "symbol": Column(str),
         "type": Column(str, Check.isin(["buy", "sell"])),
@@ -30,7 +30,7 @@ TradeSchema = DataFrameSchema(
     strict=True,
 )
 
-SubscriptionSchema = DataFrameSchema(
+Rights = DataFrameSchema(
     columns={
         "date": Column(Timestamp),
         "broker": Column(str),
@@ -48,7 +48,7 @@ SubscriptionSchema = DataFrameSchema(
     strict=True,
 )
 
-SplitSchema = DataFrameSchema(
+Splits = DataFrameSchema(
     columns={
         "date": Column(Timestamp),
         "symbol": Column(str),
@@ -57,7 +57,7 @@ SplitSchema = DataFrameSchema(
     strict=True,
 )
 
-MergerSchema = DataFrameSchema(
+Mergers = DataFrameSchema(
     columns={
         "date": Column(Timestamp),
         "symbol": Column(str),
@@ -67,7 +67,7 @@ MergerSchema = DataFrameSchema(
     strict=True,
 )
 
-SpinoffSchema = DataFrameSchema(
+SpinOffs = DataFrameSchema(
     columns={
         "date": Column(Timestamp),
         "symbol": Column(str),
@@ -78,7 +78,7 @@ SpinoffSchema = DataFrameSchema(
     strict=True,
 )
 
-StockDividendSchema = DataFrameSchema(
+StockDividends = DataFrameSchema(
     columns={
         "date": Column(Timestamp),
         "symbol": Column(str),

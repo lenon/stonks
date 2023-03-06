@@ -1,24 +1,24 @@
 import pandas as pd
 from stonks.costs import (
     calc_trades_costs,
-    calc_confirmations_costs,
-    calc_subscriptions_net_amounts,
+    calc_rights_net_amounts,
+    calc_trade_confirmations_costs,
 )
 
 
-def test_calc_confirmations_costs(confirmations_df, confirmations_costs_df):
-    results = calc_confirmations_costs(confirmations_df)
+def test_calc_trade_confirmations_costs(trade_confirmations_df, trade_confirmations_costs_df):
+    results = calc_trade_confirmations_costs(trade_confirmations_df)
 
-    pd.testing.assert_frame_equal(results, confirmations_costs_df)
+    pd.testing.assert_frame_equal(results, trade_confirmations_costs_df)
 
 
-def test_calc_trades_costs(confirmations_with_costs_df, trades_df, trades_costs_df):
-    results = calc_trades_costs(trades_df, confirmations_with_costs_df)
+def test_calc_trades_costs(trade_confirmations_with_costs_df, trades_df, trades_costs_df):
+    results = calc_trades_costs(trades_df, trade_confirmations_with_costs_df)
 
     pd.testing.assert_frame_equal(results, trades_costs_df)
 
 
-def test_calc_subscriptions_net_amounts(subscriptions_df, subscriptions_amounts_df):
-    results = calc_subscriptions_net_amounts(subscriptions_df)
+def test_calc_rights_net_amounts(rights_df, rights_amounts_df):
+    results = calc_rights_net_amounts(rights_df)
 
-    pd.testing.assert_frame_equal(results, subscriptions_amounts_df)
+    pd.testing.assert_frame_equal(results, rights_amounts_df)

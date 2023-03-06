@@ -1,29 +1,22 @@
 import pandas as pd
 from .events import event_fn, concat_events, filter_by_date
-from .schemas import (
-    SplitSchema,
-    TradeSchema,
-    MergerSchema,
-    SpinoffSchema,
-    SubscriptionSchema,
-    StockDividendSchema,
-)
+from .schemas import Rights, Splits, Trades, Mergers, SpinOffs, StockDividends
 
 
-def calc_positions(date, trades, subscriptions, splits, mergers, spinoffs, stock_dividends):
-    trades_df = TradeSchema(trades)
-    subscriptions_df = SubscriptionSchema(subscriptions)
-    splits_df = SplitSchema(splits)
-    mergers_df = MergerSchema(mergers)
-    spinoffs_df = SpinoffSchema(spinoffs)
-    stock_dividends_df = StockDividendSchema(stock_dividends)
+def calc_positions(date, trades, rights, splits, mergers, spin_offs, stock_dividends):
+    trades_df = Trades(trades)
+    rights_df = Rights(rights)
+    splits_df = Splits(splits)
+    mergers_df = Mergers(mergers)
+    spin_offs_df = SpinOffs(spin_offs)
+    stock_dividends_df = StockDividends(stock_dividends)
 
     events = concat_events(
         ["trade", trades_df.reset_index()],
-        ["subscription", subscriptions_df],
+        ["right", rights_df],
         ["split", splits_df],
         ["merger", mergers_df],
-        ["spinoff", spinoffs_df],
+        ["spin_off", spin_offs_df],
         ["stock_dividend", stock_dividends_df],
     )
     filtered_events = filter_by_date(events=events, date=date)
