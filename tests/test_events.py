@@ -1,8 +1,8 @@
-import pandas as pd
 import pytest
+from pandas import Series, DataFrame
 from pandas import to_datetime as dt
 from datetime import datetime, timedelta
-from .helpers import make_event, make_position, make_positions_df
+from .helpers import make_event
 from stonks.errors import UnknownEventError, PositionNotOpenError
 from stonks.events import (
     buy,
@@ -17,6 +17,7 @@ from stonks.events import (
     stock_dividend,
 )
 from pandas.testing import assert_frame_equal
+from stonks.positions import Positions
 
 
 def test_concat_events(
@@ -47,10 +48,12 @@ def test_filter_by_date(events_df, events_filtered_df):
 
 
 def test_buy_new_position():
-    positions = make_positions_df([])
-    expected = make_positions_df(
-        [make_position("AAA", quantity=8.0, cost=101.4, cost_per_share=12.675)]
+    positions = Positions()
+
+    expected = DataFrame(
+        [{"symbol": "AAA", "quantity": 8.0, "cost": 101.4, "cost_per_share": 12.68}]
     )
+
     event = make_event(
         date=dt("2022-01-01"),
         broker="Acme",
@@ -66,16 +69,17 @@ def test_buy_new_position():
 
     buy(positions, event)
 
-    assert_frame_equal(positions, expected)
+    assert_frame_equal(positions.to_df(), expected)
 
 
 def test_buy_second_time():
-    positions = make_positions_df(
-        [make_position("AAA", quantity=8.0, cost=101.4, cost_per_share=12.675)]
+    positions = Positions()
+    positions.update("AAA", quantity=8.0, cost=101.4, cost_per_share=12.68)
+
+    expected = DataFrame(
+        [{"symbol": "AAA", "quantity": 16.0, "cost": 198.26, "cost_per_share": 12.39}]
     )
-    expected = make_positions_df(
-        [make_position("AAA", quantity=16.0, cost=198.26, cost_per_share=12.39125)]
-    )
+
     event = make_event(
         date=dt("2022-01-02"),
         broker="Acme",
@@ -91,17 +95,17 @@ def test_buy_second_time():
 
     buy(positions, event)
 
-    assert_frame_equal(positions, expected)
+    assert_frame_equal(positions.to_df(), expected)
 
 
 def test_sell_position():
-    positions = make_positions_df(
-        [make_position("AAA", quantity=16.0, cost=198.26, cost_per_share=12.39125)]
+    positions = Positions()
+    positions.update("AAA", quantity=16.0, cost=198.26, cost_per_share=12.39)
+
+    expected = DataFrame(
+        [{"symbol": "AAA", "quantity": 11.0, "cost": 136.29, "cost_per_share": 12.39}]
     )
-    expected = make_positions_df(
-        # cost per share shouldn't change
-        [make_position("AAA", quantity=11.0, cost=136.30375, cost_per_share=12.39125)]
-    )
+
     event = make_event(
         date=dt("2022-01-03"),
         broker="Acme",
@@ -117,19 +121,18 @@ def test_sell_position():
 
     sell(positions, event)
 
-    assert_frame_equal(positions, expected)
+    assert_frame_equal(positions.to_df(), expected)
 
 
 def test_sell_closing_position():
-    positions = make_positions_df(
-        [
-            make_position("AAA", quantity=8.0, cost=80.0, cost_per_share=10.0),
-            make_position("BBB", quantity=10.0, cost=200.0, cost_per_share=20.0),
-        ]
+    positions = Positions()
+    positions.update("AAA", quantity=8.0, cost=80.0, cost_per_share=10.0)
+    positions.update("BBB", quantity=10.0, cost=200.0, cost_per_share=20.0)
+
+    expected = DataFrame(
+        [{"symbol": "BBB", "quantity": 10.0, "cost": 200.0, "cost_per_share": 20.0}]
     )
-    expected = make_positions_df(
-        [make_position("BBB", quantity=10.0, cost=200.0, cost_per_share=20.0)]
-    )
+
     event = make_event(
         date=dt("2022-01-03"),
         broker="Acme",
@@ -145,13 +148,13 @@ def test_sell_closing_position():
 
     sell(positions, event)
 
-    assert_frame_equal(positions, expected)
+    assert_frame_equal(positions.to_df(), expected)
 
 
 def test_sell_without_an_open_position():
-    positions = make_positions_df(
-        [make_position("AAA", quantity=8.0, cost=80.0, cost_per_share=10.0)]
-    )
+    positions = Positions()
+    positions.update("AAA", quantity=8.0, cost=80.0, cost_per_share=10.0)
+
     event = make_event(
         date=dt("2022-01-03"),
         broker="Acme",
@@ -170,10 +173,12 @@ def test_sell_without_an_open_position():
 
 
 def test_right_with_new_position():
-    positions = make_positions_df([])
-    expected = make_positions_df(
-        [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
+    positions = Positions()
+
+    expected = DataFrame(
+        [{"symbol": "ABC", "quantity": 90.0, "cost": 4509.0, "cost_per_share": 50.1}]
     )
+
     event = make_event(
         date=dt("2022-01-01"),
         broker="Acme",
@@ -192,16 +197,17 @@ def test_right_with_new_position():
 
     right(positions, event)
 
-    assert_frame_equal(positions, expected)
+    assert_frame_equal(positions.to_df(), expected)
 
 
 def test_right_for_existing_position():
-    positions = make_positions_df(
-        [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
+    positions = Positions()
+    positions.update("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)
+
+    expected = DataFrame(
+        [{"symbol": "ABC", "quantity": 140.0, "cost": 5034.0, "cost_per_share": 35.96}]
     )
-    expected = make_positions_df(
-        [make_position("ABC", quantity=140.0, cost=5034.0, cost_per_share=35.957143)]
-    )
+
     event = make_event(
         date=dt("2022-01-10"),
         broker="Acme",
@@ -220,16 +226,17 @@ def test_right_for_existing_position():
 
     right(positions, event)
 
-    assert_frame_equal(positions, expected)
+    assert_frame_equal(positions.to_df(), expected)
 
 
 def test_right_without_issue_date():
-    positions = make_positions_df(
-        [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
+    positions = Positions()
+    positions.update("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)
+
+    expected = DataFrame(
+        [{"symbol": "ABC", "quantity": 90.0, "cost": 4509.0, "cost_per_share": 50.1}]
     )
-    expected = make_positions_df(
-        [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
-    )
+
     event = make_event(
         date=dt("2022-01-10"),
         broker="Acme",
@@ -248,16 +255,17 @@ def test_right_without_issue_date():
 
     right(positions, event)
 
-    assert_frame_equal(positions, expected)
+    assert_frame_equal(positions.to_df(), expected)
 
 
 def test_right_with_future_issue_date():
-    positions = make_positions_df(
-        [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
+    positions = Positions()
+    positions.update("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)
+
+    expected = DataFrame(
+        [{"symbol": "ABC", "quantity": 90.0, "cost": 4509.0, "cost_per_share": 50.1}]
     )
-    expected = make_positions_df(
-        [make_position("ABC", quantity=90.0, cost=4509.0, cost_per_share=50.1)]
-    )
+
     event = make_event(
         date=dt("2022-01-10"),
         broker="Acme",
@@ -276,16 +284,17 @@ def test_right_with_future_issue_date():
 
     right(positions, event)
 
-    assert_frame_equal(positions, expected)
+    assert_frame_equal(positions.to_df(), expected)
 
 
 def test_merger():
-    positions = make_positions_df(
-        [make_position("ABC", quantity=10.0, cost=109.0, cost_per_share=10.9)]
+    positions = Positions()
+    positions.update("ABC", quantity=10.0, cost=109.0, cost_per_share=10.9)
+
+    expected = DataFrame(
+        [{"symbol": "NEWCO", "quantity": 5, "cost": 109.0, "cost_per_share": 21.8}]
     )
-    expected = make_positions_df(
-        [make_position("NEWCO", quantity=5, cost=109.0, cost_per_share=21.8)]
-    )
+
     event = make_event(
         date=dt("2022-01-10"),
         symbol="ABC",
@@ -296,11 +305,11 @@ def test_merger():
 
     merger(positions, event)
 
-    assert_frame_equal(positions, expected)
+    assert_frame_equal(positions.to_df(), expected)
 
 
 def test_merger_without_open_position():
-    positions = make_positions_df([])
+    positions = Positions()
     event = make_event(
         date=dt("2022-01-10"),
         symbol="ABC",
@@ -314,21 +323,22 @@ def test_merger_without_open_position():
 
 
 def test_split():
-    positions = make_positions_df(
-        [make_position("ABC", quantity=10.0, cost=109.0, cost_per_share=10.9)]
+    positions = Positions()
+    positions.update("ABC", quantity=10.0, cost=109.0, cost_per_share=10.9)
+
+    expected = DataFrame(
+        [{"symbol": "ABC", "quantity": 100.0, "cost": 109.0, "cost_per_share": 1.09}]
     )
-    expected = make_positions_df(
-        [make_position("ABC", quantity=100.0, cost=109.0, cost_per_share=1.09)]
-    )
+
     event = make_event(date=dt("2022-01-05"), symbol="ABC", event="split", ratio="10:1")
 
     split(positions, event)
 
-    assert_frame_equal(positions, expected)
+    assert_frame_equal(positions.to_df(), expected)
 
 
 def test_split_without_open_position():
-    positions = make_positions_df([])
+    positions = Positions()
     event = make_event(date=dt("2022-01-05"), symbol="ABC", event="split", ratio="10:1")
 
     with pytest.raises(PositionNotOpenError, match="position not open: ABC"):
@@ -336,15 +346,16 @@ def test_split_without_open_position():
 
 
 def test_spin_off():
-    positions = make_positions_df(
-        [make_position("ABC", quantity=100.0, cost=1090.0, cost_per_share=10.9)]
-    )
-    expected = make_positions_df(
+    positions = Positions()
+    positions.update("ABC", quantity=100.0, cost=1090.0, cost_per_share=10.9)
+
+    expected = DataFrame(
         [
-            make_position("ABC", quantity=100.0, cost=654.0, cost_per_share=6.54),
-            make_position("NEWCO", quantity=50.0, cost=436.0, cost_per_share=8.72),
+            {"symbol": "ABC", "quantity": 100.0, "cost": 654.0, "cost_per_share": 6.54},
+            {"symbol": "NEWCO", "quantity": 50.0, "cost": 436.0, "cost_per_share": 8.72},
         ]
     )
+
     event = make_event(
         date=dt("2022-03-01"),
         symbol="ABC",
@@ -356,11 +367,11 @@ def test_spin_off():
 
     spin_off(positions, event)
 
-    assert_frame_equal(positions, expected)
+    assert_frame_equal(positions.to_df(), expected)
 
 
 def test_spin_off_without_open_position():
-    positions = make_positions_df([])
+    positions = Positions()
     event = make_event(
         date=dt("2022-03-01"),
         symbol="ABC",
@@ -375,21 +386,22 @@ def test_spin_off_without_open_position():
 
 
 def test_stock_dividend():
-    positions = make_positions_df(
-        [make_position("ABC", quantity=10.0, cost=109.0, cost_per_share=10.9)]
+    positions = Positions()
+    positions.update("ABC", quantity=10.0, cost=109.0, cost_per_share=10.9)
+
+    expected = DataFrame(
+        [{"symbol": "ABC", "quantity": 20.0, "cost": 109.0, "cost_per_share": 5.45}]
     )
-    expected = make_positions_df(
-        [make_position("ABC", quantity=20.0, cost=109.0, cost_per_share=5.45)]
-    )
+
     event = make_event(date=dt("2022-01-05"), symbol="ABC", event="stock_dividend", quantity=10)
 
     stock_dividend(positions, event)
 
-    assert_frame_equal(positions, expected)
+    assert_frame_equal(positions.to_df(), expected)
 
 
 def test_stock_dividend_without_open_position():
-    positions = make_positions_df([])
+    positions = Positions()
     event = make_event(date=dt("2022-01-05"), symbol="ABC", event="stock_dividend", quantity=10)
 
     with pytest.raises(PositionNotOpenError, match="position not open: ABC"):
@@ -397,13 +409,13 @@ def test_stock_dividend_without_open_position():
 
 
 def test_event_fn():
-    event_trade_buy = pd.Series({"event": "trade", "type": "buy"})
-    event_trade_sell = pd.Series({"event": "trade", "type": "sell"})
-    event_right = pd.Series({"event": "right"})
-    event_merger = pd.Series({"event": "merger"})
-    event_split = pd.Series({"event": "split"})
-    event_spin_off = pd.Series({"event": "spin_off"})
-    event_unknown = pd.Series({"event": "foo"})
+    event_trade_buy = Series({"event": "trade", "type": "buy"})
+    event_trade_sell = Series({"event": "trade", "type": "sell"})
+    event_right = Series({"event": "right"})
+    event_merger = Series({"event": "merger"})
+    event_split = Series({"event": "split"})
+    event_spin_off = Series({"event": "spin_off"})
+    event_unknown = Series({"event": "foo"})
 
     assert event_fn(event_trade_buy) == buy
     assert event_fn(event_trade_sell) == sell

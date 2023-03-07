@@ -24,46 +24,45 @@ def filter_by_date(events, date):
 
 
 def buy(positions, event):
-    if event.symbol not in positions.index:
+    if positions.is_closed(event.symbol):
         # first buy, not yet in positions dataframe
         new_quantity = event.quantity
         new_cost = event.net_amount
         new_cost_per_share = event.net_amount / event.quantity
     else:
         # bought it before, let's sum quantity and update cost per share
-        prev = positions.loc[event.symbol]
+        prev = positions.find(event.symbol)
 
         new_quantity = prev.quantity + event.quantity
         new_cost = prev.cost + event.net_amount
         new_cost_per_share = new_cost / new_quantity
 
-    positions.loc[event.symbol] = {
-        "quantity": new_quantity,
-        "cost": new_cost,
-        "cost_per_share": new_cost_per_share,
-    }
+    positions.update(
+        event.symbol, quantity=new_quantity, cost=new_cost, cost_per_share=new_cost_per_share
+    )
 
 
 def sell(positions, event):
-    if event.symbol not in positions.index:
+    if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
 
-    prev = positions.loc[event.symbol]
+    prev = positions.find(event.symbol)
     # sells affect quantity and total costs
     new_quantity = prev.quantity - event.quantity
     new_cost = new_quantity * prev.cost_per_share
 
     if new_quantity == 0:
         # sold all stocks, closing position
-        positions.drop(labels=event.symbol, inplace=True)
+        positions.close(event.symbol)
     else:
-        positions.loc[event.symbol] = {
-            "quantity": new_quantity,
-            "cost": new_cost,
+        positions.update(
+            event.symbol,
+            quantity=new_quantity,
+            cost=new_cost,
             # sells do not affect cost per share
-            "cost_per_share": prev.cost_per_share,
-        }
+            cost_per_share=prev.cost_per_share,
+        )
 
 
 def right(positions, event):
@@ -71,32 +70,30 @@ def right(positions, event):
     if pd.isnull(event.issue_date) or event.issue_date.date() > date.today():
         return
 
-    if event.symbol not in positions.index:
+    if positions.is_closed(event.symbol):
         # first right, not yet in positions dataframe
         new_quantity = event.exercised
         new_cost = event.net_amount
         new_cost_per_share = event.net_amount / event.exercised
     else:
         # right for a position that is already open
-        prev = positions.loc[event.symbol]
+        prev = positions.find(event.symbol)
 
         new_cost = prev.cost + event.net_amount
         new_cost_per_share = new_cost / (prev.quantity + event.exercised)
         new_quantity = prev.quantity + event.exercised
 
-    positions.loc[event.symbol] = {
-        "quantity": new_quantity,
-        "cost": new_cost,
-        "cost_per_share": new_cost_per_share,
-    }
+    positions.update(
+        event.symbol, quantity=new_quantity, cost=new_cost, cost_per_share=new_cost_per_share
+    )
 
 
 def merger(positions, event):
-    if event.symbol not in positions.index:
+    if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
 
-    position_to_merge = positions.loc[event.symbol]
+    position_to_merge = positions.find(event.symbol)
     ratio = ratio_to_float(event.ratio)
 
     # quantity should be truncated because fractional shares are not allowed on B3
@@ -106,20 +103,16 @@ def merger(positions, event):
     cost_per_share = position_to_merge.cost / quantity
 
     # drop the old position and replace by acquirer company symbol
-    positions.drop(labels=event.symbol, inplace=True)
-    positions.loc[event.acquirer] = {
-        "quantity": quantity,
-        "cost": cost,
-        "cost_per_share": cost_per_share,
-    }
+    positions.close(event.symbol)
+    positions.update(event.acquirer, quantity=quantity, cost=cost, cost_per_share=cost_per_share)
 
 
 def split(positions, event):
-    if event.symbol not in positions.index:
+    if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
 
-    position_to_split = positions.loc[event.symbol]
+    position_to_split = positions.find(event.symbol)
     ratio = ratio_to_float(event.ratio)
 
     # splits only affect quantity and cost per share
@@ -127,19 +120,20 @@ def split(positions, event):
     new_quantity = position_to_split.quantity * ratio
     new_cost_per_share = position_to_split.cost / new_quantity
 
-    positions.loc[event.symbol] = {
-        "quantity": new_quantity,
-        "cost": position_to_split.cost,
-        "cost_per_share": new_cost_per_share,
-    }
+    positions.update(
+        event.symbol,
+        quantity=new_quantity,
+        cost=position_to_split.cost,
+        cost_per_share=new_cost_per_share,
+    )
 
 
 def spin_off(positions, event):
-    if event.symbol not in positions.index:
+    if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
 
-    position_to_spin_off = positions.loc[event.symbol]
+    position_to_spin_off = positions.find(event.symbol)
     ratio = ratio_to_float(event.ratio)
 
     newco_quantity = math.trunc(position_to_spin_off.quantity / ratio)
@@ -150,35 +144,35 @@ def spin_off(positions, event):
     new_cost = position_to_spin_off.cost - newco_cost
     new_cost_per_share = new_cost / position_to_spin_off.quantity
 
-    positions.loc[event.new_company] = {
-        "quantity": newco_quantity,
-        "cost": newco_cost,
-        "cost_per_share": newco_cost_per_share,
-    }
-    positions.loc[event.symbol] = {
-        "quantity": new_quantity,
-        "cost": new_cost,
-        "cost_per_share": new_cost_per_share,
-    }
+    positions.update(
+        event.new_company,
+        quantity=newco_quantity,
+        cost=newco_cost,
+        cost_per_share=newco_cost_per_share,
+    )
+    positions.update(
+        event.symbol, quantity=new_quantity, cost=new_cost, cost_per_share=new_cost_per_share
+    )
 
 
 def stock_dividend(positions, event):
-    if event.symbol not in positions.index:
+    if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
 
-    position_to_inc = positions.loc[event.symbol]
+    position_to_inc = positions.find(event.symbol)
 
     # stock dividends only affect quantity and cost per share
     # total cost does not change
     new_quantity = position_to_inc.quantity + event.quantity
     new_cost_per_share = position_to_inc.cost / new_quantity
 
-    positions.loc[event.symbol] = {
-        "quantity": new_quantity,
-        "cost": position_to_inc.cost,
-        "cost_per_share": new_cost_per_share,
-    }
+    positions.update(
+        event.symbol,
+        quantity=new_quantity,
+        cost=position_to_inc.cost,
+        cost_per_share=new_cost_per_share,
+    )
 
 
 def event_fn(e):
