@@ -50,7 +50,7 @@ Rights = DataFrameSchema(
         "shares": Column(float, Check.gt(0)),
         "exercised": Column(float, Check.gt(0)),
         "price": Column(float, Check.gt(0)),
-        "net_amount": Column(float, Check.gt(0)),
+        "net_amount": Column(float, Check.gt(0), nullable=True),
         "issue_date": Column(Timestamp, nullable=True),
     },
     strict=True,
