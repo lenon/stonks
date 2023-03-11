@@ -1,7 +1,9 @@
 from pandera import Check, Index, Column, Timestamp, MultiIndex, DataFrameSchema
 
 TradeConfirmations = DataFrameSchema(
-    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")]),
+    index=MultiIndex(
+        [Index(Timestamp, name="date"), Index(str, name="broker")], unique=["date", "broker"]
+    ),
     columns={
         "sales": Column(float, Check.ge(0)),
         "purchases": Column(float, Check.ge(0)),
