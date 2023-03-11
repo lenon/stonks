@@ -1,10 +1,4 @@
-from pathlib import Path
-from stonks.utils import (
-    ratio_to_float,
-    columns_to_snake_case,
-    columns_to_title_case,
-    positions_output_path,
-)
+from stonks.utils import ratio_to_float, columns_to_snake_case, columns_to_title_case
 
 
 def test_ratio_to_float():
@@ -23,7 +17,3 @@ def test_columns_to_snake_case():
 def test_columns_to_title_case():
     assert columns_to_title_case("My Column") == "My column"
     assert columns_to_title_case("my_column") == "My column"
-
-
-def test_positions_output_path():
-    assert positions_output_path("path/to/file.xlsx") == Path("path/to/file-positions.xlsx")
