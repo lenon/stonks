@@ -1,6 +1,7 @@
 from pandera import Check, Index, Column, Timestamp, MultiIndex, DataFrameSchema
 
 TradeConfirmations = DataFrameSchema(
+    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")]),
     columns={
         "sales": Column(float, Check.ge(0)),
         "purchases": Column(float, Check.ge(0)),
@@ -12,7 +13,6 @@ TradeConfirmations = DataFrameSchema(
         "costs": Column(float, Check.ge(0)),
         "net_amount": Column(float),
     },
-    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")]),
     strict=True,
 )
 
@@ -25,6 +25,7 @@ TradeConfirmationsWithNullable = TradeConfirmations.update_columns(
 )
 
 Trades = DataFrameSchema(
+    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")]),
     columns={
         "symbol": Column(str),
         "type": Column(str, Check.isin(["buy", "sell"])),
@@ -34,14 +35,12 @@ Trades = DataFrameSchema(
         "costs": Column(float, Check.ge(0), nullable=True),
         "net_amount": Column(float, nullable=True),
     },
-    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")]),
     strict=True,
 )
 
 Rights = DataFrameSchema(
+    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")]),
     columns={
-        "date": Column(Timestamp),
-        "broker": Column(str),
         "symbol": Column(str),
         "description": Column(str),
         "start": Column(Timestamp),

@@ -56,12 +56,15 @@ def rights_df():
     return read_csv(
         fixture_path("rights.csv"),
         parse_dates=["date", "start", "end", "settlement", "issue_date"],
+        index_col=["date", "broker"],
     )
 
 
 @fixture
 def rights_amounts_df():
-    return read_csv(fixture_path("rights-amounts.csv"))
+    return read_csv(
+        fixture_path("rights-amounts.csv"), parse_dates=["date"], index_col=["date", "broker"]
+    )
 
 
 @fixture

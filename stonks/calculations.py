@@ -58,5 +58,6 @@ def calc_trades_costs(trades: pd.DataFrame, trade_confirmations: pd.DataFrame):
 # Rights net amount is the cost per share x quantity of exercised shares.
 # Costs are already included in cost per share.
 @check_input(Rights)
-def calc_rights_net_amounts(rights):
-    return pd.DataFrame().assign(net_amount=rights.exercised * rights.price)
+def calc_rights_net_amounts(rights: pd.DataFrame):
+    net_amount = rights.exercised * rights.price
+    return net_amount.to_frame(name="net_amount")
