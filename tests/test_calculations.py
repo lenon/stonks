@@ -1,5 +1,5 @@
 import pandas as pd
-from stonks.costs import (
+from stonks.calculations import (
     calc_trades_costs,
     calc_rights_net_amounts,
     calc_trade_confirmations_costs,
