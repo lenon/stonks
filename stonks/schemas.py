@@ -83,6 +83,7 @@ StockDividends = DataFrameSchema(
         "date": Column(Timestamp),
         "symbol": Column(str),
         "quantity": Column(float, Check.gt(0)),
+        "cost": Column(float, Check.gt(0)),
     },
     strict=True,
 )
