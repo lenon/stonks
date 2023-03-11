@@ -7,6 +7,7 @@ from .helpers import fixture_path
 def trade_confirmations_df():
     return read_csv(
         fixture_path("trade-confirmations.csv"),
+        dtype={"sales": float, "purchases": float, "traded_volume": float},
         parse_dates=["date"],
         index_col=["date", "broker"],
     )
@@ -16,6 +17,7 @@ def trade_confirmations_df():
 def trade_confirmations_costs_df():
     return read_csv(
         fixture_path("trade-confirmations-costs.csv"),
+        dtype={"traded_volume": float},
         parse_dates=["date"],
         index_col=["date", "broker"],
     )
