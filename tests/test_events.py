@@ -31,7 +31,7 @@ def test_concat_events(
 ):
     result = concat_events(
         ["trade", trades_with_costs_df.reset_index()],
-        ["right", rights_with_amounts_df],
+        ["right", rights_with_amounts_df.reset_index()],
         ["split", splits_df],
         ["merger", mergers_df],
         ["spin_off", spin_offs_df],
