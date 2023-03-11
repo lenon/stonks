@@ -160,18 +160,14 @@ def stock_dividend(positions, event):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
 
-    position_to_inc = positions.find(event.symbol)
+    prev = positions.find(event.symbol)
 
-    # stock dividends only affect quantity and cost per share
-    # total cost does not change
-    new_quantity = position_to_inc.quantity + event.quantity
-    new_cost_per_share = position_to_inc.cost / new_quantity
+    new_quantity = prev.quantity + event.quantity
+    new_cost = prev.cost + (event.quantity * event.cost)
+    new_cost_per_share = new_cost / new_quantity
 
     positions.update(
-        event.symbol,
-        quantity=new_quantity,
-        cost=position_to_inc.cost,
-        cost_per_share=new_cost_per_share,
+        event.symbol, quantity=new_quantity, cost=new_cost, cost_per_share=new_cost_per_share
     )
 
 

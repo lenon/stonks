@@ -390,10 +390,12 @@ def test_stock_dividend():
     positions.update("ABC", quantity=10.0, cost=109.0, cost_per_share=10.9)
 
     expected = DataFrame(
-        [{"symbol": "ABC", "quantity": 20.0, "cost": 109.0, "cost_per_share": 5.45}]
+        [{"symbol": "ABC", "quantity": 20.0, "cost": 159.0, "cost_per_share": 7.95}]
     )
 
-    event = make_event(date=dt("2022-01-05"), symbol="ABC", event="stock_dividend", quantity=10)
+    event = make_event(
+        date=dt("2022-01-05"), symbol="ABC", event="stock_dividend", quantity=10, cost=5
+    )
 
     stock_dividend(positions, event)
 
@@ -402,7 +404,9 @@ def test_stock_dividend():
 
 def test_stock_dividend_without_open_position():
     positions = Positions()
-    event = make_event(date=dt("2022-01-05"), symbol="ABC", event="stock_dividend", quantity=10)
+    event = make_event(
+        date=dt("2022-01-05"), symbol="ABC", event="stock_dividend", quantity=10, cost=5
+    )
 
     with pytest.raises(PositionNotOpenError, match="position not open: ABC"):
         stock_dividend(positions, event)
