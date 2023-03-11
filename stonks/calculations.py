@@ -1,20 +1,30 @@
 import numpy as np
 import pandas as pd
+from pandera import check_input
+from .schemas import Trades, TradeConfirmations, TradeConfirmationsWithNullable
 
 
-# Calculate volume, costs and net amount columns, which are not included in
-# trade confirmations and are required for other calculations.
-def calc_trade_confirmations_costs(trade_confirmations):
-    volume = trade_confirmations.sells + trade_confirmations.buys
+# Trade confirmation is a document that confirms the details of a trade, such as
+# the security traded, the price, and the quantity. This function calculates
+# some columns required for other calculations below.
+#
+# Traded volume: is the total value of the securities traded.
+# Costs: is the sum of clearing, trading and brokerage fees.
+# Net amount: the difference between sales and purchases and costs.
+@check_input(TradeConfirmationsWithNullable)
+def calc_trade_confirmations_costs(trade_confirmations: pd.DataFrame):
+    traded_volume = trade_confirmations.sales + trade_confirmations.purchases
     costs = (
         trade_confirmations.clearing_fees
         + trade_confirmations.trading_fees
         + trade_confirmations.brokerage_fees
     )
-    net_amount = trade_confirmations.sells - trade_confirmations.buys - costs
+    net_amount = trade_confirmations.sales - trade_confirmations.purchases - costs
 
     return pd.concat(
-        [volume, costs, net_amount], axis="columns", keys=["volume", "costs", "net_amount"]
+        [traded_volume, costs, net_amount],
+        axis="columns",
+        keys=["traded_volume", "costs", "net_amount"],
     )
 
 
@@ -26,7 +36,9 @@ def calc_trades_costs(trades, trade_confirmations):
     trades_w_confirmations = trades.join(trade_confirmations, on=["date", "broker"], rsuffix="_c")
 
     amount = trades_w_confirmations.quantity * trades_w_confirmations.price
-    costs = (amount / trades_w_confirmations.volume * trades_w_confirmations.costs_c).round(2)
+    costs = (amount / trades_w_confirmations.traded_volume * trades_w_confirmations.costs_c).round(
+        2
+    )
 
     # net amount for buys is principal amount + costs, while for sells it's
     # amount - costs

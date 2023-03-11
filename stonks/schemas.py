@@ -2,9 +2,9 @@ from pandera import Check, Index, Column, Timestamp, MultiIndex, DataFrameSchema
 
 TradeConfirmations = DataFrameSchema(
     columns={
-        "sells": Column(float, Check.ge(0)),
-        "buys": Column(float, Check.ge(0)),
-        "volume": Column(float, Check.ge(0)),
+        "sales": Column(float, Check.ge(0)),
+        "purchases": Column(float, Check.ge(0)),
+        "traded_volume": Column(float, Check.ge(0)),
         "clearing_fees": Column(float, Check.ge(0)),
         "trading_fees": Column(float, Check.ge(0)),
         "brokerage_fees": Column(float, Check.ge(0)),
@@ -14,6 +14,14 @@ TradeConfirmations = DataFrameSchema(
     },
     index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")]),
     strict=True,
+)
+
+TradeConfirmationsWithNullable = TradeConfirmations.update_columns(
+    {
+        "traded_volume": {"nullable": True},
+        "costs": {"nullable": True},
+        "net_amount": {"nullable": True},
+    }
 )
 
 Trades = DataFrameSchema(
