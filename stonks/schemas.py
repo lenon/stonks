@@ -56,18 +56,16 @@ Rights = DataFrameSchema(
 )
 
 Splits = DataFrameSchema(
+    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="symbol")]),
     columns={
-        "date": Column(Timestamp),
-        "symbol": Column(str),
         "ratio": Column(str, Check.str_matches(r"^[\d,]+:[\d]+$")),
     },
     strict=True,
 )
 
 Mergers = DataFrameSchema(
+    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="symbol")]),
     columns={
-        "date": Column(Timestamp),
-        "symbol": Column(str),
         "acquirer": Column(str),
         "ratio": Column(str, Check.str_matches(r"^[\d,]+:[\d]+$")),
     },
@@ -75,9 +73,8 @@ Mergers = DataFrameSchema(
 )
 
 SpinOffs = DataFrameSchema(
+    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="symbol")]),
     columns={
-        "date": Column(Timestamp),
-        "symbol": Column(str),
         "new_company": Column(str),
         "ratio": Column(str, Check.str_matches(r"^[\d,]+:[\d]+$")),
         "cost_basis": Column(float, Check.gt(0)),
@@ -86,9 +83,8 @@ SpinOffs = DataFrameSchema(
 )
 
 StockDividends = DataFrameSchema(
+    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="symbol")]),
     columns={
-        "date": Column(Timestamp),
-        "symbol": Column(str),
         "quantity": Column(float, Check.gt(0)),
         "cost": Column(float, Check.gt(0)),
     },

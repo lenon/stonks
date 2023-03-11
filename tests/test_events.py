@@ -32,10 +32,10 @@ def test_concat_events(
     result = concat_events(
         ["trade", trades_with_costs_df.reset_index()],
         ["right", rights_with_amounts_df.reset_index()],
-        ["split", splits_df],
-        ["merger", mergers_df],
-        ["spin_off", spin_offs_df],
-        ["stock_dividend", stock_dividends_df],
+        ["split", splits_df.reset_index()],
+        ["merger", mergers_df.reset_index()],
+        ["spin_off", spin_offs_df.reset_index()],
+        ["stock_dividend", stock_dividends_df.reset_index()],
     )
 
     assert_frame_equal(result, events_df)

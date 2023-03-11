@@ -74,33 +74,25 @@ def rights_with_amounts_df(rights_df, rights_amounts_df):
 
 @fixture
 def splits_df():
-    return read_csv(
-        fixture_path("splits.csv"),
-        parse_dates=["date"],
-    )
+    return read_csv(fixture_path("splits.csv"), parse_dates=["date"], index_col=["date", "symbol"])
 
 
 @fixture
 def mergers_df():
-    return read_csv(
-        fixture_path("mergers.csv"),
-        parse_dates=["date"],
-    )
+    return read_csv(fixture_path("mergers.csv"), parse_dates=["date"], index_col=["date", "symbol"])
 
 
 @fixture
 def spin_offs_df():
     return read_csv(
-        fixture_path("spin-offs.csv"),
-        parse_dates=["date"],
+        fixture_path("spin-offs.csv"), parse_dates=["date"], index_col=["date", "symbol"]
     )
 
 
 @fixture
 def stock_dividends_df():
     return read_csv(
-        fixture_path("stock-dividends.csv"),
-        parse_dates=["date"],
+        fixture_path("stock-dividends.csv"), parse_dates=["date"], index_col=["date", "symbol"]
     )
 
 

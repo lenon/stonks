@@ -45,10 +45,10 @@ def calc_positions(date, trades, rights, splits, mergers, spin_offs, stock_divid
     events = concat_events(
         ["trade", trades_df.reset_index()],
         ["right", rights_df.reset_index()],
-        ["split", splits_df],
-        ["merger", mergers_df],
-        ["spin_off", spin_offs_df],
-        ["stock_dividend", stock_dividends_df],
+        ["split", splits_df.reset_index()],
+        ["merger", mergers_df.reset_index()],
+        ["spin_off", spin_offs_df.reset_index()],
+        ["stock_dividend", stock_dividends_df.reset_index()],
     )
     filtered_events = filter_by_date(events=events, date=date)
     positions = Positions()
