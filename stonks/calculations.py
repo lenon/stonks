@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from pandera import check_input
-from .schemas import Trades, TradeConfirmations, TradeConfirmationsWithNullable
+from .schemas import Rights, Trades, TradeConfirmations, TradeConfirmationsWithNullable
 
 
 # Trade confirmation is a document that confirms the details of a trade, such as
@@ -57,5 +57,6 @@ def calc_trades_costs(trades: pd.DataFrame, trade_confirmations: pd.DataFrame):
 
 # Rights net amount is the cost per share x quantity of exercised shares.
 # Costs are already included in cost per share.
+@check_input(Rights)
 def calc_rights_net_amounts(rights):
     return pd.DataFrame().assign(net_amount=rights.exercised * rights.price)
