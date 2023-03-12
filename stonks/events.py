@@ -1,11 +1,13 @@
 import math
 import pandas as pd
+from typing import Callable
 from .utils import ratio_to_float
 from .errors import UnknownEventError, PositionNotOpenError
 from datetime import date
+from .positions import Positions
 
 
-def concat_events(*dfs):
+def concat_events(*dfs: tuple[str, pd.DataFrame]) -> pd.DataFrame:
     events = [df.assign(event=event) for event, df in dfs]
 
     # `ignore_index` will create a new sequential index, which will work as ID for the `sort_values` below. For events
@@ -17,13 +19,13 @@ def concat_events(*dfs):
     return sorted_dfs
 
 
-def filter_by_date(events, date):
+def filter_by_date(events: pd.DataFrame, date: date) -> pd.DataFrame:
     return events.query(
         "(event == 'right' and issue_date <= @date) or (event != 'right' and date <= @date)"
     )
 
 
-def buy(positions, event):
+def buy(positions: Positions, event: pd.Series) -> None:
     if positions.is_closed(event.symbol):
         # first buy, not yet in positions dataframe
         new_quantity = event.quantity
@@ -42,7 +44,7 @@ def buy(positions, event):
     )
 
 
-def sell(positions, event):
+def sell(positions: Positions, event: pd.Series) -> None:
     if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
@@ -65,7 +67,7 @@ def sell(positions, event):
         )
 
 
-def right(positions, event):
+def right(positions: Positions, event: pd.Series) -> None:
     # rights not yet issued must not change current positions
     if pd.isnull(event.issue_date) or event.issue_date.date() > date.today():
         return
@@ -88,7 +90,7 @@ def right(positions, event):
     )
 
 
-def merger(positions, event):
+def merger(positions: Positions, event: pd.Series) -> None:
     if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
@@ -107,7 +109,7 @@ def merger(positions, event):
     positions.update(event.acquirer, quantity=quantity, cost=cost, cost_per_share=cost_per_share)
 
 
-def split(positions, event):
+def split(positions: Positions, event: pd.Series) -> None:
     if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
@@ -128,7 +130,7 @@ def split(positions, event):
     )
 
 
-def spin_off(positions, event):
+def spin_off(positions: Positions, event: pd.Series) -> None:
     if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
@@ -155,7 +157,7 @@ def spin_off(positions, event):
     )
 
 
-def stock_dividend(positions, event):
+def stock_dividend(positions: Positions, event: pd.Series) -> None:
     if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
@@ -171,7 +173,7 @@ def stock_dividend(positions, event):
     )
 
 
-def event_fn(e):
+def event_fn(e: pd.Series) -> Callable[[Positions, pd.Series], None]:
     match e:
         case pd.Series(event="trade", type="buy"):
             return buy
