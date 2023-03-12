@@ -1,6 +1,4 @@
 import pandas as pd
-from .events import event_fn, concat_events, filter_by_date
-from .schemas import Rights, Splits, Trades, Mergers, SpinOffs, StockDividends
 
 
 class Positions:
@@ -32,29 +30,3 @@ class Positions:
         # return a dataframe sorted by symbol, with 2 decimal places and a
         # sequential numeric index
         return self._df.sort_index().round(2).reset_index()
-
-
-def calc_positions(date, trades, rights, splits, mergers, spin_offs, stock_dividends):
-    trades_df = Trades(trades)
-    rights_df = Rights(rights)
-    splits_df = Splits(splits)
-    mergers_df = Mergers(mergers)
-    spin_offs_df = SpinOffs(spin_offs)
-    stock_dividends_df = StockDividends(stock_dividends)
-
-    events = concat_events(
-        ["trade", trades_df.reset_index()],
-        ["right", rights_df.reset_index()],
-        ["split", splits_df.reset_index()],
-        ["merger", mergers_df.reset_index()],
-        ["spin_off", spin_offs_df.reset_index()],
-        ["stock_dividend", stock_dividends_df.reset_index()],
-    )
-    filtered_events = filter_by_date(events=events, date=date)
-    positions = Positions()
-
-    for _, event in filtered_events.iterrows():
-        fn = event_fn(event)
-        fn(positions, event)
-
-    return positions.to_df()
