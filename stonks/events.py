@@ -1,5 +1,6 @@
 import math
 import pandas as pd
+from pandas import Series, DataFrame
 from typing import Callable
 from .utils import ratio_to_float
 from .errors import UnknownEventError, PositionNotOpenError
@@ -7,7 +8,7 @@ from datetime import date
 from .positions import Positions
 
 
-def concat_events(*dfs: tuple[str, pd.DataFrame]) -> pd.DataFrame:
+def concat_events(*dfs: tuple[str, DataFrame]) -> DataFrame:
     events = [df.assign(event=event) for event, df in dfs]
 
     # `ignore_index` will create a new sequential index, which will work as ID for the `sort_values` below. For events
@@ -19,13 +20,13 @@ def concat_events(*dfs: tuple[str, pd.DataFrame]) -> pd.DataFrame:
     return sorted_dfs
 
 
-def filter_by_date(events: pd.DataFrame, date: date) -> pd.DataFrame:
+def filter_by_date(events: DataFrame, date: date) -> DataFrame:
     return events.query(
         "(event == 'right' and issue_date <= @date) or (event != 'right' and date <= @date)"
     )
 
 
-def buy(positions: Positions, event: pd.Series) -> None:
+def buy(positions: Positions, event: Series) -> None:
     if positions.is_closed(event.symbol):
         # first buy, not yet in positions dataframe
         new_quantity = event.quantity
@@ -44,7 +45,7 @@ def buy(positions: Positions, event: pd.Series) -> None:
     )
 
 
-def sell(positions: Positions, event: pd.Series) -> None:
+def sell(positions: Positions, event: Series) -> None:
     if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
@@ -67,7 +68,7 @@ def sell(positions: Positions, event: pd.Series) -> None:
         )
 
 
-def right(positions: Positions, event: pd.Series) -> None:
+def right(positions: Positions, event: Series) -> None:
     # rights not yet issued must not change current positions
     if pd.isnull(event.issue_date) or event.issue_date.date() > date.today():
         return
@@ -90,7 +91,7 @@ def right(positions: Positions, event: pd.Series) -> None:
     )
 
 
-def merger(positions: Positions, event: pd.Series) -> None:
+def merger(positions: Positions, event: Series) -> None:
     if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
@@ -109,7 +110,7 @@ def merger(positions: Positions, event: pd.Series) -> None:
     positions.update(event.acquirer, quantity=quantity, cost=cost, cost_per_share=cost_per_share)
 
 
-def split(positions: Positions, event: pd.Series) -> None:
+def split(positions: Positions, event: Series) -> None:
     if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
@@ -130,7 +131,7 @@ def split(positions: Positions, event: pd.Series) -> None:
     )
 
 
-def spin_off(positions: Positions, event: pd.Series) -> None:
+def spin_off(positions: Positions, event: Series) -> None:
     if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
@@ -157,7 +158,7 @@ def spin_off(positions: Positions, event: pd.Series) -> None:
     )
 
 
-def stock_dividend(positions: Positions, event: pd.Series) -> None:
+def stock_dividend(positions: Positions, event: Series) -> None:
     if positions.is_closed(event.symbol):
         # safeguard against incorrect data
         raise PositionNotOpenError(event.symbol)
@@ -173,21 +174,21 @@ def stock_dividend(positions: Positions, event: pd.Series) -> None:
     )
 
 
-def event_fn(e: pd.Series) -> Callable[[Positions, pd.Series], None]:
+def event_fn(e: Series) -> Callable[[Positions, Series], None]:
     match e:
-        case pd.Series(event="trade", type="buy"):
+        case Series(event="trade", type="buy"):
             return buy
-        case pd.Series(event="trade", type="sell"):
+        case Series(event="trade", type="sell"):
             return sell
-        case pd.Series(event="right"):
+        case Series(event="right"):
             return right
-        case pd.Series(event="merger"):
+        case Series(event="merger"):
             return merger
-        case pd.Series(event="split"):
+        case Series(event="split"):
             return split
-        case pd.Series(event="spin_off"):
+        case Series(event="spin_off"):
             return spin_off
-        case pd.Series(event="stock_dividend"):
+        case Series(event="stock_dividend"):
             return stock_dividend
         case _:
             raise UnknownEventError(e.event)
