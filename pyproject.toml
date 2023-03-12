@@ -15,6 +15,8 @@ pytest = "^7.2"
 black = "^23.1"
 isort = "^5.12.0"
 coverage = "^7.2"
+mypy = "^1.1.1"
+pandera = {extras = ["mypy"], version = "^0.13.4"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -40,3 +42,19 @@ dynamic_context = "test_function"
 
 [tool.coverage.html]
 show_contexts = true
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+show_error_codes = true
+strict_equality = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unused_configs = true
+warn_unused_ignores = true
