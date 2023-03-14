@@ -3,7 +3,7 @@ from pandas import DataFrame
 from .utils import reverse_dict
 from datetime import date, datetime
 from functools import cached_property
-from stonks.i18n import SheetNamesMap, TableColumnsMap
+from stonks.i18n import SheetNamesMap, TableValuesMap, TableColumnsMap
 
 
 class Workbook:
@@ -14,11 +14,12 @@ class Workbook:
         sheet = self._wb.sheets[SheetNamesMap[name]]
         table = sheet.tables[name]
         table_col_map = TableColumnsMap[name]
+        table_values_map = TableValuesMap.get(name, {})
 
         if index is None:
             index = []
 
-        return Table(self._wb, sheet, table, index, table_col_map)
+        return Table(self._wb, sheet, table, index, table_col_map, table_values_map)
 
     @cached_property
     def positions(self) -> "Table":
@@ -66,12 +67,14 @@ class Table:
         table: xw.main.Table,
         index: list[str],
         col_map: dict[str, str],
+        val_map: dict[str, dict[str, str]],
     ):
         self._wb = wb
         self._sheet = sheet
         self._table = table
         self._index = index
         self._col_map = col_map
+        self._val_map = val_map
 
     def to_df(self) -> DataFrame:
         headers = self._table.header_row_range.options(ndim=1).value
@@ -85,6 +88,9 @@ class Table:
 
         if self._index:
             df.set_index(self._index, inplace=True)
+
+        if self._val_map:
+            df.replace(self._val_map, inplace=True)
 
         return df
 
