@@ -91,11 +91,13 @@ class Table:
     def update_from_df(self, df: DataFrame) -> None:
         renamed_df = df.rename(columns=self._col_map)
 
-        # update only the columns included in the dataframe to avoid changing
-        # any other data
-        for column_name in renamed_df.columns:
-            range = self._sheet.range(f"{self._table.name}[{column_name}]")
-            range.options(index=False, header=False).value = renamed_df[column_name]
+        with self._wb.app.properties(enable_events=False, screen_updating=False):
+            # update only the columns included in the dataframe to avoid changing
+            # any other data
+            for column_name in renamed_df.columns:
+                range = self._sheet.range(f"{self._table.name}[{column_name}]")
+                range.options(index=False, header=False).value = renamed_df[column_name]
 
     def replace_with_df(self, df: DataFrame) -> None:
-        self._table.update(df.rename(columns=self._col_map, errors="raise"), index=False)
+        with self._wb.app.properties(enable_events=False, screen_updating=False):
+            self._table.update(df.rename(columns=self._col_map, errors="raise"), index=False)
