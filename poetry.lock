@@ -461,36 +461,36 @@ files = [
 
 [[package]]
 name = "pandera"
-version = "0.13.4"
+version = "0.14.0"
 description = "A light-weight and flexible data validation and testing tool for statistical data objects."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pandera-0.13.4-py3-none-any.whl", hash = "sha256:9e91687861406284270add1d467f204630377892e7a4b45809bb7546f0013153"},
-    {file = "pandera-0.13.4.tar.gz", hash = "sha256:6ef2b7ee00d3439ac815d4347984421a08502da1020cec60c06dd0135e8aee2f"},
+    {file = "pandera-0.14.0-py3-none-any.whl", hash = "sha256:f31474d00eaab9dab7819fd22fac1b46035e469695fb9cc4858ff57f0354b408"},
+    {file = "pandera-0.14.0.tar.gz", hash = "sha256:5de462188abd3868111faa3b7bee8a9019e5a477dea7be2912dfa63600d5f736"},
 ]
 
 [package.dependencies]
 numpy = ">=1.19.0"
 packaging = ">=20.0"
 pandas = ">=1.2.0"
-pandas-stubs = {version = "<=1.4.3.220807", optional = true, markers = "extra == \"mypy\""}
+pandas-stubs = {version = "*", optional = true, markers = "extra == \"mypy\""}
 pydantic = "*"
 typing-inspect = ">=0.6.0"
 wrapt = "*"
 
 [package.extras]
-all = ["black", "dask", "fastapi", "frictionless", "geopandas", "hypothesis (>=5.41.1)", "modin", "pandas-stubs (<=1.4.3.220807)", "pyspark (>=3.2.0)", "pyyaml (>=5.1)", "ray (<=1.7.0)", "scipy", "shapely"]
+all = ["black", "dask", "fastapi", "frictionless (<=4.40.8)", "geopandas", "hypothesis (>=5.41.1)", "modin", "pandas-stubs", "pyspark (>=3.2.0)", "pyyaml (>=5.1)", "ray", "scipy", "shapely"]
 dask = ["dask"]
 fastapi = ["fastapi"]
 geopandas = ["geopandas", "shapely"]
 hypotheses = ["scipy"]
-io = ["black", "frictionless", "pyyaml (>=5.1)"]
-modin = ["dask", "modin", "ray (<=1.7.0)"]
+io = ["black", "frictionless (<=4.40.8)", "pyyaml (>=5.1)"]
+modin = ["dask", "modin", "ray"]
 modin-dask = ["dask", "modin"]
-modin-ray = ["modin", "ray (<=1.7.0)"]
-mypy = ["pandas-stubs (<=1.4.3.220807)"]
+modin-ray = ["modin", "ray"]
+mypy = ["pandas-stubs"]
 pyspark = ["pyspark (>=3.2.0)"]
 strategies = ["hypothesis (>=5.41.1)"]
 
@@ -884,4 +884,4 @@ reports = ["Jinja2", "pdfrw"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "bd7eb030243dbab56765231f7504134ca42300db0659ae84df813f97338d0c7c"
+content-hash = "0ed9d6d2bfea4e0ed8d3c93336f37cd07fd22c32b85a304065e01f018c31ae33"
