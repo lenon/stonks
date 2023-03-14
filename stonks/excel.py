@@ -116,9 +116,14 @@ class Table:
                 range = self._sheet.range(f"{self._table.name}[{column_name}]")
                 range.options(index=False, header=False).value = renamed_df[column_name]
 
-    def replace_with_df(self, df: DataFrame) -> None:
+    def replace_with_df(self, df: DataFrame, index: bool = False) -> None:
+        renamed_df = df.rename(columns=self._col_map)
+
+        if index:
+            renamed_df.rename_axis(index=self._col_map, inplace=True)
+
         with self._wb.app.properties(enable_events=False, screen_updating=False):
-            self._table.update(df.rename(columns=self._col_map, errors="raise"), index=False)
+            self._table.update(renamed_df, index=index)
 
     def set_message(self, message: str) -> None:
         self._sheet.range("message_box").value = message
