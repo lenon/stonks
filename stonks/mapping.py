@@ -74,3 +74,14 @@ TABLE_COLUMNS = {
 }
 
 TABLE_VALUES = {"trades": {"type": {"C": "buy", "V": "sell"}}}
+
+TABLE_INDEXES = {
+    "trade_confirmations": ["date", "broker"],
+    "trades": ["date", "broker"],
+    "rights": ["date", "broker"],
+    "splits": ["date", "symbol"],
+    "mergers": ["date", "symbol"],
+    "spin_offs": ["date", "symbol"],
+    "stock_dividends": ["date", "symbol"],
+    "ptax": ["date"],
+}

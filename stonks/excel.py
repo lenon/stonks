@@ -3,21 +3,19 @@ from pandas import DataFrame
 from .utils import reverse_dict
 from datetime import date, datetime
 from functools import cached_property
-from stonks.mapping import SHEET_NAMES, TABLE_VALUES, TABLE_COLUMNS
+from stonks.mapping import SHEET_NAMES, TABLE_VALUES, TABLE_COLUMNS, TABLE_INDEXES
 
 
 class Workbook:
     def __init__(self, wb: xw.Book):
         self._wb = wb
 
-    def _table(self, name: str, index: list[str] | None = None) -> "Table":
+    def _table(self, name: str) -> "Table":
         sheet = self._wb.sheets[SHEET_NAMES[name]]
         table = sheet.tables[name]
         table_col_map = TABLE_COLUMNS[name]
         table_values_map = TABLE_VALUES.get(name, {})
-
-        if index is None:
-            index = []
+        index = TABLE_INDEXES.get(name, [])
 
         return Table(self._wb, sheet, table, index, table_col_map, table_values_map)
 
@@ -32,31 +30,31 @@ class Workbook:
 
     @cached_property
     def trade_confirmations(self) -> "Table":
-        return self._table("trade_confirmations", index=["date", "broker"])
+        return self._table("trade_confirmations")
 
     @cached_property
     def trades(self) -> "Table":
-        return self._table("trades", index=["date", "broker"])
+        return self._table("trades")
 
     @cached_property
     def rights(self) -> "Table":
-        return self._table("rights", index=["date", "broker"])
+        return self._table("rights")
 
     @cached_property
     def splits(self) -> "Table":
-        return self._table("splits", index=["date", "symbol"])
+        return self._table("splits")
 
     @cached_property
     def mergers(self) -> "Table":
-        return self._table("mergers", index=["date", "symbol"])
+        return self._table("mergers")
 
     @cached_property
     def spin_offs(self) -> "Table":
-        return self._table("spin_offs", index=["date", "symbol"])
+        return self._table("spin_offs")
 
     @cached_property
     def stock_dividends(self) -> "Table":
-        return self._table("stock_dividends", index=["date", "symbol"])
+        return self._table("stock_dividends")
 
     @cached_property
     def ptax(self) -> "Table":
