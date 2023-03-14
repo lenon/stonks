@@ -10,7 +10,7 @@ class Workbook:
     def __init__(self, wb: xw.Book):
         self._wb = wb
 
-    def _get_table(self, name: str, index: list[str] | None = None) -> "Table":
+    def _table(self, name: str, index: list[str] | None = None) -> "Table":
         sheet = self._wb.sheets[SheetNamesMap[name]]
         table = sheet.tables[name]
         table_col_map = TableColumnsMap[name]
@@ -23,7 +23,7 @@ class Workbook:
 
     @cached_property
     def positions(self) -> "Table":
-        return self._get_table("positions")
+        return self._table("positions")
 
     @cached_property
     def positions_date(self) -> date:
@@ -32,31 +32,31 @@ class Workbook:
 
     @cached_property
     def trade_confirmations(self) -> "Table":
-        return self._get_table("trade_confirmations", index=["date", "broker"])
+        return self._table("trade_confirmations", index=["date", "broker"])
 
     @cached_property
     def trades(self) -> "Table":
-        return self._get_table("trades", index=["date", "broker"])
+        return self._table("trades", index=["date", "broker"])
 
     @cached_property
     def rights(self) -> "Table":
-        return self._get_table("rights", index=["date", "broker"])
+        return self._table("rights", index=["date", "broker"])
 
     @cached_property
     def splits(self) -> "Table":
-        return self._get_table("splits", index=["date", "symbol"])
+        return self._table("splits", index=["date", "symbol"])
 
     @cached_property
     def mergers(self) -> "Table":
-        return self._get_table("mergers", index=["date", "symbol"])
+        return self._table("mergers", index=["date", "symbol"])
 
     @cached_property
     def spin_offs(self) -> "Table":
-        return self._get_table("spin_offs", index=["date", "symbol"])
+        return self._table("spin_offs", index=["date", "symbol"])
 
     @cached_property
     def stock_dividends(self) -> "Table":
-        return self._get_table("stock_dividends", index=["date", "symbol"])
+        return self._table("stock_dividends", index=["date", "symbol"])
 
 
 class Table:
