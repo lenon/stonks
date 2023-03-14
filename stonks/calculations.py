@@ -46,8 +46,8 @@ def calc_trade_confirmations_costs(trade_confirmations: DataFrame) -> DataFrame:
 # Amount: is the quantity of the traded security x price.
 # Costs: pro rata costs based on the amount of the traded security.
 # Net amount: the amount of traded security + any costs.
-@check_input(Trades, 0)
-@check_input(TradeConfirmations, 1)
+@check_input(Trades, "trades")
+@check_input(TradeConfirmations, "trade_confirmations")
 def calc_trades_costs(trades: DataFrame, trade_confirmations: DataFrame) -> DataFrame:
     # The trade confirmation has a one-to-many association with trades, meaning
     # that a single trade confirmation has one or more trades.
@@ -78,6 +78,14 @@ def calc_rights_net_amounts(rights: DataFrame) -> DataFrame:
     return net_amount_df
 
 
+# Calculate positions at a given date by processing all trades along with all
+# corporate actions.
+@check_input(Trades, "trades")
+@check_input(Rights, "rights")
+@check_input(Splits, "splits")
+@check_input(Mergers, "mergers")
+@check_input(SpinOffs, "spin_offs")
+@check_input(StockDividends, "stock_dividends")
 def calc_positions(
     date: date,
     trades: DataFrame,
@@ -87,20 +95,13 @@ def calc_positions(
     spin_offs: DataFrame,
     stock_dividends: DataFrame,
 ) -> DataFrame:
-    trades_df = Trades(trades)
-    rights_df = Rights(rights)
-    splits_df = Splits(splits)
-    mergers_df = Mergers(mergers)
-    spin_offs_df = SpinOffs(spin_offs)
-    stock_dividends_df = StockDividends(stock_dividends)
-
     events = concat_events(
-        ("trade", trades_df.reset_index()),
-        ("right", rights_df.reset_index()),
-        ("split", splits_df.reset_index()),
-        ("merger", mergers_df.reset_index()),
-        ("spin_off", spin_offs_df.reset_index()),
-        ("stock_dividend", stock_dividends_df.reset_index()),
+        ("trade", trades.reset_index()),
+        ("right", rights.reset_index()),
+        ("split", splits.reset_index()),
+        ("merger", mergers.reset_index()),
+        ("spin_off", spin_offs.reset_index()),
+        ("stock_dividend", stock_dividends.reset_index()),
     )
     filtered_events = filter_by_date(events=events, date=date)
     positions = Positions()
