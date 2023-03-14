@@ -61,7 +61,7 @@ class Workbook:
 class Table:
     def __init__(
         self,
-        wb: Workbook,
+        wb: xw.Book,
         sheet: xw.Sheet,
         table: xw.main.Table,
         index: list[str],
