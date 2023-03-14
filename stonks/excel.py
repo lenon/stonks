@@ -3,7 +3,7 @@ from pandas import DataFrame
 from .utils import reverse_dict
 from datetime import date, datetime
 from functools import cached_property
-from stonks.i18n import SheetNamesMap, TableValuesMap, TableColumnsMap
+from stonks.mapping import SheetNamesMap, TableValuesMap, TableColumnsMap
 
 
 class Workbook:
