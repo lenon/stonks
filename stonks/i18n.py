@@ -70,3 +70,5 @@ TableColumnsMap = {
         "cost": "Custo",
     },
 }
+
+TableValuesMap = {"trades": {"type": {"C": "buy", "V": "sell"}}}
