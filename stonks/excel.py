@@ -3,7 +3,7 @@ from pandas import DataFrame
 from .utils import reverse_dict
 from datetime import date, datetime
 from functools import cached_property
-from stonks.mapping import SheetNamesMap, TableValuesMap, TableColumnsMap
+from stonks.mapping import SHEET_NAMES, TABLE_VALUES, TABLE_COLUMNS
 
 
 class Workbook:
@@ -11,10 +11,10 @@ class Workbook:
         self._wb = wb
 
     def _table(self, name: str, index: list[str] | None = None) -> "Table":
-        sheet = self._wb.sheets[SheetNamesMap[name]]
+        sheet = self._wb.sheets[SHEET_NAMES[name]]
         table = sheet.tables[name]
-        table_col_map = TableColumnsMap[name]
-        table_values_map = TableValuesMap.get(name, {})
+        table_col_map = TABLE_COLUMNS[name]
+        table_values_map = TABLE_VALUES.get(name, {})
 
         if index is None:
             index = []
@@ -27,7 +27,7 @@ class Workbook:
 
     @cached_property
     def positions_date(self) -> date:
-        dtime: datetime = self._wb.sheets[SheetNamesMap["positions"]].range("date").value
+        dtime: datetime = self._wb.sheets[SHEET_NAMES["positions"]].range("date").value
         return dtime.date()
 
     @cached_property
@@ -64,12 +64,12 @@ class Workbook:
 
     @cached_property
     def ptax_start_date(self) -> date:
-        dtime: datetime = self._wb.sheets[SheetNamesMap["ptax"]].range("start_date").value
+        dtime: datetime = self._wb.sheets[SHEET_NAMES["ptax"]].range("start_date").value
         return dtime.date()
 
     @cached_property
     def ptax_end_date(self) -> date:
-        dtime: datetime = self._wb.sheets[SheetNamesMap["ptax"]].range("end_date").value
+        dtime: datetime = self._wb.sheets[SHEET_NAMES["ptax"]].range("end_date").value
         return dtime.date()
 
 

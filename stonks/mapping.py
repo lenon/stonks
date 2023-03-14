@@ -1,4 +1,4 @@
-SheetNamesMap = {
+SHEET_NAMES = {
     "positions": "Posição",
     "trade_confirmations": "Notas de corretagem",
     "trades": "Negócios",
@@ -10,7 +10,7 @@ SheetNamesMap = {
     "ptax": "PTAX",
 }
 
-TableColumnsMap = {
+TABLE_COLUMNS = {
     "positions": {
         "symbol": "Código",
         "quantity": "Quantidade",
@@ -73,4 +73,4 @@ TableColumnsMap = {
     "ptax": {"date": "Data", "buying_rate": "Compra", "selling_rate": "Venda"},
 }
 
-TableValuesMap = {"trades": {"type": {"C": "buy", "V": "sell"}}}
+TABLE_VALUES = {"trades": {"type": {"C": "buy", "V": "sell"}}}
