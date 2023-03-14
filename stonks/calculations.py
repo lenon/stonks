@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
-from pandera import check_input
+from pandera import check_input, check_output
 from .events import event_fn, concat_events, filter_by_date
 from datetime import date
 from .schemas import (
@@ -10,9 +10,15 @@ from .schemas import (
     Trades,
     Mergers,
     SpinOffs,
+    RightsPreCalc,
+    TradesPreCalc,
     StockDividends,
+    RightsCalcResult,
+    TradesCalcResult,
     TradeConfirmations,
-    TradeConfirmationsWithNullable,
+    PositionsCalcResult,
+    TradeConfirmationsPreCalc,
+    TradeConfirmationsCalcResult,
 )
 from .positions import Positions
 
@@ -24,7 +30,8 @@ from .positions import Positions
 # Traded volume: is the total value of the securities traded.
 # Costs: is the sum of clearing, trading and brokerage fees.
 # Net amount: the difference between sales and purchases and costs.
-@check_input(TradeConfirmationsWithNullable)
+@check_input(TradeConfirmationsPreCalc)
+@check_output(TradeConfirmationsCalcResult)
 def calc_trade_confirmations_costs(trade_confirmations: DataFrame) -> DataFrame:
     traded_volume = trade_confirmations.sales + trade_confirmations.purchases
     costs = (
@@ -46,8 +53,9 @@ def calc_trade_confirmations_costs(trade_confirmations: DataFrame) -> DataFrame:
 # Amount: is the quantity of the traded security x price.
 # Costs: pro rata costs based on the amount of the traded security.
 # Net amount: the amount of traded security + any costs.
-@check_input(Trades, "trades")
+@check_input(TradesPreCalc, "trades")
 @check_input(TradeConfirmations, "trade_confirmations")
+@check_output(TradesCalcResult)
 def calc_trades_costs(trades: DataFrame, trade_confirmations: DataFrame) -> DataFrame:
     # The trade confirmation has a one-to-many association with trades, meaning
     # that a single trade confirmation has one or more trades.
@@ -70,7 +78,8 @@ def calc_trades_costs(trades: DataFrame, trade_confirmations: DataFrame) -> Data
 
 # Rights net amount is the cost per share x quantity of exercised shares.
 # Costs are already included in cost per share.
-@check_input(Rights)
+@check_input(RightsPreCalc)
+@check_output(RightsCalcResult)
 def calc_rights_net_amounts(rights: DataFrame) -> DataFrame:
     net_amount = rights.exercised * rights.price
     net_amount_df: DataFrame = net_amount.to_frame(name="net_amount")
@@ -86,6 +95,7 @@ def calc_rights_net_amounts(rights: DataFrame) -> DataFrame:
 @check_input(Mergers, "mergers")
 @check_input(SpinOffs, "spin_offs")
 @check_input(StockDividends, "stock_dividends")
+@check_output(PositionsCalcResult)
 def calc_positions(
     date: date,
     trades: DataFrame,

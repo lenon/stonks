@@ -2,7 +2,9 @@ from pandera import Check, Index, Column, Timestamp, MultiIndex, DataFrameSchema
 
 TradeConfirmations = DataFrameSchema(
     index=MultiIndex(
-        [Index(Timestamp, name="date"), Index(str, name="broker")], unique=["date", "broker"]
+        [Index(Timestamp, name="date"), Index(str, name="broker")],
+        unique=["date", "broker"],
+        strict=True,
     ),
     columns={
         "sales": Column(float, Check.ge(0)),
@@ -18,7 +20,7 @@ TradeConfirmations = DataFrameSchema(
     strict=True,
 )
 
-TradeConfirmationsWithNullable = TradeConfirmations.update_columns(
+TradeConfirmationsPreCalc = TradeConfirmations.update_columns(
     {
         "traded_volume": {"nullable": True},
         "costs": {"nullable": True},
@@ -26,22 +28,36 @@ TradeConfirmationsWithNullable = TradeConfirmations.update_columns(
     }
 )
 
+TradeConfirmationsCalcResult = TradeConfirmations.select_columns(
+    ["traded_volume", "costs", "net_amount"]
+)
+
 Trades = DataFrameSchema(
-    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")]),
+    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")], strict=True),
     columns={
         "symbol": Column(str),
         "type": Column(str, Check.isin(["buy", "sell"])),
         "quantity": Column(float, Check.gt(0)),
         "price": Column(float, Check.ge(0)),
-        "amount": Column(float, Check.ge(0), nullable=True),
-        "costs": Column(float, Check.ge(0), nullable=True),
-        "net_amount": Column(float, nullable=True),
+        "amount": Column(float, Check.ge(0)),
+        "costs": Column(float, Check.ge(0)),
+        "net_amount": Column(float),
     },
     strict=True,
 )
 
+TradesPreCalc = Trades.update_columns(
+    {
+        "amount": {"nullable": True},
+        "costs": {"nullable": True},
+        "net_amount": {"nullable": True},
+    }
+)
+
+TradesCalcResult = Trades.select_columns(["amount", "costs", "net_amount"])
+
 Rights = DataFrameSchema(
-    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")]),
+    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")], strict=True),
     columns={
         "symbol": Column(str),
         "description": Column(str),
@@ -51,15 +67,25 @@ Rights = DataFrameSchema(
         "shares": Column(float, Check.gt(0)),
         "exercised": Column(float, Check.gt(0)),
         "price": Column(float, Check.gt(0)),
-        "net_amount": Column(float, Check.gt(0), nullable=True),
+        "net_amount": Column(float, Check.gt(0)),
         "issue_date": Column(Timestamp, nullable=True),
     },
     strict=True,
 )
 
+RightsPreCalc = Rights.update_columns(
+    {
+        "net_amount": {"nullable": True},
+    }
+)
+
+RightsCalcResult = Rights.select_columns(["net_amount"])
+
 Splits = DataFrameSchema(
     index=MultiIndex(
-        [Index(Timestamp, name="date"), Index(str, name="symbol")], unique=["date", "symbol"]
+        [Index(Timestamp, name="date"), Index(str, name="symbol")],
+        unique=["date", "symbol"],
+        strict=True,
     ),
     columns={
         "ratio": Column(str, Check.str_matches(r"^[\d,]+:[\d]+$")),
@@ -69,7 +95,9 @@ Splits = DataFrameSchema(
 
 Mergers = DataFrameSchema(
     index=MultiIndex(
-        [Index(Timestamp, name="date"), Index(str, name="symbol")], unique=["date", "symbol"]
+        [Index(Timestamp, name="date"), Index(str, name="symbol")],
+        unique=["date", "symbol"],
+        strict=True,
     ),
     columns={
         "acquirer": Column(str),
@@ -80,7 +108,9 @@ Mergers = DataFrameSchema(
 
 SpinOffs = DataFrameSchema(
     index=MultiIndex(
-        [Index(Timestamp, name="date"), Index(str, name="symbol")], unique=["date", "symbol"]
+        [Index(Timestamp, name="date"), Index(str, name="symbol")],
+        unique=["date", "symbol"],
+        strict=True,
     ),
     columns={
         "new_company": Column(str),
@@ -92,11 +122,24 @@ SpinOffs = DataFrameSchema(
 
 StockDividends = DataFrameSchema(
     index=MultiIndex(
-        [Index(Timestamp, name="date"), Index(str, name="symbol")], unique=["date", "symbol"]
+        [Index(Timestamp, name="date"), Index(str, name="symbol")],
+        unique=["date", "symbol"],
+        strict=True,
     ),
     columns={
         "quantity": Column(float, Check.gt(0)),
         "cost": Column(float, Check.gt(0)),
+    },
+    strict=True,
+)
+
+PositionsCalcResult = DataFrameSchema(
+    index=Index(int),
+    columns={
+        "symbol": Column(str, unique=True),
+        "quantity": Column(float, Check.gt(0)),
+        "cost": Column(float, Check.gt(0)),
+        "cost_per_share": Column(float, Check.gt(0)),
     },
     strict=True,
 )
