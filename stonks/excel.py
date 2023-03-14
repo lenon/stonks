@@ -24,11 +24,6 @@ class Workbook:
         return self._table("positions")
 
     @cached_property
-    def positions_date(self) -> date:
-        dtime: datetime = self._wb.sheets[SHEET_NAMES["positions"]].range("date").value
-        return dtime.date()
-
-    @cached_property
     def trade_confirmations(self) -> "Table":
         return self._table("trade_confirmations")
 
@@ -60,16 +55,6 @@ class Workbook:
     def ptax(self) -> "Table":
         return self._table("ptax")
 
-    @cached_property
-    def ptax_start_date(self) -> date:
-        dtime: datetime = self._wb.sheets[SHEET_NAMES["ptax"]].range("start_date").value
-        return dtime.date()
-
-    @cached_property
-    def ptax_end_date(self) -> date:
-        dtime: datetime = self._wb.sheets[SHEET_NAMES["ptax"]].range("end_date").value
-        return dtime.date()
-
 
 class Table:
     def __init__(
@@ -87,6 +72,16 @@ class Table:
         self._index = index
         self._col_map = col_map
         self._val_map = val_map
+
+    def _cell(self, name: str) -> xw.Range:
+        return self._sheet.range(name)
+
+    def set_message(self, message: str) -> None:
+        self._cell("message_box").value = message
+
+    def date_input_value(self, name: str) -> date:
+        value: datetime = self._cell(name).value
+        return value.date()
 
     def to_df(self) -> DataFrame:
         headers = self._table.header_row_range.options(ndim=1).value
@@ -124,6 +119,3 @@ class Table:
 
         with self._wb.app.properties(enable_events=False, screen_updating=False):
             self._table.update(renamed_df, index=index)
-
-    def set_message(self, message: str) -> None:
-        self._sheet.range("message_box").value = message
