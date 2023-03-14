@@ -26,7 +26,7 @@ class Workbook:
 
     @cached_property
     def positions_date(self) -> date:
-        dtime: datetime = self._wb.sheets[SheetNamesMap["positions"]].range("positions_date").value
+        dtime: datetime = self._wb.sheets[SheetNamesMap["positions"]].range("date").value
         return dtime.date()
 
     @cached_property
