@@ -58,6 +58,20 @@ class Workbook:
     def stock_dividends(self) -> "Table":
         return self._table("stock_dividends", index=["date", "symbol"])
 
+    @cached_property
+    def ptax(self) -> "Table":
+        return self._table("ptax")
+
+    @cached_property
+    def ptax_start_date(self) -> date:
+        dtime: datetime = self._wb.sheets[SheetNamesMap["ptax"]].range("start_date").value
+        return dtime.date()
+
+    @cached_property
+    def ptax_end_date(self) -> date:
+        dtime: datetime = self._wb.sheets[SheetNamesMap["ptax"]].range("end_date").value
+        return dtime.date()
+
 
 class Table:
     def __init__(

@@ -7,6 +7,7 @@ SheetNamesMap = {
     "mergers": "Incorporações",
     "spin_offs": "Cisões",
     "stock_dividends": "Bonificações",
+    "ptax": "PTAX",
 }
 
 TableColumnsMap = {
@@ -69,6 +70,7 @@ TableColumnsMap = {
         "quantity": "Quantidade",
         "cost": "Custo",
     },
+    "ptax": {"date": "Data", "buying_rate": "Compra", "selling_rate": "Venda"},
 }
 
 TableValuesMap = {"trades": {"type": {"C": "buy", "V": "sell"}}}
