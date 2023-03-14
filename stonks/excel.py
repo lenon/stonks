@@ -101,3 +101,6 @@ class Table:
     def replace_with_df(self, df: DataFrame) -> None:
         with self._wb.app.properties(enable_events=False, screen_updating=False):
             self._table.update(df.rename(columns=self._col_map, errors="raise"), index=False)
+
+    def set_message(self, message: str) -> None:
+        self._sheet.range("message_box").value = message
