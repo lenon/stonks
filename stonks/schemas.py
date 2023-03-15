@@ -143,3 +143,9 @@ PositionsCalcResult = DataFrameSchema(
     },
     strict=True,
 )
+
+PTAX = DataFrameSchema(
+    index=Index(Timestamp, name="date", unique=True),
+    columns={"buying_rate": Column(float, Check.gt(0)), "selling_rate": Column(float, Check.gt(0))},
+    strict=True,
+)
