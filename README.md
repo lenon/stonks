@@ -1,12 +1,12 @@
 # stonks
 
-This repo contains a Python project that I use to keep track of my investments
-portfolio in the Brazilian stock market. I wrote it in Python 3 using Pandas for
-data analysis. The goal was to replace a complicated Excel spreadsheet I was
-using.
+This repository includes a Python project that I developed to manage my
+investment portfolio in the Brazilian stock market. The project is written in
+Python 3 and utilizes Pandas for data analysis. Its primary purpose is to
+replace the complex Excel spreadsheet that I previously used.
 
-Feel free to use the code as you like, but please keep in mind that nothing here
-is guaranteed to be correct.
+While the code is available for your use, it is important to note that I cannot
+guarantee its accuracy. Please use it at your own discretion.
 
 ## Requirements
 
