@@ -61,9 +61,8 @@ def test_buy_new_position():
         type="buy",
         quantity=8.0,
         price=12.5,
-        amount=100,
         costs=1.4,
-        net_amount=101.4,
+        amount=101.4,
         event="trade",
     )
 
@@ -87,9 +86,8 @@ def test_buy_second_time():
         type="buy",
         quantity=8.0,
         price=12.0,
-        amount=96.0,
         costs=0.86,
-        net_amount=96.86,
+        amount=96.86,
         event="trade",
     )
 
@@ -113,9 +111,8 @@ def test_sell_position():
         type="sell",
         quantity=5.0,
         price=20.0,
-        amount=100.0,
         costs=1.07,
-        net_amount=98.93,
+        amount=98.93,
         event="trade",
     )
 
@@ -140,9 +137,8 @@ def test_sell_closing_position():
         type="sell",
         quantity=8.0,
         price=20.0,
-        amount=160.0,
         costs=2.0,
-        net_amount=158.0,
+        amount=158.0,
         event="trade",
     )
 
@@ -162,9 +158,8 @@ def test_sell_without_an_open_position():
         type="sell",
         quantity=8.0,
         price=20.0,
-        amount=160.0,
         costs=2.0,
-        net_amount=158.0,
+        amount=158.0,
         event="trade",
     )
 
@@ -184,7 +179,7 @@ def test_right_with_new_position():
         broker="Acme",
         symbol="ABC",
         price=50.1,
-        net_amount=4509.0,
+        amount=4509.0,
         event="right",
         description="4th subs",
         start=dt("2022-01-01"),
@@ -213,7 +208,7 @@ def test_right_for_existing_position():
         broker="Acme",
         symbol="ABC",
         price=10.5,
-        net_amount=525.0,
+        amount=525.0,
         event="right",
         description="5th subs",
         start=dt("2022-01-10"),
@@ -242,7 +237,7 @@ def test_right_without_issue_date():
         broker="Acme",
         symbol="ABC",
         price=10.5,
-        net_amount=525.0,
+        amount=525.0,
         event="right",
         description="5th subs",
         start=dt("2022-01-10"),
@@ -271,7 +266,7 @@ def test_right_with_future_issue_date():
         broker="Acme",
         symbol="ABC",
         price=10.5,
-        net_amount=525.0,
+        amount=525.0,
         event="right",
         description="5th subs",
         start=dt("2022-01-10"),

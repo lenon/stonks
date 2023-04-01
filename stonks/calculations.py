@@ -32,7 +32,7 @@ from .positions import Positions
 #
 # Traded volume: is the total value of the securities traded.
 # Costs: is the sum of clearing, trading and brokerage fees.
-# Net amount: the difference between sales and purchases and costs.
+# Amount: the difference between sales and purchases and costs.
 @check_input(TradeConfirmationsPreCalc)
 @check_output(TradeConfirmationsCalcResult)
 def calc_trade_confirmations_costs(trade_confirmations: DataFrame) -> DataFrame:
@@ -42,12 +42,12 @@ def calc_trade_confirmations_costs(trade_confirmations: DataFrame) -> DataFrame:
         + trade_confirmations.trading_fees
         + trade_confirmations.brokerage_fees
     )
-    net_amount = trade_confirmations.sales - trade_confirmations.purchases - costs
+    amount = trade_confirmations.sales - trade_confirmations.purchases - costs
 
     return pd.concat(
-        [traded_volume, costs, net_amount],
+        [traded_volume, costs, amount],
         axis="columns",
-        keys=["traded_volume", "costs", "net_amount"],
+        keys=["traded_volume", "costs", "amount"],
     )
 
 
@@ -55,7 +55,7 @@ def calc_trade_confirmations_costs(trade_confirmations: DataFrame) -> DataFrame:
 #
 # Amount: is the quantity of the traded security x price.
 # Costs: pro rata costs based on the amount of the traded security.
-# Net amount: the amount of traded security + any costs.
+# Amount: the amount of traded security + any costs.
 @check_input(TradesPreCalc, "trades")
 @check_input(TradeConfirmations, "trade_confirmations")
 @check_output(TradesCalcResult)
@@ -69,23 +69,23 @@ def calc_trades_costs(trades: DataFrame, trade_confirmations: DataFrame) -> Data
         2
     )
 
-    # net amount for buys is principal amount + costs, while for sells it's
+    # amount with costs for buys is principal amount + costs, while for sells it's
     # amount - costs
     costs_with_sign = costs * np.where(trades_w_confirmations.type == "buy", 1, -1)
     amount_with_costs = amount + costs_with_sign
 
-    return pd.concat([costs, amount_with_costs], axis="columns", keys=["costs", "net_amount"])
+    return pd.concat([costs, amount_with_costs], axis="columns", keys=["costs", "amount"])
 
 
-# Rights net amount is the cost per share x quantity of exercised shares.
+# Rights amount is the cost per share x quantity of exercised shares.
 # Costs are already included in cost per share.
 @check_input(RightsPreCalc)
 @check_output(RightsCalcResult)
-def calc_rights_net_amounts(rights: DataFrame) -> DataFrame:
-    net_amount = rights.exercised * rights.price
-    net_amount_df: DataFrame = net_amount.to_frame(name="net_amount")
+def calc_rights_amounts(rights: DataFrame) -> DataFrame:
+    amount = rights.exercised * rights.price
+    amount_df: DataFrame = amount.to_frame(name="amount")
 
-    return net_amount_df
+    return amount_df
 
 
 # Calculate positions at a given date by processing all trades along with all

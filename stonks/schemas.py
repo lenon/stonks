@@ -15,7 +15,7 @@ TradeConfirmations = DataFrameSchema(
         "brokerage_fees": Column(float, Check.ge(0)),
         "income_tax": Column(float, Check.ge(0)),
         "costs": Column(float, Check.ge(0)),
-        "net_amount": Column(float),
+        "amount": Column(float),
     },
     strict=True,
 )
@@ -24,12 +24,12 @@ TradeConfirmationsPreCalc = TradeConfirmations.update_columns(
     {
         "traded_volume": {"nullable": True},
         "costs": {"nullable": True},
-        "net_amount": {"nullable": True},
+        "amount": {"nullable": True},
     }
 )
 
 TradeConfirmationsCalcResult = TradeConfirmations.select_columns(
-    ["traded_volume", "costs", "net_amount"]
+    ["traded_volume", "costs", "amount"]
 )
 
 Trades = DataFrameSchema(
@@ -40,7 +40,7 @@ Trades = DataFrameSchema(
         "quantity": Column(float, Check.gt(0)),
         "price": Column(float, Check.ge(0)),
         "costs": Column(float, Check.ge(0)),
-        "net_amount": Column(float),
+        "amount": Column(float),
     },
     strict=True,
 )
@@ -48,11 +48,11 @@ Trades = DataFrameSchema(
 TradesPreCalc = Trades.update_columns(
     {
         "costs": {"nullable": True},
-        "net_amount": {"nullable": True},
+        "amount": {"nullable": True},
     }
 )
 
-TradesCalcResult = Trades.select_columns(["costs", "net_amount"])
+TradesCalcResult = Trades.select_columns(["costs", "amount"])
 
 Rights = DataFrameSchema(
     index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")], strict=True),
@@ -65,7 +65,7 @@ Rights = DataFrameSchema(
         "shares": Column(float, Check.gt(0)),
         "exercised": Column(float, Check.gt(0)),
         "price": Column(float, Check.gt(0)),
-        "net_amount": Column(float, Check.gt(0)),
+        "amount": Column(float, Check.gt(0)),
         "issue_date": Column(Timestamp, nullable=True),
     },
     strict=True,
@@ -73,11 +73,11 @@ Rights = DataFrameSchema(
 
 RightsPreCalc = Rights.update_columns(
     {
-        "net_amount": {"nullable": True},
+        "amount": {"nullable": True},
     }
 )
 
-RightsCalcResult = Rights.select_columns(["net_amount"])
+RightsCalcResult = Rights.select_columns(["amount"])
 
 Splits = DataFrameSchema(
     index=MultiIndex(

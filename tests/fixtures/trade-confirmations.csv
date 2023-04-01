@@ -1,4 +1,4 @@
-date,broker,sales,purchases,clearing_fees,trading_fees,brokerage_fees,income_tax,traded_volume,costs,net_amount
+date,broker,sales,purchases,clearing_fees,trading_fees,brokerage_fees,income_tax,traded_volume,costs,amount
 2022-01-01,Acme,0,100,0.3,0.1,1.0,0.0,,,
 2022-01-15,Acme,0,200,0.6,0.2,1.0,0.0,,,
 2022-01-31,Acme,100,50,0.45,0.15,1.0,2.0,,,

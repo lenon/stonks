@@ -1,4 +1,4 @@
-date,broker,costs,net_amount
+date,broker,costs,amount
 2022-01-01,Acme,1.4,101.4
 2022-01-15,Acme,0.86,96.86
 2022-01-15,Acme,0.94,104.94

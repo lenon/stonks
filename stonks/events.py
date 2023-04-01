@@ -30,14 +30,14 @@ def buy(positions: Positions, event: Series) -> None:
     if positions.is_closed(event.symbol):
         # first buy, not yet in positions dataframe
         new_quantity = event.quantity
-        new_cost = event.net_amount
-        new_cost_per_share = event.net_amount / event.quantity
+        new_cost = event.amount
+        new_cost_per_share = event.amount / event.quantity
     else:
         # bought it before, let's sum quantity and update cost per share
         prev = positions.find(event.symbol)
 
         new_quantity = prev.quantity + event.quantity
-        new_cost = prev.cost + event.net_amount
+        new_cost = prev.cost + event.amount
         new_cost_per_share = new_cost / new_quantity
 
     positions.update(
@@ -76,13 +76,13 @@ def right(positions: Positions, event: Series) -> None:
     if positions.is_closed(event.symbol):
         # first right, not yet in positions dataframe
         new_quantity = event.exercised
-        new_cost = event.net_amount
-        new_cost_per_share = event.net_amount / event.exercised
+        new_cost = event.amount
+        new_cost_per_share = event.amount / event.exercised
     else:
         # right for a position that is already open
         prev = positions.find(event.symbol)
 
-        new_cost = prev.cost + event.net_amount
+        new_cost = prev.cost + event.amount
         new_cost_per_share = new_cost / (prev.quantity + event.exercised)
         new_quantity = prev.quantity + event.exercised
 

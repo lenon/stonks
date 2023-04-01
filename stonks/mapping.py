@@ -29,7 +29,7 @@ TABLE_COLUMNS = {
         "brokerage_fees": "Corretagem",
         "income_tax": "IR",
         "costs": "Custos",
-        "net_amount": "Total Líquido",
+        "amount": "Total",
     },
     "trades": {
         "date": "Data",
@@ -39,7 +39,7 @@ TABLE_COLUMNS = {
         "quantity": "Quantidade",
         "price": "Preço",
         "costs": "Custos",
-        "net_amount": "Total Líquido",
+        "amount": "Total",
     },
     "rights": {
         "date": "Data",
@@ -52,7 +52,7 @@ TABLE_COLUMNS = {
         "shares": "Quantidade",
         "exercised": "Exercido",
         "price": "Preço",
-        "net_amount": "Valor Total",
+        "amount": "Valor Total",
         "issue_date": "Emissão",
     },
     "splits": {"date": "Data", "symbol": "Código", "ratio": "Proporção"},
