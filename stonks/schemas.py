@@ -169,9 +169,9 @@ USTrades = DataFrameSchema(
 
 USTradesPreCalc = USTrades.update_columns(
     {
-        "ptax": {"nullable": True, "coerce": True},
-        "price_brl": {"nullable": True, "coerce": True},
-        "amount_brl": {"nullable": True, "coerce": True},
+        "ptax": {"nullable": True},
+        "price_brl": {"nullable": True},
+        "amount_brl": {"nullable": True},
     }
 )
 
