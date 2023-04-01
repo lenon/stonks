@@ -79,6 +79,7 @@ TABLE_COLUMNS = {
         "price": "Price",
         "commission": "Commission",
         "reg_fee": "Reg Fee",
+        "costs": "Costs",
         "amount": "Amount",
         "ptax": "PTAX",
         "price_brl": "Price BRL",

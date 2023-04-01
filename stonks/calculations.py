@@ -141,12 +141,14 @@ def calc_us_trades(trades: DataFrame, ptax: DataFrame) -> DataFrame:
     # recalculate the correct price
     price_adjusted = trades_with_ptax.amount / trades_with_ptax.quantity
 
+    costs = trades_with_ptax.commission + trades_with_ptax.reg_fee
+
     # calculate the amount in BRL for tax purposes
     price_brl = trades_with_ptax.selling_rate * price_adjusted
     amount_brl = trades_with_ptax.selling_rate * trades_with_ptax.amount
 
     return pd.concat(
-        [trades_with_ptax.selling_rate, price_brl, amount_brl],
+        [costs, trades_with_ptax.selling_rate, price_brl, amount_brl],
         axis="columns",
-        keys=["ptax", "price_brl", "amount_brl"],
+        keys=["costs", "ptax", "price_brl", "amount_brl"],
     ).round(2)

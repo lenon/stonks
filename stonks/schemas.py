@@ -157,6 +157,7 @@ USTrades = DataFrameSchema(
         "price": Column(float, Check.ge(0)),
         "commission": Column(float, Check.ge(0)),
         "reg_fee": Column(float, Check.ge(0)),
+        "costs": Column(float, Check.ge(0)),
         "amount": Column(float, Check.ge(0)),
         "ptax": Column(float, Check.gt(0)),
         "price_brl": Column(float, Check.gt(0)),
@@ -167,10 +168,11 @@ USTrades = DataFrameSchema(
 
 USTradesPreCalc = USTrades.update_columns(
     {
+        "costs": {"nullable": True, "coerce": True},
         "ptax": {"nullable": True},
         "price_brl": {"nullable": True},
         "amount_brl": {"nullable": True},
     }
 )
 
-USTradesCalcResult = USTrades.select_columns(["ptax", "price_brl", "amount_brl"])
+USTradesCalcResult = USTrades.select_columns(["costs", "ptax", "price_brl", "amount_brl"])
