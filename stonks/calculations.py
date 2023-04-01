@@ -5,6 +5,7 @@ from pandera import check_input, check_output
 from .events import event_fn, concat_events, filter_by_date
 from datetime import date
 from .schemas import (
+    PTAX,
     Rights,
     Splits,
     Trades,
@@ -13,9 +14,11 @@ from .schemas import (
     RightsPreCalc,
     TradesPreCalc,
     StockDividends,
+    USTradesPreCalc,
     RightsCalcResult,
     TradesCalcResult,
     TradeConfirmations,
+    USTradesCalcResult,
     PositionsCalcResult,
     TradeConfirmationsPreCalc,
     TradeConfirmationsCalcResult,
@@ -121,3 +124,31 @@ def calc_positions(
         fn(positions, event)
 
     return positions.to_df()
+
+
+# Calculate PTAX, price and amount in BRL for US trades.
+@check_input(USTradesPreCalc, "trades")
+@check_input(PTAX, "ptax")
+@check_output(USTradesCalcResult)
+def calc_us_trades(trades: DataFrame, ptax: DataFrame) -> DataFrame:
+    # forward fill missing dates, like weekends and holidays with the last
+    # available PTAX
+    ptax_idx = pd.date_range(min(ptax.index), max(ptax.index))
+    ptax_bfilled = ptax.reindex(ptax_idx).ffill(axis="rows")
+
+    trades_with_ptax = trades.join(ptax_bfilled.selling_rate, on=["date"])
+
+    # for some reason the price per share informed by my broker's transaction
+    # history is incorrect by a few pennies for DRIP transactions, so we need to
+    # recalculate the correct price
+    price_adjusted = trades_with_ptax.amount / trades_with_ptax.quantity
+
+    # calculate the amount in BRL for tax purposes
+    price_brl = trades_with_ptax.selling_rate * price_adjusted
+    amount_brl = trades_with_ptax.selling_rate * trades_with_ptax.amount
+
+    return pd.concat(
+        [trades_with_ptax.selling_rate, price_brl, amount_brl],
+        axis="columns",
+        keys=["ptax", "price_brl", "amount_brl"],
+    ).round(2)

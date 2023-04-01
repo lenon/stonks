@@ -116,3 +116,18 @@ def events_filtered_df():
 @fixture
 def positions_df():
     return read_csv(fixture_path("positions.csv"))
+
+
+@fixture
+def ptax_df():
+    return read_csv(fixture_path("ptax.csv"), parse_dates=["date"], index_col=["date"])
+
+
+@fixture
+def us_trades_df():
+    return read_csv(fixture_path("us-trades.csv"), parse_dates=["date"], index_col=["date"])
+
+
+@fixture
+def us_trades_ptax_df():
+    return read_csv(fixture_path("us-trades-ptax.csv"), parse_dates=["date"], index_col=["date"])
