@@ -32,7 +32,9 @@ def ptax_usd(start_date: date, end_date: date) -> pd.DataFrame:
     )
     url = f"{_PTAX_URL}?{qs}"
 
-    df = pd.read_csv(url, dtype=_PTAX_DTYPES, decimal=_PTAX_DECIMAL).rename(columns=_PTAX_COLUMNS)
+    df = pd.read_csv(url, dtype=_PTAX_DTYPES, decimal=_PTAX_DECIMAL).rename(
+        columns=_PTAX_COLUMNS, errors="raise"
+    )
     df["date"] = pd.to_datetime(df["date"], format=_PTAX_DATETIME_FORMAT).dt.normalize()
 
     # for some reason there are duplicated entries for 2023-01-31
