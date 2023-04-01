@@ -149,3 +149,30 @@ PTAX = DataFrameSchema(
     columns={"buying_rate": Column(float, Check.gt(0)), "selling_rate": Column(float, Check.gt(0))},
     strict=True,
 )
+
+USTrades = DataFrameSchema(
+    index=MultiIndex([Index(Timestamp, name="date")], strict=True),
+    columns={
+        "symbol": Column(str),
+        "type": Column(str, Check.isin(["buy", "sell"])),
+        "quantity": Column(float, Check.gt(0)),
+        "price": Column(float, Check.ge(0)),
+        "commission": Column(float, Check.ge(0)),
+        "reg_fee": Column(float, Check.ge(0)),
+        "amount": Column(float, Check.ge(0)),
+        "ptax": Column(float, Check.gt(0)),
+        "price_brl": Column(float, Check.gt(0)),
+        "amount_brl": Column(float, Check.gt(0)),
+    },
+    strict=True,
+)
+
+USTradesPreCalc = USTrades.update_columns(
+    {
+        "ptax": {"nullable": True, "coerce": True},
+        "price_brl": {"nullable": True, "coerce": True},
+        "amount_brl": {"nullable": True, "coerce": True},
+    }
+)
+
+USTradesCalcResult = USTrades.select_columns(["ptax", "price_brl", "amount_brl"])

@@ -8,6 +8,7 @@ SHEET_NAMES = {
     "spin_offs": "Cisões",
     "stock_dividends": "Bonificações",
     "ptax": "PTAX",
+    "us_trades": "US | Trades",
 }
 
 TABLE_COLUMNS = {
@@ -71,9 +72,25 @@ TABLE_COLUMNS = {
         "cost": "Custo",
     },
     "ptax": {"date": "Data", "buying_rate": "Compra", "selling_rate": "Venda"},
+    "us_trades": {
+        "date": "Date",
+        "symbol": "Symbol",
+        "type": "Type",
+        "quantity": "Quantity",
+        "price": "Price",
+        "commission": "Commission",
+        "reg_fee": "Reg Fee",
+        "amount": "Amount",
+        "ptax": "PTAX",
+        "price_brl": "Price BRL",
+        "amount_brl": "Amount BRL",
+    },
 }
 
-TABLE_VALUES = {"trades": {"type": {"C": "buy", "V": "sell"}}}
+TABLE_VALUES = {
+    "trades": {"type": {"C": "buy", "V": "sell"}},
+    "us_trades": {"type": {"B": "buy", "S": "sell"}},
+}
 
 TABLE_INDEXES = {
     "trade_confirmations": ["date", "broker"],
@@ -84,4 +101,5 @@ TABLE_INDEXES = {
     "spin_offs": ["date", "symbol"],
     "stock_dividends": ["date", "symbol"],
     "ptax": ["date"],
+    "us_trades": ["date"],
 }

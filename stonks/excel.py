@@ -55,6 +55,10 @@ class Workbook:
     def ptax(self) -> "Table":
         return self._table("ptax")
 
+    @cached_property
+    def us_trades(self) -> "Table":
+        return self._table("us_trades")
+
 
 class Table:
     def __init__(
