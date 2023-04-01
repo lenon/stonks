@@ -39,7 +39,6 @@ Trades = DataFrameSchema(
         "type": Column(str, Check.isin(["buy", "sell"])),
         "quantity": Column(float, Check.gt(0)),
         "price": Column(float, Check.ge(0)),
-        "amount": Column(float, Check.ge(0)),
         "costs": Column(float, Check.ge(0)),
         "net_amount": Column(float),
     },
@@ -48,13 +47,12 @@ Trades = DataFrameSchema(
 
 TradesPreCalc = Trades.update_columns(
     {
-        "amount": {"nullable": True},
         "costs": {"nullable": True},
         "net_amount": {"nullable": True},
     }
 )
 
-TradesCalcResult = Trades.select_columns(["amount", "costs", "net_amount"])
+TradesCalcResult = Trades.select_columns(["costs", "net_amount"])
 
 Rights = DataFrameSchema(
     index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")], strict=True),

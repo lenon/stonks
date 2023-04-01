@@ -72,11 +72,9 @@ def calc_trades_costs(trades: DataFrame, trade_confirmations: DataFrame) -> Data
     # net amount for buys is principal amount + costs, while for sells it's
     # amount - costs
     costs_with_sign = costs * np.where(trades_w_confirmations.type == "buy", 1, -1)
-    net_amount = amount + costs_with_sign
+    amount_with_costs = amount + costs_with_sign
 
-    return pd.concat(
-        [amount, costs, net_amount], axis="columns", keys=["amount", "costs", "net_amount"]
-    )
+    return pd.concat([costs, amount_with_costs], axis="columns", keys=["costs", "net_amount"])
 
 
 # Rights net amount is the cost per share x quantity of exercised shares.

@@ -38,7 +38,6 @@ TABLE_COLUMNS = {
         "type": "Tipo",
         "quantity": "Quantidade",
         "price": "Preço",
-        "amount": "Total",
         "costs": "Custos",
         "net_amount": "Total Líquido",
     },
