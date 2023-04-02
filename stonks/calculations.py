@@ -123,7 +123,7 @@ def calc_positions(
         fn = event_fn(event)
         fn(positions, event)
 
-    return positions.to_df()
+    return positions.to_df().reset_index()
 
 
 # Calculate PTAX, price and amount in BRL for US trades.
@@ -189,8 +189,8 @@ def calc_us_positions(
         fn(positions_brl, event.rename(_EVENT_WITHOUT_BRL_SUFFIX, errors="raise"))
 
     # join BRL details with the positions df and drop duplicated columns
-    positions_df = positions.to_df(drop_index=False)
-    positions_brl_df = positions_brl.to_df(drop_index=False)
+    positions_df = positions.to_df()
+    positions_brl_df = positions_brl.to_df()
     joined_positions = positions_df.join(positions_brl_df, on="symbol", rsuffix="_brl").drop(
         columns=["quantity_brl"]
     )

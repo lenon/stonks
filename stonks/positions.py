@@ -26,12 +26,7 @@ class Positions:
     def close(self, symbol: str) -> None:
         self._df.drop(labels=symbol, inplace=True)
 
-    def to_df(self, drop_index: bool = True) -> DataFrame:
+    def to_df(self) -> DataFrame:
         # return a dataframe sorted by symbol
         # round cost and cost per share, keep quantity as is
-        df = self._df.sort_index().round({"cost": 2, "cost_per_share": 2})
-
-        if drop_index:
-            df = df.reset_index()
-
-        return df
+        return self._df.sort_index().round({"cost": 2, "cost_per_share": 2})

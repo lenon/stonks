@@ -52,7 +52,7 @@ def test_buy_new_position():
 
     expected = DataFrame(
         [{"symbol": "AAA", "quantity": 8.0, "cost": 101.4, "cost_per_share": 12.68}]
-    )
+    ).set_index("symbol")
 
     event = make_event(
         date=dt("2022-01-01"),
@@ -77,7 +77,7 @@ def test_buy_second_time():
 
     expected = DataFrame(
         [{"symbol": "AAA", "quantity": 16.0, "cost": 198.26, "cost_per_share": 12.39}]
-    )
+    ).set_index("symbol")
 
     event = make_event(
         date=dt("2022-01-02"),
@@ -102,7 +102,7 @@ def test_sell_position():
 
     expected = DataFrame(
         [{"symbol": "AAA", "quantity": 11.0, "cost": 136.29, "cost_per_share": 12.39}]
-    )
+    ).set_index("symbol")
 
     event = make_event(
         date=dt("2022-01-03"),
@@ -128,7 +128,7 @@ def test_sell_closing_position():
 
     expected = DataFrame(
         [{"symbol": "BBB", "quantity": 10.0, "cost": 200.0, "cost_per_share": 20.0}]
-    )
+    ).set_index("symbol")
 
     event = make_event(
         date=dt("2022-01-03"),
@@ -172,7 +172,7 @@ def test_right_with_new_position():
 
     expected = DataFrame(
         [{"symbol": "ABC", "quantity": 90.0, "cost": 4509.0, "cost_per_share": 50.1}]
-    )
+    ).set_index("symbol")
 
     event = make_event(
         date=dt("2022-01-01"),
@@ -201,7 +201,7 @@ def test_right_for_existing_position():
 
     expected = DataFrame(
         [{"symbol": "ABC", "quantity": 140.0, "cost": 5034.0, "cost_per_share": 35.96}]
-    )
+    ).set_index("symbol")
 
     event = make_event(
         date=dt("2022-01-10"),
@@ -230,7 +230,7 @@ def test_right_without_issue_date():
 
     expected = DataFrame(
         [{"symbol": "ABC", "quantity": 90.0, "cost": 4509.0, "cost_per_share": 50.1}]
-    )
+    ).set_index("symbol")
 
     event = make_event(
         date=dt("2022-01-10"),
@@ -259,7 +259,7 @@ def test_right_with_future_issue_date():
 
     expected = DataFrame(
         [{"symbol": "ABC", "quantity": 90.0, "cost": 4509.0, "cost_per_share": 50.1}]
-    )
+    ).set_index("symbol")
 
     event = make_event(
         date=dt("2022-01-10"),
@@ -288,7 +288,7 @@ def test_merger():
 
     expected = DataFrame(
         [{"symbol": "NEWCO", "quantity": 5, "cost": 109.0, "cost_per_share": 21.8}]
-    )
+    ).set_index("symbol")
 
     event = make_event(
         date=dt("2022-01-10"),
@@ -323,7 +323,7 @@ def test_split():
 
     expected = DataFrame(
         [{"symbol": "ABC", "quantity": 100.0, "cost": 109.0, "cost_per_share": 1.09}]
-    )
+    ).set_index("symbol")
 
     event = make_event(date=dt("2022-01-05"), symbol="ABC", event="split", ratio="10:1")
 
@@ -349,7 +349,7 @@ def test_spin_off():
             {"symbol": "ABC", "quantity": 100.0, "cost": 654.0, "cost_per_share": 6.54},
             {"symbol": "NEWCO", "quantity": 50.0, "cost": 436.0, "cost_per_share": 8.72},
         ]
-    )
+    ).set_index("symbol")
 
     event = make_event(
         date=dt("2022-03-01"),
@@ -386,7 +386,7 @@ def test_stock_dividend():
 
     expected = DataFrame(
         [{"symbol": "ABC", "quantity": 20.0, "cost": 159.0, "cost_per_share": 7.95}]
-    )
+    ).set_index("symbol")
 
     event = make_event(
         date=dt("2022-01-05"), symbol="ABC", event="stock_dividend", quantity=10, cost=5
