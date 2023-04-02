@@ -27,9 +27,9 @@ class Positions:
         self._df.drop(labels=symbol, inplace=True)
 
     def to_df(self, drop_index: bool = True) -> DataFrame:
-        # return a dataframe sorted by symbol, with 2 decimal places and a
-        # sequential numeric index
-        df = self._df.sort_index().round(2)
+        # return a dataframe sorted by symbol
+        # round cost and cost per share, keep quantity as is
+        df = self._df.sort_index().round({"cost": 2, "cost_per_share": 2})
 
         if drop_index:
             df = df.reset_index()
