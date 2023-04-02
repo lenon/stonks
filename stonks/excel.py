@@ -24,6 +24,10 @@ class Workbook:
         return self._table("positions")
 
     @cached_property
+    def us_positions(self) -> "Table":
+        return self._table("us_positions")
+
+    @cached_property
     def trade_confirmations(self) -> "Table":
         return self._table("trade_confirmations")
 

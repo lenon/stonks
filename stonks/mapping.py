@@ -9,6 +9,7 @@ SHEET_NAMES = {
     "stock_dividends": "Bonificações",
     "ptax": "PTAX",
     "us_trades": "US | Trades",
+    "us_positions": "US | Positions",
 }
 
 TABLE_COLUMNS = {
@@ -84,6 +85,14 @@ TABLE_COLUMNS = {
         "ptax": "PTAX",
         "price_brl": "Price BRL",
         "amount_brl": "Amount BRL",
+    },
+    "us_positions": {
+        "symbol": "Symbol",
+        "quantity": "Quantity",
+        "cost": "Cost",
+        "cost_per_share": "Cost per share",
+        "cost_brl": "Cost (R$)",
+        "cost_per_share_brl": "Cost per share (R$)",
     },
 }
 
