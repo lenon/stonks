@@ -31,19 +31,20 @@ from .positions import Positions
 # Trade confirmation is a document that confirms the details of a trade, such as
 # the security traded, the price, and the quantity. This function calculates
 # some columns required for other calculations below.
-#
-# Traded volume: is the total value of the securities traded.
-# Costs: is the sum of clearing, trading and brokerage fees.
-# Amount: the difference between sales and purchases and costs.
 @check_input(TradeConfirmationsPreCalc)
 @check_output(TradeConfirmationsCalcResult)
 def calc_trade_confirmations_costs(trade_confirmations: DataFrame) -> DataFrame:
+    # traded volume is the total value of the securities traded
+    # it is used to calculate costs of a single trade
     traded_volume = trade_confirmations.sales + trade_confirmations.purchases
+    # costs is the sum of any incurring fees
     costs = (
         trade_confirmations.clearing_fees
         + trade_confirmations.trading_fees
         + trade_confirmations.brokerage_fees
     )
+    # amount is the difference between sales and purchases and costs
+    # it is the effective value that will be credited or debited in the account
     amount = trade_confirmations.sales - trade_confirmations.purchases - costs
 
     return pd.concat(
@@ -55,24 +56,27 @@ def calc_trade_confirmations_costs(trade_confirmations: DataFrame) -> DataFrame:
 
 # Calculate pro rata costs for each trade included in a trade confirmation.
 #
-# Amount: is the quantity of the traded security x price.
-# Costs: pro rata costs based on the amount of the traded security.
+# Costs: .
 # Amount: the amount of traded security + any costs.
 @check_input(TradesPreCalc, "trades")
 @check_input(TradeConfirmations, "trade_confirmations")
 @check_output(TradesCalcResult)
 def calc_trades_costs(trades: DataFrame, trade_confirmations: DataFrame) -> DataFrame:
-    # The trade confirmation has a one-to-many association with trades, meaning
-    # that a single trade confirmation has one or more trades.
+    # the trade confirmation has a one-to-many association with trades, meaning
+    # that a single trade confirmation has one or more trades
     trades_w_confirmations = trades.join(trade_confirmations, on=["date", "broker"], rsuffix="_c")
 
+    # amount is the quantity of the traded security x price, so no costs
     amount = trades_w_confirmations.quantity * trades_w_confirmations.price
-    costs = (amount / trades_w_confirmations.traded_volume * trades_w_confirmations.costs_c).round(
-        2
-    )
+    # costs is the pro rata cost based on the amount of the traded security
+    # rounding to 2 decimal places to match broker's calculations
+    costs = (amount / trades_w_confirmations.traded_volume) * trades_w_confirmations.costs_c
+    costs = costs.round(2)
 
-    # amount with costs for buys is principal amount + costs, while for sells it's
-    # amount - costs
+    # amount is the principal amount of traded security + or - pro rata costs
+    # it is the effective value that will be credited or debited
+    # for purchases it is principal amount + costs
+    # for sales it is principal amount - costs
     costs_with_sign = costs * np.where(trades_w_confirmations.type == "buy", 1, -1)
     amount_with_costs = amount + costs_with_sign
 
