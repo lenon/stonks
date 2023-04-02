@@ -135,12 +135,7 @@ def calc_positions(
 @check_input(PTAX, "ptax")
 @check_output(USTradesCalcResult)
 def calc_us_trades(trades: DataFrame, ptax: DataFrame) -> DataFrame:
-    # forward fill missing dates, like weekends and holidays with the last
-    # available PTAX
-    ptax_idx = pd.date_range(min(ptax.index), max(ptax.index))
-    ptax_bfilled = ptax.reindex(ptax_idx).ffill(axis="rows")
-
-    trades_with_ptax = trades.join(ptax_bfilled.selling_rate, on=["date"])
+    trades_with_ptax = trades.join(ptax.selling_rate, on=["date"])
 
     # for some reason the price per share informed by my broker's transaction
     # history is incorrect by a few pennies for DRIP transactions, so we need to

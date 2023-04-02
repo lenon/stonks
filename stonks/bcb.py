@@ -1,4 +1,5 @@
 import pandas as pd
+from typing import cast
 from pandera import check_output
 from datetime import date
 from .schemas import PTAX
@@ -32,10 +33,17 @@ def ptax_usd(start_date: date, end_date: date) -> pd.DataFrame:
     )
     url = f"{_PTAX_URL}?{qs}"
 
-    df = pd.read_csv(url, dtype=_PTAX_DTYPES, decimal=_PTAX_DECIMAL).rename(
+    ptax = pd.read_csv(url, dtype=_PTAX_DTYPES, decimal=_PTAX_DECIMAL).rename(
         columns=_PTAX_COLUMNS, errors="raise"
     )
-    df["date"] = pd.to_datetime(df["date"], format=_PTAX_DATETIME_FORMAT).dt.normalize()
+    ptax["date"] = pd.to_datetime(ptax.date, format=_PTAX_DATETIME_FORMAT).dt.normalize()
 
     # for some reason there are duplicated entries for 2023-01-31
-    return df.drop_duplicates(subset="date", keep="last").set_index("date")
+    ptax = ptax.drop_duplicates(subset="date", keep="last")
+    ptax = ptax.set_index("date")
+
+    # forward fill missing dates, like weekends and holidays with the last
+    # available PTAX
+    ffill_ptax = cast(pd.DataFrame, ptax.asfreq(freq="D", method="ffill"))
+
+    return ffill_ptax
