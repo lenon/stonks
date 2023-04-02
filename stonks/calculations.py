@@ -11,6 +11,7 @@ from .schemas import (
     Trades,
     Mergers,
     SpinOffs,
+    USTrades,
     RightsPreCalc,
     TradesPreCalc,
     StockDividends,
@@ -20,6 +21,7 @@ from .schemas import (
     TradeConfirmations,
     USTradesCalcResult,
     PositionsCalcResult,
+    USPositionsCalcResult,
     TradeConfirmationsPreCalc,
     TradeConfirmationsCalcResult,
 )
@@ -153,3 +155,44 @@ def calc_us_trades(trades: DataFrame, ptax: DataFrame) -> DataFrame:
         keys=["costs", "ptax", "price_brl", "amount_brl"],
     )
 
+
+_EVENT_WITHOUT_BRL_SUFFIX = {
+    "price": "price_usd",
+    "amount": "amount_usd",
+    "price_brl": "price",
+    "amount_brl": "amount",
+}
+
+
+# Calculate positions at a given date by processing all trades along with all
+# corporate actions.
+@check_input(USTrades, "trades")
+@check_output(USPositionsCalcResult)
+def calc_us_positions(
+    date: date,
+    trades: DataFrame,
+) -> DataFrame:
+    events = concat_events(
+        ("trade", trades.reset_index()),
+    )
+
+    filtered_events = filter_by_date(events=events, date=date)
+    positions = Positions()
+    positions_brl = Positions()
+
+    # calculate positions in the original currency (USD) and in BRL for tax
+    # purposes
+    for _, event in filtered_events.iterrows():
+        fn = event_fn(event)
+        fn(positions, event)
+        # rename columns with the names that event functions expect (without the _brl suffix)
+        fn(positions_brl, event.rename(_EVENT_WITHOUT_BRL_SUFFIX, errors="raise"))
+
+    # join BRL details with the positions df and drop duplicated columns
+    positions_df = positions.to_df(drop_index=False)
+    positions_brl_df = positions_brl.to_df(drop_index=False)
+    joined_positions = positions_df.join(positions_brl_df, on="symbol", rsuffix="_brl").drop(
+        columns=["quantity_brl"]
+    )
+
+    return joined_positions.reset_index()

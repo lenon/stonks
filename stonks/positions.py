@@ -26,7 +26,12 @@ class Positions:
     def close(self, symbol: str) -> None:
         self._df.drop(labels=symbol, inplace=True)
 
-    def to_df(self) -> DataFrame:
+    def to_df(self, drop_index: bool = True) -> DataFrame:
         # return a dataframe sorted by symbol, with 2 decimal places and a
         # sequential numeric index
-        return self._df.sort_index().round(2).reset_index()
+        df = self._df.sort_index().round(2)
+
+        if drop_index:
+            df = df.reset_index()
+
+        return df

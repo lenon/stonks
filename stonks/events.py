@@ -21,9 +21,15 @@ def concat_events(*dfs: tuple[str, DataFrame]) -> DataFrame:
 
 
 def filter_by_date(events: DataFrame, date: date) -> DataFrame:
-    return events.query(
-        "(event == 'right' and issue_date <= @date) or (event != 'right' and date <= @date)"
-    )
+    query = (events.event != "right") & (events.date <= str(date))
+
+    # filter out events that should be computed in the future
+    if "issue_date" in events:
+        query = (events.event == "right") & (events.issue_date <= str(date)) | query
+
+    res: DataFrame = events[query]
+
+    return res
 
 
 def buy(positions: Positions, event: Series) -> None:

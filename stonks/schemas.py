@@ -176,3 +176,10 @@ USTradesPreCalc = USTrades.update_columns(
 )
 
 USTradesCalcResult = USTrades.select_columns(["costs", "ptax", "price_brl", "amount_brl"])
+
+USPositionsCalcResult = PositionsCalcResult.add_columns(
+    {
+        "cost_brl": Column(float, Check.gt(0)),
+        "cost_per_share_brl": Column(float, Check.gt(0)),
+    }
+)
