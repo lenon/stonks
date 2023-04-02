@@ -1,5 +1,4 @@
 from pandas import Series, DataFrame
-from typing import cast
 
 
 class Positions:
