@@ -113,12 +113,14 @@ def calc_positions(
     stock_dividends: DataFrame,
 ) -> DataFrame:
     events = concat_events(
-        ("trade", trades.reset_index()),
-        ("right", rights.reset_index()),
-        ("split", splits.reset_index()),
-        ("merger", mergers.reset_index()),
-        ("spin_off", spin_offs.reset_index()),
-        ("stock_dividend", stock_dividends.reset_index()),
+        {
+            "trade": trades,
+            "right": rights,
+            "split": splits,
+            "merger": mergers,
+            "spin_off": spin_offs,
+            "stock_dividend": stock_dividends,
+        }
     )
     filtered_events = filter_by_date(events=events, date=date)
     positions = Positions()
@@ -173,9 +175,7 @@ def calc_us_positions(
     date: date,
     trades: DataFrame,
 ) -> DataFrame:
-    events = concat_events(
-        ("trade", trades.reset_index()),
-    )
+    events = concat_events({"trade": trades})
     filtered_events = filter_by_date(events=events, date=date)
 
     positions = Positions()

@@ -8,8 +8,8 @@ from datetime import date
 from .positions import Positions
 
 
-def concat_events(*dfs: tuple[str, DataFrame]) -> DataFrame:
-    events = [df.assign(event=event) for event, df in dfs]
+def concat_events(dfs: dict[str, DataFrame]) -> DataFrame:
+    events = [df.reset_index().assign(event=event) for event, df in dfs.items()]
 
     # `ignore_index` will create a new sequential index, which will work as ID for the `sort_values` below. For events
     # with the same date, the ID will be used to differentiate between then and ensure the order of appearance is
