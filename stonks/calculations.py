@@ -127,6 +127,8 @@ def calc_positions(
         fn = event_fn(event)
         fn(positions, event)
 
+    # reset index to a sequential numeric index so it can be used to update
+    # excel tables
     return positions.to_df().reset_index()
 
 
@@ -137,9 +139,9 @@ def calc_positions(
 def calc_us_trades(trades: DataFrame, ptax: DataFrame) -> DataFrame:
     trades_with_ptax = trades.join(ptax.selling_rate, on=["date"])
 
-    # for some reason the price per share informed by my broker's transaction
-    # history is incorrect by a few pennies for DRIP transactions, so we need to
-    # recalculate the correct price
+    # for some reason the price per share informed in the transactions page
+    # is incorrect by a few pennies for DRIP transactions but the amount is correct
+    # so we need to recalculate the correct price per share using amount / quantity
     price_adjusted = trades_with_ptax.amount / trades_with_ptax.quantity
 
     costs = trades_with_ptax.commission + trades_with_ptax.reg_fee
@@ -155,12 +157,12 @@ def calc_us_trades(trades: DataFrame, ptax: DataFrame) -> DataFrame:
     )
 
 
-_EVENT_WITHOUT_BRL_SUFFIX = {
-    "price": "price_usd",
-    "amount": "amount_usd",
-    "price_brl": "price",
-    "amount_brl": "amount",
-}
+def _map_brl_event(event: pd.Series) -> pd.Series:
+    # remove the _brl suffix from event so it can be used with all functions
+    # defined in events.py
+    return event.drop(["price", "amount"]).rename(
+        {"price_brl": "price", "amount_brl": "amount"}, errors="raise"
+    )
 
 
 # Calculate positions at a given date by processing all trades along with all
@@ -174,8 +176,8 @@ def calc_us_positions(
     events = concat_events(
         ("trade", trades.reset_index()),
     )
-
     filtered_events = filter_by_date(events=events, date=date)
+
     positions = Positions()
     positions_brl = Positions()
 
@@ -184,14 +186,13 @@ def calc_us_positions(
     for _, event in filtered_events.iterrows():
         fn = event_fn(event)
         fn(positions, event)
-        # rename columns with the names that event functions expect (without the _brl suffix)
-        fn(positions_brl, event.rename(_EVENT_WITHOUT_BRL_SUFFIX, errors="raise"))
+        fn(positions_brl, _map_brl_event(event))
 
-    # join BRL details with the positions df and drop duplicated columns
-    positions_df = positions.to_df()
-    positions_brl_df = positions_brl.to_df()
-    joined_positions = positions_df.join(positions_brl_df, on="symbol", rsuffix="_brl").drop(
-        columns=["quantity_brl"]
-    )
+    # remove duplicate quantity as it is the same in both dataframes
+    positions_brl_df = positions_brl.to_df().drop(columns="quantity")
+    # join BRL details with the positions dataframe
+    joined_positions = positions.to_df().join(positions_brl_df, on="symbol", rsuffix="_brl")
 
+    # reset index to a sequential numeric index so it can be used to update
+    # excel tables
     return joined_positions.reset_index()
