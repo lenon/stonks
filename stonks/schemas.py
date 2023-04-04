@@ -183,3 +183,32 @@ USPositionsCalcResult = PositionsCalcResult.add_columns(
         "cost_per_share_brl": Column(float, Check.gt(0)),
     }
 )
+
+USDividends = DataFrameSchema(
+    index=Index(Timestamp, name="date"),
+    columns={
+        "symbol": Column(str),
+        "amount": Column(float, Check.gt(0)),
+        "taxes": Column(float, Check.ge(0)),
+        "total": Column(float, Check.ge(0)),
+        "ptax": Column(float, Check.ge(0)),
+        "amount_brl": Column(float, Check.ge(0)),
+        "taxes_brl": Column(float, Check.ge(0)),
+        "total_brl": Column(float, Check.ge(0)),
+    },
+    strict=True,
+)
+
+USDividendsPreCalc = USDividends.update_columns(
+    {
+        "total": {"nullable": True, "coerce": True},
+        "ptax": {"nullable": True, "coerce": True},
+        "amount_brl": {"nullable": True, "coerce": True},
+        "taxes_brl": {"nullable": True, "coerce": True},
+        "total_brl": {"nullable": True, "coerce": True},
+    }
+)
+
+USDividendsCalcResult = USDividends.select_columns(
+    ["total", "ptax", "amount_brl", "taxes_brl", "total_brl"]
+)

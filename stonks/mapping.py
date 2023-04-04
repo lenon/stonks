@@ -10,6 +10,7 @@ SHEET_NAMES = {
     "ptax": "PTAX",
     "us_trades": "US | Trades",
     "us_positions": "US | Positions",
+    "us_dividends": "US | Dividends",
 }
 
 TABLE_COLUMNS = {
@@ -94,6 +95,17 @@ TABLE_COLUMNS = {
         "cost_brl": "Cost (R$)",
         "cost_per_share_brl": "Cost per share (R$)",
     },
+    "us_dividends": {
+        "date": "Date",
+        "symbol": "Symbol",
+        "amount": "Amount",
+        "taxes": "Taxes",
+        "total": "Total",
+        "ptax": "PTAX",
+        "amount_brl": "Amount (BRL)",
+        "taxes_brl": "Taxes (BRL)",
+        "total_brl": "Total (BRL)",
+    },
 }
 
 TABLE_VALUES = {
@@ -111,4 +123,5 @@ TABLE_INDEXES = {
     "stock_dividends": ["date", "symbol"],
     "ptax": ["date"],
     "us_trades": ["date"],
+    "us_dividends": ["date"],
 }
