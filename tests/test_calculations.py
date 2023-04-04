@@ -4,6 +4,7 @@ from stonks.calculations import (
     calc_positions,
     calc_us_trades,
     calc_trades_costs,
+    calc_us_dividends,
     calc_us_positions,
     calc_rights_amounts,
     calc_trade_confirmations_costs,
@@ -66,3 +67,9 @@ def test_calc_us_positions(
     )
 
     assert_frame_equal(actual_positions, us_positions_df)
+
+
+def test_calc_us_dividends(us_dividends_df, ptax_df, us_dividends_ptax_df):
+    results = calc_us_dividends(us_dividends_df, ptax_df)
+
+    assert_frame_equal(results, us_dividends_ptax_df)

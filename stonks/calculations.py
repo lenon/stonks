@@ -1,9 +1,10 @@
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
+from .utils import previous_month_15th
 from pandera import check_input, check_output
 from .events import event_fn, concat_events, filter_by_date
-from datetime import date
+from datetime import date, timedelta
 from .schemas import (
     PTAX,
     Rights,
@@ -19,8 +20,10 @@ from .schemas import (
     RightsCalcResult,
     TradesCalcResult,
     TradeConfirmations,
+    USDividendsPreCalc,
     USTradesCalcResult,
     PositionsCalcResult,
+    USDividendsCalcResult,
     USPositionsCalcResult,
     TradeConfirmationsPreCalc,
     TradeConfirmationsCalcResult,
@@ -196,3 +199,30 @@ def calc_us_positions(
     # reset index to a sequential numeric index so it can be used to update
     # excel tables
     return joined_positions.reset_index()
+
+
+# Calculate PTAX, amount and taxes in BRL for US dividends.
+@check_input(USDividendsPreCalc, "dividends")
+@check_input(PTAX, "ptax")
+@check_output(USDividendsCalcResult)
+def calc_us_dividends(dividends: DataFrame, ptax: DataFrame) -> DataFrame:
+    # dividends in USD must be converted into BRL using the PTAX for the last
+    # business day of the first fortnight of the month prior to the dividend
+    #
+    # since PTAX missing dates are filled with ffill, we can use 15th of the
+    # month without having to calculate business days
+    ptax_dates = dividends.index.map(previous_month_15th)
+    dividends_w_ptax = dividends.assign(ptax_date=ptax_dates).join(
+        ptax.buying_rate, on=["ptax_date"]
+    )
+
+    total = dividends.amount - dividends.taxes
+    amount_brl = (dividends.amount * dividends_w_ptax.buying_rate).round(2)
+    taxes_brl = (dividends.taxes * dividends_w_ptax.buying_rate).round(2)
+    total_brl = (total * dividends_w_ptax.buying_rate).round(2)
+
+    return pd.concat(
+        [total, dividends_w_ptax.buying_rate, amount_brl, taxes_brl, total_brl],
+        axis="columns",
+        keys=["total", "ptax", "amount_brl", "taxes_brl", "total_brl"],
+    )

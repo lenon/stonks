@@ -7,6 +7,7 @@ from .calculations import (
     calc_positions,
     calc_us_trades,
     calc_trades_costs,
+    calc_us_dividends,
     calc_us_positions,
     calc_rights_amounts,
     calc_trade_confirmations_costs,
@@ -81,3 +82,11 @@ def on_us_trades_update() -> None:
     with _update_table("us_trades") as wb:
         us_trades_ptax = calc_us_trades(trades=wb.us_trades.to_df(), ptax=wb.ptax.to_df())
         wb.us_trades.update_from_df(us_trades_ptax)
+
+
+def on_us_dividends_update() -> None:
+    with _update_table("us_dividends") as wb:
+        us_dividends_ptax = calc_us_dividends(
+            dividends=wb.us_dividends.to_df(), ptax=wb.ptax.to_df()
+        )
+        wb.us_dividends.update_from_df(us_dividends_ptax)

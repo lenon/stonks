@@ -141,3 +141,13 @@ def us_trades_with_ptax_df(us_trades_df, us_trades_ptax_df):
 @fixture
 def us_positions_df():
     return read_csv(fixture_path("us-positions.csv"))
+
+
+@fixture
+def us_dividends_df():
+    return read_csv(fixture_path("us-dividends.csv"), parse_dates=["date"], index_col=["date"])
+
+
+@fixture
+def us_dividends_ptax_df():
+    return read_csv(fixture_path("us-dividends-ptax.csv"), parse_dates=["date"], index_col=["date"])
