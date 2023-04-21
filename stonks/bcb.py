@@ -17,8 +17,14 @@ _PTAX_COLUMNS = {
 }
 
 
-# Get PTAX rates from BCB (the Brazilian central bank). They are required to
-# calculate cost basis from USD to BRL, which is required for tax filing.
+# To calculate the cost basis from USD to BRL for tax filing purposes, it is
+# necessary to obtain the PTAX rates from the Brazilian Central Bank (BCB).
+# These rates represent the official exchange rate between the US dollar and the
+# Brazilian real and are used to determine the value of foreign assets and
+# investments held by Brazilian taxpayers.
+#
+# This function returns PTAX rates for the specified date range. Holidays and
+# weekends are filled with the last available rate.
 #
 # https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/documentacao
 @check_output(PTAX)
