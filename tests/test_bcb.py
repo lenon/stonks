@@ -1,5 +1,6 @@
 import vcr
 import pandas as pd
+import pytest
 from pandas import to_datetime as dt
 from datetime import date
 from stonks.bcb import ptax_usd
@@ -53,3 +54,11 @@ def test_ptax_usd():
         )
 
         assert_frame_equal(results, expected)
+
+
+def test_ptax_usd_with_invalid_inputs():
+    start_date = date(2022, 12, 2)
+    end_date = date(2022, 12, 1)
+
+    with pytest.raises(ValueError, match="start_date must be less than or equal than end_date"):
+        ptax_usd(start_date=start_date, end_date=end_date)
