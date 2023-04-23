@@ -30,24 +30,29 @@ from .schemas import (
 )
 from .positions import Positions
 
-
+# This function calculates some columns required for other calculations based on
+# the input trade confirmations DataFrame.
+#
 # Trade confirmation is a document that confirms the details of a trade, such as
-# the security traded, the price, and the quantity. This function calculates
-# some columns required for other calculations below.
+# the security traded, its price, and the traded quantity.
 @check_input(TradeConfirmationsPreCalc)
 @check_output(TradeConfirmationsCalcResult)
 def calc_trade_confirmations_costs(trade_confirmations: DataFrame) -> DataFrame:
-    # traded volume is the total value of the securities traded
-    # it is used to calculate costs of a single trade
+    # calculate traded volume by adding purchases and sales
+    #
+    # traded volume is the total value of the securities traded and is used to
+    # calculate costs of a single trade
     traded_volume = trade_confirmations.sales + trade_confirmations.purchases
-    # costs is the sum of any incurring fees
+    # calculate costs by adding clearing, trading, and brokerage fees
     costs = (
         trade_confirmations.clearing_fees
         + trade_confirmations.trading_fees
         + trade_confirmations.brokerage_fees
     )
-    # amount is the difference between sales and purchases and costs
-    # it is the effective value that will be credited or debited in the account
+    # calculate amount by subtracting purchases, sales, and costs
+    #
+    # amount is the effective value that will be credited or debited in the
+    # account
     amount = trade_confirmations.sales - trade_confirmations.purchases - costs
 
     return pd.concat(
