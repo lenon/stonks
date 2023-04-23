@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
-from pandas import DataFrame
+from pandas import Series, DataFrame
 from .utils import previous_month_15th
 from pandera import check_input, check_output
 from .events import event_fn, concat_events, filter_by_date
-from datetime import date, timedelta
+from datetime import date
 from .schemas import (
     PTAX,
     Rights,
@@ -29,6 +29,7 @@ from .schemas import (
     TradeConfirmationsCalcResult,
 )
 from .positions import Positions
+
 
 # This function calculates some columns required for other calculations based on
 # the input trade confirmations DataFrame.
@@ -167,7 +168,7 @@ def calc_us_trades(trades: DataFrame, ptax: DataFrame) -> DataFrame:
     )
 
 
-def _map_brl_event(event: pd.Series) -> pd.Series:
+def _map_brl_event(event: Series) -> Series:
     # remove the _brl suffix from event so it can be used with all functions
     # defined in events.py
     return event.drop(["price", "amount"]).rename(
