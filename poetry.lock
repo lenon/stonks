@@ -582,14 +582,14 @@ files = [
 
 [[package]]
 name = "pandera"
-version = "0.14.5"
+version = "0.15.1"
 description = "A light-weight and flexible data validation and testing tool for statistical data objects."
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.7,<3.12"
 files = [
-    {file = "pandera-0.14.5-py3-none-any.whl", hash = "sha256:d8093404010d3e908aa11ae5bd4d0a6be6a715a1209800c4eec0eb03f06561fc"},
-    {file = "pandera-0.14.5.tar.gz", hash = "sha256:41cb917ecb898c392af9e34c13cd55d42934b10a36595b0d39cbbb5129e56487"},
+    {file = "pandera-0.15.1-py3-none-any.whl", hash = "sha256:1cf13c06068d64edb1630b0e50d6588243b7c202d7ce00d968fe3d6bef7684f8"},
+    {file = "pandera-0.15.1.tar.gz", hash = "sha256:1cc70f5f182f5b4bd2e248f49372fcd88eba8423b8604ea9e1ebd64222730a41"},
 ]
 
 [package.dependencies]
@@ -599,6 +599,7 @@ packaging = ">=20.0"
 pandas = ">=1.2.0"
 pandas-stubs = {version = "*", optional = true, markers = "extra == \"mypy\""}
 pydantic = "*"
+typeguard = ">=3.0.2"
 typing-inspect = ">=0.6.0"
 wrapt = "*"
 
@@ -871,6 +872,22 @@ files = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
 ]
+
+[[package]]
+name = "typeguard"
+version = "4.0.0"
+description = "Run-time type checker for Python"
+category = "main"
+optional = false
+python-versions = ">=3.7.4"
+files = [
+    {file = "typeguard-4.0.0-py3-none-any.whl", hash = "sha256:c4a40af0ba8a41077221271b46d0a6d8d46045443e4d887887c69254ca861952"},
+    {file = "typeguard-4.0.0.tar.gz", hash = "sha256:194fb3dbcb06ea9caf7088f3befee014de57961689f9c859ac5239b1ef61d987"},
+]
+
+[package.extras]
+doc = ["packaging", "sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme"]
+test = ["mypy (>=1.2.0)", "pytest (>=7)"]
 
 [[package]]
 name = "typing-extensions"
@@ -1166,4 +1183,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "52378e3039e10715f18c123351b35e62a4c57a1588e325a462b75795608fff5a"
+content-hash = "05f9cd29fcb8fb5552dd94d20f7879f19193630e21b420c2c389773d7832fac2"
