@@ -1,7 +1,7 @@
 import pandas as pd
 from typing import cast
 from pandera import check_output
-from datetime import date
+from datetime import date, timedelta
 from .schemas import PTAX
 from urllib.parse import urlencode
 
@@ -32,9 +32,13 @@ def ptax_usd(start_date: date, end_date: date) -> pd.DataFrame:
     if start_date > end_date:
         raise ValueError("start_date must be less than or equal than end_date")
 
+    # request an extra week of data to compensate for weekends and holidays that
+    # may affect the start date
+    req_start_date = start_date - timedelta(days=7)
+
     qs = urlencode(
         {
-            "@dataInicial": start_date.strftime(_PTAX_DATE_FORMAT),
+            "@dataInicial": req_start_date.strftime(_PTAX_DATE_FORMAT),
             "@dataFinalCotacao": end_date.strftime(_PTAX_DATE_FORMAT),
             "$format": "text/csv",
             "$orderby": "dataHoraCotacao",
@@ -51,8 +55,10 @@ def ptax_usd(start_date: date, end_date: date) -> pd.DataFrame:
     ptax = ptax.drop_duplicates(subset="date", keep="last")
     ptax = ptax.set_index("date")
 
+    # slice the data frame to remove extra data
     # forward fill missing dates, like weekends and holidays with the last
     # available PTAX
-    ffill_ptax = cast(pd.DataFrame, ptax.asfreq(freq="D", method="ffill"))
+    date_range_idx = pd.date_range(name="date", start=start_date, end=end_date, freq="D")
+    ffill_ptax = ptax.reindex(date_range_idx, method="ffill")
 
     return ffill_ptax

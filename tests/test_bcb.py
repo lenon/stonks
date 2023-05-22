@@ -16,6 +16,7 @@ def test_ptax_usd():
         expected = (
             pd.DataFrame(
                 [
+                    {"date": dt("2023-01-01"), "buying_rate": 5.2171, "selling_rate": 5.2177},
                     {"date": dt("2023-01-02"), "buying_rate": 5.3430, "selling_rate": 5.3436},
                     {"date": dt("2023-01-03"), "buying_rate": 5.3753, "selling_rate": 5.3759},
                     {"date": dt("2023-01-04"), "buying_rate": 5.4453, "selling_rate": 5.4459},
@@ -62,3 +63,30 @@ def test_ptax_usd_with_invalid_inputs():
 
     with pytest.raises(ValueError, match="start_date must be less than or equal than end_date"):
         ptax_usd(start_date=start_date, end_date=end_date)
+
+
+def test_ptax_usd_weekends_and_holidays():
+    with vcr.use_cassette("tests/fixtures/vcr_cassettes/ptax_usd_weekends_and_holidays.yaml"):
+        start_date = date(2023, 2, 18)
+        end_date = date(2023, 2, 26)
+        results = ptax_usd(start_date=start_date, end_date=end_date)
+
+        expected = (
+            pd.DataFrame(
+                [
+                    {"date": dt("2023-02-18"), "buying_rate": 5.2006, "selling_rate": 5.2012},
+                    {"date": dt("2023-02-19"), "buying_rate": 5.2006, "selling_rate": 5.2012},
+                    {"date": dt("2023-02-20"), "buying_rate": 5.2006, "selling_rate": 5.2012},
+                    {"date": dt("2023-02-21"), "buying_rate": 5.2006, "selling_rate": 5.2012},
+                    {"date": dt("2023-02-22"), "buying_rate": 5.1724, "selling_rate": 5.1730},
+                    {"date": dt("2023-02-23"), "buying_rate": 5.1324, "selling_rate": 5.1330},
+                    {"date": dt("2023-02-24"), "buying_rate": 5.1785, "selling_rate": 5.1791},
+                    {"date": dt("2023-02-25"), "buying_rate": 5.1785, "selling_rate": 5.1791},
+                    {"date": dt("2023-02-26"), "buying_rate": 5.1785, "selling_rate": 5.1791},
+                ],
+            )
+            .set_index("date")
+            .asfreq("D")
+        )
+
+        assert_frame_equal(results, expected)
