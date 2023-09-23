@@ -14,7 +14,7 @@ pandera = "^0.15.1"
 pytest = "^7.4"
 black = "^23.3"
 isort = "^5.12.0"
-coverage = "^7.2"
+coverage = "^7.3"
 mypy = "^1.3.0"
 pandera = {extras = ["mypy"], version = "^0.15.1"}
 vcrpy = "^5.1.0"
