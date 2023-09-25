@@ -1,17 +1,18 @@
-import vcr
 import pandas as pd
 import pytest
+from vcr import use_cassette
 from pandas import to_datetime as dt
 from datetime import date
-from stonks.bcb import ptax_usd
+from stonks.bcb import fetch_ptax_usd
 from pandas.testing import assert_frame_equal
 
 
-def test_ptax_usd():
-    with vcr.use_cassette("tests/fixtures/vcr_cassettes/ptax_usd.yaml"):
-        start_date = date(2023, 1, 1)
-        end_date = date(2023, 2, 1)
-        results = ptax_usd(start_date=start_date, end_date=end_date)
+def test_fetch_ptax_usd():
+    start_date = date(2023, 1, 1)
+    end_date = date(2023, 2, 1)
+
+    with use_cassette("tests/fixtures/vcr_cassettes/ptax_usd.yaml"):
+        results = fetch_ptax_usd(start_date=start_date, end_date=end_date)
 
         expected = (
             pd.DataFrame(
@@ -57,19 +58,20 @@ def test_ptax_usd():
         assert_frame_equal(results, expected)
 
 
-def test_ptax_usd_with_invalid_inputs():
+def test_fetch_ptax_usd_with_invalid_inputs():
     start_date = date(2022, 12, 2)
     end_date = date(2022, 12, 1)
 
     with pytest.raises(ValueError, match="start_date must be less than or equal than end_date"):
-        ptax_usd(start_date=start_date, end_date=end_date)
+        fetch_ptax_usd(start_date=start_date, end_date=end_date)
 
 
-def test_ptax_usd_weekends_and_holidays():
-    with vcr.use_cassette("tests/fixtures/vcr_cassettes/ptax_usd_weekends_and_holidays.yaml"):
-        start_date = date(2023, 2, 18)
-        end_date = date(2023, 2, 26)
-        results = ptax_usd(start_date=start_date, end_date=end_date)
+def test_fetch_ptax_usd_weekends_and_holidays():
+    start_date = date(2023, 2, 18)
+    end_date = date(2023, 2, 26)
+
+    with use_cassette("tests/fixtures/vcr_cassettes/ptax_usd_weekends_and_holidays.yaml"):
+        results = fetch_ptax_usd(start_date=start_date, end_date=end_date)
 
         expected = (
             pd.DataFrame(

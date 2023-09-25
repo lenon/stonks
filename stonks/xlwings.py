@@ -1,5 +1,5 @@
 import xlwings as xw  # type: ignore
-from .bcb import ptax_usd
+from .bcb import fetch_ptax_usd
 from typing import Generator
 from .excel import Workbook
 from contextlib import contextmanager
@@ -71,7 +71,7 @@ def on_rights_update() -> None:
 
 def on_ptax_dates_update() -> None:
     with _update_table("ptax") as wb:
-        ptax_usd_df = ptax_usd(
+        ptax_usd_df = fetch_ptax_usd(
             start_date=wb.ptax.date_input_value("start_date"),
             end_date=wb.ptax.date_input_value("end_date"),
         )

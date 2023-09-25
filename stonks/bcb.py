@@ -28,7 +28,7 @@ _PTAX_COLUMNS = {
 #
 # https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/documentacao
 @check_output(PTAX)
-def ptax_usd(start_date: date, end_date: date) -> pd.DataFrame:
+def fetch_ptax_usd(start_date: date, end_date: date) -> pd.DataFrame:
     if start_date > end_date:
         raise ValueError("start_date must be less than or equal than end_date")
 
