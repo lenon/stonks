@@ -1,5 +1,4 @@
 import pandas as pd
-from typing import cast
 from pandera import check_output
 from datetime import date, timedelta
 from .schemas import PTAX
