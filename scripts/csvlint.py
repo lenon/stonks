@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-import os
 import csv
+import os
 import sys
 
 if len(sys.argv) < 2:
@@ -15,7 +15,7 @@ if not file or not os.path.isfile(file) or not os.access(file, os.R_OK):
     exit(1)
 
 
-with open(file, "r", newline="") as input, open(tmpfile, "w", newline="") as output:
+with open(file, newline="") as input, open(tmpfile, "w", newline="") as output:
     reader = csv.reader(input, delimiter=";")
     writer = csv.writer(output, delimiter=",", lineterminator="\n")
 

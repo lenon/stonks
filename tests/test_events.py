@@ -1,23 +1,26 @@
-import pytest
-from pandas import Series, DataFrame
-from pandas import to_datetime as dt
 from datetime import datetime, timedelta
-from .helpers import make_event
-from stonks.errors import UnknownEventError, PositionNotOpenError
+
+import pytest
+from pandas import DataFrame, Series
+from pandas import to_datetime as dt
+from pandas.testing import assert_frame_equal
+
+from stonks.errors import PositionNotOpenError, UnknownEventError
 from stonks.events import (
     buy,
-    sell,
-    right,
-    split,
-    merger,
-    event_fn,
-    spin_off,
     concat_events,
+    event_fn,
     filter_by_date,
+    merger,
+    right,
+    sell,
+    spin_off,
+    split,
     stock_dividend,
 )
-from pandas.testing import assert_frame_equal
 from stonks.positions import Positions
+
+from .helpers import make_event
 
 
 def test_concat_events(

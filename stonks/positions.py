@@ -1,4 +1,4 @@
-from pandas import Series, DataFrame
+from pandas import DataFrame, Series
 
 
 class Positions:

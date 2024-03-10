@@ -1,5 +1,6 @@
 from datetime import date
-from stonks.utils import reverse_dict, ratio_to_float, previous_month_15th
+
+from stonks.utils import previous_month_15th, ratio_to_float, reverse_dict
 
 
 def test_ratio_to_float():

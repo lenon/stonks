@@ -1,4 +1,4 @@
-from pandera import Check, Index, Column, Timestamp, MultiIndex, DataFrameSchema
+from pandera import Check, Column, DataFrameSchema, Index, MultiIndex, Timestamp
 
 TradeConfirmations = DataFrameSchema(
     index=MultiIndex(

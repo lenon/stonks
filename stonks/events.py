@@ -1,11 +1,13 @@
 import math
-import pandas as pd
-from pandas import Series, DataFrame
-from typing import Callable
-from .utils import ratio_to_float
-from .errors import UnknownEventError, PositionNotOpenError
+from collections.abc import Callable
 from datetime import date
+
+import pandas as pd
+from pandas import DataFrame, Series
+
+from .errors import PositionNotOpenError, UnknownEventError
 from .positions import Positions
+from .utils import ratio_to_float
 
 
 def concat_events(dfs: dict[str, DataFrame]) -> DataFrame:

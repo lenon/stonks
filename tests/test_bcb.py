@@ -1,10 +1,12 @@
+from datetime import date
+
 import pandas as pd
 import pytest
-from vcr import use_cassette
 from pandas import to_datetime as dt
-from datetime import date
-from stonks.bcb import fetch_ptax_usd
 from pandas.testing import assert_frame_equal
+from vcr import use_cassette
+
+from stonks.bcb import fetch_ptax_usd
 
 
 def test_fetch_ptax_usd():

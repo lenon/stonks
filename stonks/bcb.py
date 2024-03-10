@@ -1,8 +1,10 @@
+from datetime import date, timedelta
+from urllib.parse import urlencode
+
 import pandas as pd
 from pandera import check_output
-from datetime import date, timedelta
+
 from .schemas import PTAX
-from urllib.parse import urlencode
 
 _PTAX_URL = "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)"
 _PTAX_DATE_FORMAT = "'%m-%d-%Y'"

@@ -1,9 +1,12 @@
-import xlwings as xw  # type: ignore
-from pandas import DataFrame
-from .utils import reverse_dict
 from datetime import date, datetime
 from functools import cached_property
-from stonks.mapping import SHEET_NAMES, TABLE_VALUES, TABLE_COLUMNS, TABLE_INDEXES
+
+import xlwings as xw  # type: ignore
+from pandas import DataFrame
+
+from stonks.mapping import SHEET_NAMES, TABLE_COLUMNS, TABLE_INDEXES, TABLE_VALUES
+
+from .utils import reverse_dict
 
 
 class Workbook:

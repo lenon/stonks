@@ -1,17 +1,19 @@
-import xlwings as xw  # type: ignore
-from .bcb import fetch_ptax_usd
-from typing import Generator
-from .excel import Workbook
+from collections.abc import Generator
 from contextlib import contextmanager
+
+import xlwings as xw  # type: ignore
+
+from .bcb import fetch_ptax_usd
 from .calculations import (
     calc_positions,
-    calc_us_trades,
+    calc_rights_amounts,
+    calc_trade_confirmations_costs,
     calc_trades_costs,
     calc_us_dividends,
     calc_us_positions,
-    calc_rights_amounts,
-    calc_trade_confirmations_costs,
+    calc_us_trades,
 )
+from .excel import Workbook
 
 
 @contextmanager

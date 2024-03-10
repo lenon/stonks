@@ -1,13 +1,15 @@
 from datetime import date
+
 from pandas.testing import assert_frame_equal
+
 from stonks.calculations import (
     calc_positions,
-    calc_us_trades,
+    calc_rights_amounts,
+    calc_trade_confirmations_costs,
     calc_trades_costs,
     calc_us_dividends,
     calc_us_positions,
-    calc_rights_amounts,
-    calc_trade_confirmations_costs,
+    calc_us_trades,
 )
 
 
