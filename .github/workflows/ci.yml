@@ -13,6 +13,8 @@ jobs:
           python-version-file: .python-version
           cache: poetry
       - run: poetry install
+      - run: poetry run ruff format --check --diff .
+      - run: poetry run ruff check --diff .
       - run: poetry run coverage run -m pytest
       - run: poetry run coverage html
       - name: Archive code coverage results
