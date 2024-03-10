@@ -558,13 +558,13 @@ files = [
 
 [[package]]
 name = "pandera"
-version = "0.17.2"
+version = "0.18.0"
 description = "A light-weight and flexible data validation and testing tool for statistical data objects."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pandera-0.17.2-py3-none-any.whl", hash = "sha256:8e4e7b279c62f6d4b5109801544bf8d46e1c9fdf7ceceb8fedd5f3dad0c1bea1"},
-    {file = "pandera-0.17.2.tar.gz", hash = "sha256:67515984f855ba14d12443f893b5ff90ae6796f613d5f3df43abad406a48c373"},
+    {file = "pandera-0.18.0-py3-none-any.whl", hash = "sha256:fe2da835a16df5a7e49fbfb828f1eeaea9d6f4534f124630957e64fef53e7e73"},
+    {file = "pandera-0.18.0.tar.gz", hash = "sha256:97ab33d884362c0bb99668a12be2855d15c1a71f4934c588a999947b47764bc1"},
 ]
 
 [package.dependencies]
@@ -1138,4 +1138,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "a135be56140d7419bcf39a7c8a89cf7a0e73a8245536fcdb026e21b0bd572d93"
+content-hash = "36681252e56e9423074ae8b52673932d138a30c12d92659d787782899e00f398"
