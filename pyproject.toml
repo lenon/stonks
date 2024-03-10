@@ -2,7 +2,7 @@
 name = "stonks"
 version = "0.1.0"
 description = ""
-authors = ["Lenon Marcel <lenon.marcel@gmail.com>"]
+authors = ["Lenon <hello@lenon.dev>"]
 
 [tool.poetry.dependencies]
 python = "3.11.5"
