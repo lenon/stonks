@@ -27,7 +27,13 @@ target-version = "py312"
 select = ["E4", "E7", "E9", "F", "I", "UP"]
 
 [tool.pytest.ini_options]
-addopts = "--capture=tee-sys --no-header --quiet --tb=short"
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = [
+  "--capture=tee-sys", # capture sys.stdout/stderr and live print to the console
+  "--tb=short", # use a shorter traceback format
+  "--import-mode=importlib" # recommended by pytest for new projects
+]
 
 [tool.coverage.run]
 branch = true
