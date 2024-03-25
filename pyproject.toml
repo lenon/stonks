@@ -37,6 +37,7 @@ addopts = [
 
 [tool.coverage.run]
 branch = true
+source = ["stonks"]
 omit = ["tests/*"]
 dynamic_context = "test_function"
 
