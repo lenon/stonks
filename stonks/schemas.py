@@ -2,7 +2,10 @@ from pandera import Check, Column, DataFrameSchema, Index, MultiIndex, Timestamp
 
 TradeConfirmations = DataFrameSchema(
     index=MultiIndex(
-        [Index(Timestamp, name="date"), Index(str, name="broker")],
+        [
+            Index(Timestamp, name="date"),
+            Index(str, name="broker"),
+        ],
         unique=["date", "broker"],
         strict=True,
     ),
@@ -29,11 +32,21 @@ TradeConfirmationsPreCalc = TradeConfirmations.update_columns(
 )
 
 TradeConfirmationsCalcResult = TradeConfirmations.select_columns(
-    ["traded_volume", "costs", "amount"]
+    [
+        "traded_volume",
+        "costs",
+        "amount",
+    ]
 )
 
 Trades = DataFrameSchema(
-    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")], strict=True),
+    index=MultiIndex(
+        [
+            Index(Timestamp, name="date"),
+            Index(str, name="broker"),
+        ],
+        strict=True,
+    ),
     columns={
         "symbol": Column(str),
         "type": Column(str, Check.isin(["buy", "sell"])),
@@ -52,10 +65,21 @@ TradesPreCalc = Trades.update_columns(
     }
 )
 
-TradesCalcResult = Trades.select_columns(["costs", "amount"])
+TradesCalcResult = Trades.select_columns(
+    [
+        "costs",
+        "amount",
+    ]
+)
 
 Rights = DataFrameSchema(
-    index=MultiIndex([Index(Timestamp, name="date"), Index(str, name="broker")], strict=True),
+    index=MultiIndex(
+        [
+            Index(Timestamp, name="date"),
+            Index(str, name="broker"),
+        ],
+        strict=True,
+    ),
     columns={
         "symbol": Column(str),
         "description": Column(str),
@@ -81,7 +105,10 @@ RightsCalcResult = Rights.select_columns(["amount"])
 
 Splits = DataFrameSchema(
     index=MultiIndex(
-        [Index(Timestamp, name="date"), Index(str, name="symbol")],
+        [
+            Index(Timestamp, name="date"),
+            Index(str, name="symbol"),
+        ],
         unique=["date", "symbol"],
         strict=True,
     ),
@@ -93,7 +120,10 @@ Splits = DataFrameSchema(
 
 Mergers = DataFrameSchema(
     index=MultiIndex(
-        [Index(Timestamp, name="date"), Index(str, name="symbol")],
+        [
+            Index(Timestamp, name="date"),
+            Index(str, name="symbol"),
+        ],
         unique=["date", "symbol"],
         strict=True,
     ),
@@ -106,7 +136,10 @@ Mergers = DataFrameSchema(
 
 SpinOffs = DataFrameSchema(
     index=MultiIndex(
-        [Index(Timestamp, name="date"), Index(str, name="symbol")],
+        [
+            Index(Timestamp, name="date"),
+            Index(str, name="symbol"),
+        ],
         unique=["date", "symbol"],
         strict=True,
     ),
@@ -120,7 +153,10 @@ SpinOffs = DataFrameSchema(
 
 StockDividends = DataFrameSchema(
     index=MultiIndex(
-        [Index(Timestamp, name="date"), Index(str, name="symbol")],
+        [
+            Index(Timestamp, name="date"),
+            Index(str, name="symbol"),
+        ],
         unique=["date", "symbol"],
         strict=True,
     ),
@@ -144,12 +180,18 @@ PositionsCalcResult = DataFrameSchema(
 
 PTAX = DataFrameSchema(
     index=Index(Timestamp, name="date", unique=True),
-    columns={"buying_rate": Column(float, Check.gt(0)), "selling_rate": Column(float, Check.gt(0))},
+    columns={
+        "buying_rate": Column(float, Check.gt(0)),
+        "selling_rate": Column(float, Check.gt(0)),
+    },
     strict=True,
 )
 
 USTrades = DataFrameSchema(
-    index=MultiIndex([Index(Timestamp, name="date")], strict=True),
+    index=MultiIndex(
+        [Index(Timestamp, name="date")],
+        strict=True,
+    ),
     columns={
         "symbol": Column(str),
         "type": Column(str, Check.isin(["buy", "sell"])),
@@ -175,7 +217,14 @@ USTradesPreCalc = USTrades.update_columns(
     }
 )
 
-USTradesCalcResult = USTrades.select_columns(["costs", "ptax", "price_brl", "amount_brl"])
+USTradesCalcResult = USTrades.select_columns(
+    [
+        "costs",
+        "ptax",
+        "price_brl",
+        "amount_brl",
+    ]
+)
 
 USPositionsCalcResult = PositionsCalcResult.add_columns(
     {
@@ -210,5 +259,11 @@ USDividendsPreCalc = USDividends.update_columns(
 )
 
 USDividendsCalcResult = USDividends.select_columns(
-    ["total", "ptax", "amount_brl", "taxes_brl", "total_brl"]
+    [
+        "total",
+        "ptax",
+        "amount_brl",
+        "taxes_brl",
+        "total_brl",
+    ]
 )
