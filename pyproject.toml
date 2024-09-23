@@ -5,7 +5,7 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "3.12.2"
 pandas = "^2.2.2"
-xlwings = "^0.31.6"
+xlwings = "^0.32.2"
 pandera = "^0.19.3"
 
 [tool.poetry.group.dev.dependencies]
