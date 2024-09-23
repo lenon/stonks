@@ -3,7 +3,7 @@ name = "stonks"
 package-mode = false
 
 [tool.poetry.dependencies]
-python = "3.12.2"
+python = "3.12.6"
 pandas = "^2.2.3"
 xlwings = "^0.32.2"
 pandera = "^0.20.4"
