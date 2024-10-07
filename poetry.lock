@@ -1218,45 +1218,45 @@ files = [
 
 [[package]]
 name = "xlwings"
-version = "0.33.0"
+version = "0.33.1"
 description = "Make Excel fly: Interact with Excel from Python and vice versa."
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "xlwings-0.33.0-cp310-cp310-macosx_10_12_x86_64.whl", hash = "sha256:5b00a586c3dfd5d1368ec5987615a9d6918f94143aeb2afd18170ed9c51f80c5"},
-    {file = "xlwings-0.33.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:699a73eddfd1f36faa64f3eb88363fa826ab07ab1d8511356f0fa66eab7dc187"},
-    {file = "xlwings-0.33.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:94a9102000891cc19ba7b1527bf064c95fc5994e61a692082a4b361aa8f72816"},
-    {file = "xlwings-0.33.0-cp310-cp310-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:a3490b2d8eac0e331956d37f9d5bd3eca8e1278584e12f7ee7638915bd75493a"},
-    {file = "xlwings-0.33.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fc55e38fca04de7393cc7cffb6b44fa83cedf8f96a3b14f8e08102e5126d374c"},
-    {file = "xlwings-0.33.0-cp310-cp310-musllinux_1_1_aarch64.whl", hash = "sha256:e687e3e1aba60c595e7371b95448ca47e0c04105f05868c581f9ebcd34435a6a"},
-    {file = "xlwings-0.33.0-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:9e1d60b994c7a0ea752668f796b3e96c707819cb2439f8a01404752b8c461554"},
-    {file = "xlwings-0.33.0-cp310-cp310-win_amd64.whl", hash = "sha256:8dacb48997c2994ade7e36a692e1aad64160c019295377507e48f84ac07fd546"},
-    {file = "xlwings-0.33.0-cp311-cp311-macosx_10_12_x86_64.whl", hash = "sha256:74aff7ad3cd4e98c43ebdad81bea01b1ce9d598fb8ebbb8662c7a580dd5c714d"},
-    {file = "xlwings-0.33.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:7f61df3cba942309f15388d9e3d4d3708ce1006f72bfaede16618bcfc956c565"},
-    {file = "xlwings-0.33.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:712029eb596733363267cd756a287e25024b2d863f33d910e7cb8571db901408"},
-    {file = "xlwings-0.33.0-cp311-cp311-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:7acfa9b23cbff449b4ee5e665b9a7b2a96abbaa8d53035f7feaada5a5614e4b9"},
-    {file = "xlwings-0.33.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:95deef642afbf7cf983af16c647630594adbb211ff5a24fb9dd8cde4e771d882"},
-    {file = "xlwings-0.33.0-cp311-cp311-musllinux_1_1_aarch64.whl", hash = "sha256:2f01819f7697e3be9c5b8b28f362a1001211ce1fe4f7a0dc21502a92beefc431"},
-    {file = "xlwings-0.33.0-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:64c64e7e1374bf49c918a8bd6c9ce6c78405201943eb80972390a0b709c508c9"},
-    {file = "xlwings-0.33.0-cp311-cp311-win_amd64.whl", hash = "sha256:32356a7828f5f328f6643ac9b3ad8ed4acffb43894e962e5d01c40ddb19cf24c"},
-    {file = "xlwings-0.33.0-cp312-cp312-macosx_10_12_x86_64.whl", hash = "sha256:0b2fb59121fc079d46c8ab3230dc9dd9827c9a1b820cca52260465f15315f922"},
-    {file = "xlwings-0.33.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:de2bbe469be1a5dc2ffc00635d48c9ef30d3957a091c96af97af13e237a7a738"},
-    {file = "xlwings-0.33.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1994d0643e6101ae655d3ccdaa9223e414a8dbb49997a58bdb000e35883b95cf"},
-    {file = "xlwings-0.33.0-cp312-cp312-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:f5a0194fddd0a8edd5a80390788c28a4fa494a4fc5b5aeb0b8d15a8a76a2bc25"},
-    {file = "xlwings-0.33.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:18970449082525e30a135fce83fa307aad524be868f48c076917c706d9843799"},
-    {file = "xlwings-0.33.0-cp312-cp312-musllinux_1_1_aarch64.whl", hash = "sha256:27e27be729b8fddb87739ce9639e8160079f73a074e370c9b5fc6bcfd6dbfbdd"},
-    {file = "xlwings-0.33.0-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:e99d4b68cd7c681553445ab9c219bafc1c2fc158c3c8ab2054b96ae29fb93596"},
-    {file = "xlwings-0.33.0-cp312-cp312-win_amd64.whl", hash = "sha256:19ae8922a0ee3b8dcf69a88120dfc6143d58c8f98f6eef680e0df9fd76a4aea3"},
-    {file = "xlwings-0.33.0-cp39-cp39-macosx_10_12_x86_64.whl", hash = "sha256:46e85c8c876357541e1a42bb85a1cc3533ccfb3f98537f8c763cbb965ea032bd"},
-    {file = "xlwings-0.33.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:7875abb518498257ba1d99d01e1c89d50f586bedb8ed1f8fee01b57d96a885f0"},
-    {file = "xlwings-0.33.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:83e9e04f166d7065e236668a767210df1b078153c5f010f4a30949a65bee289b"},
-    {file = "xlwings-0.33.0-cp39-cp39-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:21aff2015a9ab204f0ae63e7f46a33c6f19ced22b9204fb12562299eb22b3c73"},
-    {file = "xlwings-0.33.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0cc3ad25888f781f90e316d6d2caf7c656e2e98e0767b9b82bbb67246fd99212"},
-    {file = "xlwings-0.33.0-cp39-cp39-musllinux_1_1_aarch64.whl", hash = "sha256:3a3e80ac92af96fb3a6e311d442a65383d9fbf7970263db2731894fffec1e9ea"},
-    {file = "xlwings-0.33.0-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:1e1a9da2493fb34359b29bb0dab51953be91f5f2fd509dd1624cd06c5f4f27c8"},
-    {file = "xlwings-0.33.0-cp39-cp39-win_amd64.whl", hash = "sha256:e4700038d7f9882d9a08f55f8d58f8928c05f0937a211c3c60c663be99e2464e"},
-    {file = "xlwings-0.33.0-py3-none-any.whl", hash = "sha256:37ef136b1c74e11bdf2267f9c0019100457cc0121cd6a81a8e9689e972959294"},
-    {file = "xlwings-0.33.0.tar.gz", hash = "sha256:d4bbc77aa53efb89dc0187242f7644cf3a7783af20bbbf37cd39bfaf52ec175c"},
+    {file = "xlwings-0.33.1-cp310-cp310-macosx_10_12_x86_64.whl", hash = "sha256:faef6f284e08659fbf6b3636eae46f846f4e636c7970c3a37c57e10c8b7532fa"},
+    {file = "xlwings-0.33.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:6584252808286e848697b06553ee95408b68de29861b595e9aa84e3528d1b25a"},
+    {file = "xlwings-0.33.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:fddf15efd8aea8905f3baa88c4099a9099d9b1cbafb1b9b72585fae074ff61b8"},
+    {file = "xlwings-0.33.1-cp310-cp310-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:aadb27a995ff7891b6e98c3dc1085cd41c0656fd976561322282bc77a437a838"},
+    {file = "xlwings-0.33.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7ebf97176b99c24b5bea0b2eb12ff26fbc8f711d7a87ec48daac3b1827ecd0f5"},
+    {file = "xlwings-0.33.1-cp310-cp310-musllinux_1_1_aarch64.whl", hash = "sha256:bbd0de346e2bbb7c4ceda38349680f139a1b15eb85abee9a24c6a86bf989632c"},
+    {file = "xlwings-0.33.1-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:3c77baea8bc9d1c15240f2a0797b1da6ee6d1cc48eb26e4df5fef91ec46d0700"},
+    {file = "xlwings-0.33.1-cp310-cp310-win_amd64.whl", hash = "sha256:eb6de4fb88cd250628c2e30535244b8b2474375326863188b4bb0ac7ffcac6f5"},
+    {file = "xlwings-0.33.1-cp311-cp311-macosx_10_12_x86_64.whl", hash = "sha256:636c1d38b7e91d017dc7de37e609d64ff875e8e38fe56680f3ea250a1ad83ed9"},
+    {file = "xlwings-0.33.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:e0625abb6a061638331fd08f9e9c535904e7c46081e1e9c3d04cc900bfaf9838"},
+    {file = "xlwings-0.33.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:29704ebbc9f0018942c4aac8f224488b9059075844a7349b5aac00c466bd9b3f"},
+    {file = "xlwings-0.33.1-cp311-cp311-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:fcd41dcc013e37ccc21845986a6f79a5e217356a7a19bfe6e69081c34d20e927"},
+    {file = "xlwings-0.33.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e947350fd2bcab1a3915cf2eeb61038445cd6e17808da28a2fdc1dcf73b8ed0d"},
+    {file = "xlwings-0.33.1-cp311-cp311-musllinux_1_1_aarch64.whl", hash = "sha256:6ba891722f1dd59d211aa7fc46160364329f4ffb970b4480565988a19e745df1"},
+    {file = "xlwings-0.33.1-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:bbefc3892cc71164f128080aee488a453208272170eddf284c536a8f8f1f87dd"},
+    {file = "xlwings-0.33.1-cp311-cp311-win_amd64.whl", hash = "sha256:7d3cf58f479563b876620b0517c46120279f3f981d8738c98b917d2a99e5f4de"},
+    {file = "xlwings-0.33.1-cp312-cp312-macosx_10_12_x86_64.whl", hash = "sha256:b33352fbcef0ea9a16d3a1509a32c058529b9845d85cf09624d3b83eb4dcbced"},
+    {file = "xlwings-0.33.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:bd4cfe2030e51090f3d429d52e5f79c4a340b353349e3f375058e6dd360ce02d"},
+    {file = "xlwings-0.33.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:9e6de48e288e7373ee4ed55ae67bf296f20a1330e8a9081f8f08b3f3fcb731a8"},
+    {file = "xlwings-0.33.1-cp312-cp312-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:923777d0a218d867df12ecd220eed8ee3a9e66e07b7fb1d3f9c2b8fc9deb6071"},
+    {file = "xlwings-0.33.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9be8b62b9815240ca9057e4b349a29e511b126b1369f32aa242bf92d27659d50"},
+    {file = "xlwings-0.33.1-cp312-cp312-musllinux_1_1_aarch64.whl", hash = "sha256:deac3af1ea2261c0565607c56ca1e53045da6f7b1b02d2e84ba10354d0e4f144"},
+    {file = "xlwings-0.33.1-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:955270c1225d548739e919fe1816b924fccf32942ea4a9d6e63c3e69325485ac"},
+    {file = "xlwings-0.33.1-cp312-cp312-win_amd64.whl", hash = "sha256:d8b7317e640ea41ee43c9b33e118ac6e98de97fe8079dbe9e1971c8633418572"},
+    {file = "xlwings-0.33.1-cp39-cp39-macosx_10_12_x86_64.whl", hash = "sha256:f80e46f1f494f511af159bc3c2f090d76f0031072844d049ce18658bfd503426"},
+    {file = "xlwings-0.33.1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:71a432dee16252540064c8894cd2c85f7978104c12b055933155651a75c34939"},
+    {file = "xlwings-0.33.1-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:64471aee30566406acfdf0fd33eb7e64c487f2df31a6539e0245cb89dcc8a436"},
+    {file = "xlwings-0.33.1-cp39-cp39-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:eab9ba61f7a92192a490d33368f034cda654ea47e9fd74e3f36d60710cd1b341"},
+    {file = "xlwings-0.33.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0c497604653176deeca16e7e8c946416ecfbbb60527b44274fea799e615b5bcf"},
+    {file = "xlwings-0.33.1-cp39-cp39-musllinux_1_1_aarch64.whl", hash = "sha256:5d74822010fc861643c27fbb90eaaa56823f97597413a9e0a354a92766870a58"},
+    {file = "xlwings-0.33.1-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:7d1c212982c9c9f2686dcac048ee87ac4d2b0c0517f217db4aa23c9241becc6f"},
+    {file = "xlwings-0.33.1-cp39-cp39-win_amd64.whl", hash = "sha256:6206848fd5eeb7e1108430b5b2cbc7536766fe9bfd5b1f02208fc975d95ed6be"},
+    {file = "xlwings-0.33.1-py3-none-any.whl", hash = "sha256:932be785681cfd65bb7d735e8022b772c4b2a87b1a6bcce62e7335fe33a04237"},
+    {file = "xlwings-0.33.1.tar.gz", hash = "sha256:3976a01e221c48bcc43ac947923b7bb772fd2bc95184a757c50ce07bad3c199a"},
 ]
 
 [package.dependencies]
@@ -1376,4 +1376,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "3.12.6"
-content-hash = "c7392636906ee1d9d3d9a9f711d0c502c81b6de1197dd250f85be05c6ce677ea"
+content-hash = "b890e29dd297cd2273613f70d04bbfcefefd54e1995097c3551f36a54721c295"
