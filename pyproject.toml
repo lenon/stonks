@@ -6,12 +6,12 @@ package-mode = false
 python = "3.12.6"
 pandas = "^2.2.3"
 xlwings = "^0.33.15"
-pandera = "^0.20.4"
+pandera = "^0.25.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4"
 mypy = "^1.17.1"
-pandera = {extras = ["mypy"], version = "^0.20.4"}
+pandera = {extras = ["mypy"], version = "^0.25.0"}
 vcrpy = "^7.0.0"
 ruff = "^0.12.7"
 pytest-cov = "^6.2.1"
