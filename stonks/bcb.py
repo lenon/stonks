@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from urllib.parse import urlencode
 
 import pandas as pd
-from pandera import check_output
+from pandera.pandas import check_output
 
 from .schemas import PTAX
 

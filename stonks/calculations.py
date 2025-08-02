@@ -3,7 +3,7 @@ from datetime import date
 import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
-from pandera import check_input, check_output
+from pandera.pandas import check_input, check_output
 
 from .events import concat_events, event_fn, filter_by_date
 from .positions import Positions
