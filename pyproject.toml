@@ -1,9 +1,12 @@
-[tool.poetry]
+[project]
 name = "stonks"
+dynamic = ["dependencies", "requires-python"]
+
+[tool.poetry]
 package-mode = false
 
 [tool.poetry.dependencies]
-python = "3.12.6"
+python = "^3.13.5"
 pandas = "^2.3.1"
 xlwings = "^0.33.15"
 pandera = "^0.25.0"
@@ -17,12 +20,12 @@ ruff = "^0.12.7"
 pytest-cov = "^6.2.1"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=2.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 100
-target-version = "py312"
+target-version = "py313"
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I", "UP"]
