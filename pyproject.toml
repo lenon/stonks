@@ -9,7 +9,7 @@ xlwings = "^0.33.15"
 pandera = "^0.20.4"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.3"
+pytest = "^8.4"
 mypy = "^1.17.1"
 pandera = {extras = ["mypy"], version = "^0.20.4"}
 vcrpy = "^7.0.0"
