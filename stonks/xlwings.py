@@ -17,7 +17,7 @@ from .excel import Workbook
 
 
 @contextmanager
-def _update_table(table_name: str) -> Generator[Workbook, None, None]:
+def _update_table(table_name: str) -> Generator[Workbook]:
     wb = Workbook(xw.Book.caller())
     table = getattr(wb, table_name)
 
