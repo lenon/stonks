@@ -16,7 +16,7 @@ pytest = "^8.4"
 mypy = "^1.17.1"
 pandera = {extras = ["mypy"], version = "^0.25.0"}
 vcrpy = "^7.0.0"
-ruff = "^0.12.7"
+ruff = "^0.12.9"
 pytest-cov = "^6.2.1"
 
 [build-system]
