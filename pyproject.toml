@@ -17,7 +17,7 @@ mypy = "^1.17.1"
 pandera = {extras = ["mypy"], version = "^0.25.0"}
 vcrpy = "^7.0.0"
 ruff = "^0.12.7"
-pytest-cov = "^6.2.1"
+pytest-cov = "^7.0.0"
 
 [build-system]
 requires = ["poetry-core>=2.0"]
