@@ -13,7 +13,7 @@ pandera = "^0.25.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4"
-mypy = "^1.17.1"
+mypy = "^1.18.1"
 pandera = {extras = ["mypy"], version = "^0.25.0"}
 vcrpy = "^7.0.0"
 ruff = "^0.12.7"
