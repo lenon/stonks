@@ -15,7 +15,7 @@ pandera = "^0.25.0"
 pytest = "^8.4"
 mypy = "^1.17.1"
 pandera = {extras = ["mypy"], version = "^0.25.0"}
-vcrpy = "^7.0.0"
+vcrpy = "^8.2.1"
 ruff = "^0.12.7"
 pytest-cov = "^6.2.1"
 
