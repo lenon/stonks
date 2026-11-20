@@ -7,7 +7,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.3.3
       - run: uv sync --locked
       - run: uv run ruff format --check --diff .
@@ -15,7 +15,7 @@ jobs:
       - run: uv run coverage run -m pytest
       - run: uv run coverage html
       - name: Archive code coverage results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: code-coverage-report
           path: htmlcov/
