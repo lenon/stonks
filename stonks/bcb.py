@@ -59,7 +59,7 @@ def fetch_ptax_usd(start_date: date, end_date: date) -> pd.DataFrame:
     # slice the data frame to remove extra data
     # forward fill missing dates, like weekends and holidays with the last
     # available PTAX
-    date_range_idx = pd.date_range(name="date", start=start_date, end=end_date, freq="D")
+    date_range_idx = pd.date_range(name="date", start=start_date, end=end_date, freq="D", unit="us")
     ffill_ptax = ptax.reindex(date_range_idx, method="ffill")
 
     return ffill_ptax

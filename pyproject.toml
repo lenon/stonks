@@ -3,19 +3,19 @@ name = "stonks"
 version = "0.0.0"
 requires-python = "==3.13.5"
 dependencies = [
-  "pandas==2.3.1",
-  "xlwings==0.33.15",
-  "pandera==0.25.0",
+  "pandas==3.1.1",
+  "xlwings==0.37.11",
+  "pandera==0.36.0",
 ]
 
 [dependency-groups]
 dev = [
-  "pytest==8.4.1",
-  "mypy==1.17.1",
-  "pandera[mypy]==0.25.0",
-  "vcrpy==7.0.0",
-  "ruff==0.12.7",
-  "pytest-cov==6.2.1",
+  "pytest==9.2.0",
+  "mypy==2.4.1",
+  "pandera[mypy]==0.36.0",
+  "vcrpy==9.4.2",
+  "ruff==0.17.6",
+  "pytest-cov==7.1.0",
 ]
 
 [tool.uv]

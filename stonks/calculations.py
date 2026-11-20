@@ -75,7 +75,9 @@ def calc_trade_confirmations_costs(trade_confirmations: DataFrame) -> DataFrame:
 def calc_trades_costs(trades: DataFrame, trade_confirmations: DataFrame) -> DataFrame:
     # the trade confirmation has a one-to-many association with trades, meaning
     # that a single trade confirmation has one or more trades
-    trades_w_confirmations = trades.join(trade_confirmations, on=["date", "broker"], rsuffix="_c")
+    trades_w_confirmations = trades.join(
+        trade_confirmations, on=["date", "broker"], suffixes=("", "_c")
+    )
 
     # amount is the quantity of the traded security x price, so no costs
     amount = trades_w_confirmations.quantity * trades_w_confirmations.price
@@ -167,6 +169,7 @@ def calc_us_trades(trades: DataFrame, ptax: DataFrame) -> DataFrame:
         [costs, trades_with_ptax.selling_rate, price_brl, amount_brl],
         axis="columns",
         keys=["costs", "ptax", "price_brl", "amount_brl"],
+        sort=True,
     )
 
 
@@ -202,7 +205,7 @@ def calc_us_positions(
     # remove duplicate quantity as it is the same in both dataframes
     positions_brl_df = positions_brl.to_df().drop(columns="quantity")
     # join BRL details with the positions dataframe
-    joined_positions = positions.to_df().join(positions_brl_df, on="symbol", rsuffix="_brl")
+    joined_positions = positions.to_df().join(positions_brl_df, on="symbol", suffixes=("", "_brl"))
 
     # reset index to a sequential numeric index so it can be used to update
     # excel tables
@@ -233,4 +236,5 @@ def calc_us_dividends(dividends: DataFrame, ptax: DataFrame) -> DataFrame:
         [total, dividends_w_ptax.buying_rate, amount_brl, taxes_brl, total_brl],
         axis="columns",
         keys=["total", "ptax", "amount_brl", "taxes_brl", "total_brl"],
+        sort=True,
     )

@@ -188,10 +188,7 @@ PTAX = DataFrameSchema(
 )
 
 USTrades = DataFrameSchema(
-    index=MultiIndex(
-        [Index(Timestamp, name="date")],
-        strict=True,
-    ),
+    index=Index(Timestamp, name="date"),
     columns={
         "symbol": Column(str),
         "type": Column(str, Check.isin(["buy", "sell"])),

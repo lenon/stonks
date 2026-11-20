@@ -109,7 +109,7 @@ def events_df():
 def events_filtered_df():
     return read_csv(
         fixture_path("events-filtered.csv"),
-        dtype={"acquirer": object, "new_company": object},
+        dtype={"acquirer": "str", "new_company": "str"},
         parse_dates=["date", "start", "end", "settlement", "issue_date"],
     )
 
