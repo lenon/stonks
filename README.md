@@ -9,8 +9,7 @@ it at your own risk.
 
 ## Requirements
 
-* [pyenv][pyenv-instructions] to switch to the correct Python version.
-* [Poetry][poetry-instructions] to install dependencies.
+* [uv][uv-instructions] to install Python and dependencies.
 
 ## Installation
 
@@ -20,17 +19,16 @@ Clone the repo:
 git clone git@github.com:lenon/stonks.git && cd stonks
 ```
 
-Install the correct Python with pyenv:
+Install the correct Python and dependencies with uv:
 
 ```
-pyenv install
+uv sync
 ```
 
-And then install dependencies with Poetry:
+Run commands inside the project environment with `uv run`, for example:
 
 ```
-poetry install
+uv run pytest
 ```
 
-[pyenv-instructions]: https://github.com/pyenv/pyenv#installation
-[poetry-instructions]: https://python-poetry.org/docs/#installation
+[uv-instructions]: https://docs.astral.sh/uv/getting-started/installation/

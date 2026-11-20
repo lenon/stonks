@@ -6,17 +6,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Install Poetry
-        run: pipx install poetry
-      - uses: actions/setup-python@v5
-        with:
-          python-version-file: .python-version
-          cache: poetry
-      - run: poetry install
-      - run: poetry run ruff format --check --diff .
-      - run: poetry run ruff check --diff .
-      - run: poetry run coverage run -m pytest
-      - run: poetry run coverage html
+      - uses: astral-sh/setup-uv@v10.3.3
+      - run: uv sync --locked
+      - run: uv run ruff format --check --diff .
+      - run: uv run ruff check --diff .
+      - run: uv run coverage run -m pytest
+      - run: uv run coverage html
       - name: Archive code coverage results
         uses: actions/upload-artifact@v6
         with:
