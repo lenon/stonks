@@ -13,7 +13,7 @@ class Workbook:
     def __init__(self, wb: xw.Book):
         self._wb = wb
 
-    def _table(self, name: str) -> "Table":
+    def _table(self, name: str) -> Table:
         sheet = self._wb.sheets[SHEET_NAMES[name]]
         table = sheet.tables[name]
         table_col_map = TABLE_COLUMNS[name]
@@ -23,51 +23,51 @@ class Workbook:
         return Table(self._wb, sheet, table, index, table_col_map, table_values_map)
 
     @cached_property
-    def positions(self) -> "Table":
+    def positions(self) -> Table:
         return self._table("positions")
 
     @cached_property
-    def trade_confirmations(self) -> "Table":
+    def trade_confirmations(self) -> Table:
         return self._table("trade_confirmations")
 
     @cached_property
-    def trades(self) -> "Table":
+    def trades(self) -> Table:
         return self._table("trades")
 
     @cached_property
-    def rights(self) -> "Table":
+    def rights(self) -> Table:
         return self._table("rights")
 
     @cached_property
-    def splits(self) -> "Table":
+    def splits(self) -> Table:
         return self._table("splits")
 
     @cached_property
-    def mergers(self) -> "Table":
+    def mergers(self) -> Table:
         return self._table("mergers")
 
     @cached_property
-    def spin_offs(self) -> "Table":
+    def spin_offs(self) -> Table:
         return self._table("spin_offs")
 
     @cached_property
-    def stock_dividends(self) -> "Table":
+    def stock_dividends(self) -> Table:
         return self._table("stock_dividends")
 
     @cached_property
-    def ptax(self) -> "Table":
+    def ptax(self) -> Table:
         return self._table("ptax")
 
     @cached_property
-    def us_trades(self) -> "Table":
+    def us_trades(self) -> Table:
         return self._table("us_trades")
 
     @cached_property
-    def us_positions(self) -> "Table":
+    def us_positions(self) -> Table:
         return self._table("us_positions")
 
     @cached_property
-    def us_dividends(self) -> "Table":
+    def us_dividends(self) -> Table:
         return self._table("us_dividends")
 
 
